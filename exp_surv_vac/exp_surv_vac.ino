@@ -22,7 +22,7 @@
 // The IP address will be dependent on your local network:
 byte mac[] = { 
   0xA8, 0x61, 0x0A, 0xAE, 0x7D, 0x12 };
-IPAddress ip(192,168,1,177);
+IPAddress ip(10,117,53,38);
 
 // Initialize the Ethernet server library
 // with the IP address and port you want to use 
