@@ -21,7 +21,7 @@
 // Enter a MAC address and IP address for your controller below.
 // The IP address will be dependent on your local network:
 byte mac[] = { 
-  0xA8, 0x61, 0x0A, 0xAE, 0x7D, 0x12 };
+  0xA8, 0x61, 0x0A, 0xAE, 0x69, 0x86 };
 IPAddress ip(10,117,53,38);
 
 // Initialize the Ethernet server library
