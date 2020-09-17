@@ -25,8 +25,8 @@
 #include <Ethernet.h>
 
 // MAC address from Ethernet shield sticker under board
-byte mac[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };
-IPAddress ip(10, 0, 0, 20); // IP address, may need to change depending on network
+byte mac[] = { 0xA8, 0x61, 0x0A, 0xAE, 0x69, 0x86 };
+IPAddress ip(192, 168, 1, 19); // IP address, may need to change depending on network
 EthernetServer server(80);  // create a server at port 80
 
 void setup()
@@ -56,11 +56,22 @@ void loop()
                     client.println("<!DOCTYPE html>");
                     client.println("<html>");
                     client.println("<head>");
-                    client.println("<title>Arduino Web Page</title>");
+                    client.println("<title>Helium 2 Experiment Surveillance</title>");
                     client.println("</head>");
                     client.println("<body>");
-                    client.println("<h1>Hello from Arduino!</h1>");
+                    client.println("<h1>Science chamber vacuum</h1>");
                     client.println("<p>A web page from the Arduino server</p>");
+
+                    // output the value of each analog input pin
+                    for (int analogChannel = 0; analogChannel < 6; analogChannel++) {
+                      int sensorReading = analogRead(analogChannel);
+                      client.print("analog input ");
+                      client.print(analogChannel);
+                      client.print(" is ");
+                      client.print(sensorReading);
+                      client.println("<br />");
+                    }
+            
                     client.println("</body>");
                     client.println("</html>");
                     break;
