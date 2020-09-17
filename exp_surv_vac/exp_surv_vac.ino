@@ -19,6 +19,8 @@
   Date:         7 January 2013
  
   Author:       W.A. Smith, http://startingelectronics.org
+
+  Edited by:    JP Bureik, LCF, IOGS, 20/09/17
 --------------------------------------------------------------*/
 
 #include <SPI.h>
@@ -53,27 +55,34 @@ void loop()
                     client.println("Connection: close");
                     client.println();
                     // send web page
-                    client.println("<!DOCTYPE html>");
-                    client.println("<html>");
+                    client.println("<!DOCTYPE arduino_due");
+                    client.println("<!ELEMENT arduino_due (sensor)*>");
+                    client.println("<!ELEMENT sensor (#PCDATA)>");
+                    client.println("<!ATTLIST sensor type CDATA #REQUIRED>");
+                    client.println("<!ATTLIST sensor reading CDATA #REQUIRED>");
+                    client.println("<xml>");
                     client.println("<head>");
                     client.println("<title>Helium 2 Experiment Surveillance</title>");
                     client.println("</head>");
                     client.println("<body>");
                     client.println("<h1>Science chamber vacuum</h1>");
-                    client.println("<p>A web page from the Arduino server</p>");
-
+                    client.println("<p>Analog input readings</p>");
+                    client.println("<arduino_due>");
                     // output the value of each analog input pin
                     for (int analogChannel = 0; analogChannel < 6; analogChannel++) {
                       int sensorReading = analogRead(analogChannel);
-                      client.print("analog input ");
+                      client.print("<sensor type = \"analog\">");
                       client.print(analogChannel);
-                      client.print(" is ");
+                      client.print("</sensor>");
+
+                      client.print("<sensor reading>");
                       client.print(sensorReading);
+                      client.print("</sensor>");
+                                           
                       client.println("<br />");
-                    }
-            
+                    }            
                     client.println("</body>");
-                    client.println("</html>");
+                    client.println("</xml>");
                     break;
                 }
                 // every line of text received from the client ends with \r\n
