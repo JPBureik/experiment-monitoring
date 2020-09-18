@@ -69,11 +69,16 @@ void loop()
                     client.println("<p>Analog input readings</p>");
                     client.println("<arduino_due>");
                     // output the value of each analog input pin
-                    for (int analogChannel = 0; analogChannel < 6; analogChannel++) {
-                      int sensorReading = analogRead(analogChannel);
+                    for (int analogChannel = 0; analogChannel < 12; analogChannel++) {
+                      int analogPin = analogChannel;
+                      int sensorReading = 0;
+                      analogReadResolution(12);
+                      sensorReading = analogRead(analogPin);
                       client.print("<sensor type = \"analog\">");
-                      client.print(analogChannel);
+                      client.print(analogPin);
                       client.print("</sensor>");
+
+                      client.print(" - ");
 
                       client.print("<sensor reading>");
                       client.print(sensorReading);
