@@ -31,6 +31,9 @@ byte mac[] = { 0xA8, 0x61, 0x0A, 0xAE, 0x69, 0x86 };
 IPAddress ip(192, 168, 1, 19); // IP address, may need to change depending on network
 EthernetServer server(80);  // create a server at port 80
 
+// how many analog voltages are being measured (1 - 12)
+int number_of_analog_inputs = 2;
+
 void setup()
 {
     Ethernet.begin(mac, ip);  // initialize Ethernet device
@@ -65,15 +68,18 @@ void loop()
                     client.println("<title>Helium 2 Experiment Surveillance</title>");
                     client.println("</head>");
                     client.println("<body>");
-                    client.println("<h1>Science chamber vacuum</h1>");
+                    client.println("<h1>Helium 2 Experiment Surveillance</h1>");
                     client.println("<p>Analog input readings</p>");
                     client.println("<arduino_due>");
                     // output the value of each analog input pin
-                    for (int analogChannel = 0; analogChannel < 12; analogChannel++) {
+                    for (int analogChannel = 0; analogChannel < number_of_analog_inputs; analogChannel++) {
                       int analogPin = analogChannel;
                       int sensorReading = 0;
                       analogReadResolution(12);
                       sensorReading = analogRead(analogPin);
+                      
+                      client.print("A");
+                      
                       client.print("<sensor type = \"analog\">");
                       client.print(analogPin);
                       client.print("</sensor>");
