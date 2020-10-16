@@ -1,4 +1,4 @@
-#!/usr/local/bin/python3.9
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
 Created on Thu Sep 17 10:12:52 2020
@@ -37,13 +37,13 @@ for i in range(number_of_used_analog_inputs):
     # Conversion of sensor name from numeric
     sensor_conv = int(sensor_label[i])
     sensor_conv = "A" + str(sensor_conv)
-    
+
     # Conversion of voltage from digital to analog
     voltage = int(sensor_reading[i]) * board_voltage / 2**analog_read_resolution
     voltage = round(voltage, numerical_precision)
-    
+
     # Write to dict
-    measurement[sensor_conv] = voltage    
+    measurement[sensor_conv] = voltage
 
 # Format for csv
 fieldnames = []
