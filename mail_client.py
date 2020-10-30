@@ -16,6 +16,7 @@ password = mail()
 
 sender_email = "jan-philipp.bureik@institutoptique.fr"
 receiver_email = "jan-philipp.bureik@institutoptique.fr"
+
 message = """\
 Subject: Experiment Surveillance Alert
 
