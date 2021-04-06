@@ -5,49 +5,60 @@ Created on Thu Aug 08 10:22:13 2019
 
 @author: jp
 
-Module for ethernet communication from PC to Arduino via Ethernet Shield
+Ethernet communication module for experiment monitoring.
+
+This module reads out all 12 Analog Input signals sent from the Arduino over
+TCP/IP and returns them as floats in a list.
+
+The entries of the list correspond to the Analog Inputs in ascending order,
+i.e. A0 through A11.
+
+Note that it always returns a list of length 12, regardless of how many Analog
+Inputs are used. The unused analog pins will float, so be sure to correctly
+identify the signals to be monitored.
 
 """
 
 
-def dac_output(channel, voltage, output):
+def rcv_meas():
 
     import socket
     import struct
+    IP_adr_arduino = '10.117.53.45' # Static IP: IOGS network
+    # IP_adr_arduino = '172.20.217.9' # DHCP: Visitor network - not recommended
 
-    # IP_adr_lockbox = '192.168.1.29'
-    # IP_adr_lockbox = '172.20.217.135'
-    # IP_adr_lockbox = '172.20.217.9'                                                                        bnbb
-    IP_adr_lockbox = '10.117.53.45'
+    arduino_port = 6574 # Match to server side port
 
-
-
-    arduino_port = 6574
-
-    # msg_channel = struct.pack('B',channel)
-
-    # msg_voltage = struct.pack('H',voltage)
-
-    # msg_output = struct.pack('?',output)
+    buffer_size = 2**12
 
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-    s.connect((IP_adr_lockbox, arduino_port))
+    s.connect((IP_adr_arduino, arduino_port))
 
-    print("Connected.")
+    s.sendall(b'a') # Send a non-empty message to initialize TCP/IP com
 
-    s.sendall(b'Hello, world')
+    # Measurement data: 12-bit int -> receive msg as 2**8 * byte1 + byte2
 
-    msg = s.recv(1024)
+    analog_signals = []
 
-    # s.sendall(msg_voltage)
+    for i in range(12):
 
-    # s.sendall(msg_output)
+        # Receive both bytes successively:
+        byte1 = s.recv(buffer_size)
+        byte2 = s.recv(buffer_size)
+        # Restore original 12-bit integer:
 
-    print(msg)
+        reconstr = 2**8*(int.from_bytes(byte1, 'little')) +\
+            int.from_bytes(byte2, 'little')
 
-    return msg
+        # Convert to voltage:
+        voltage = reconstr / 2**12 * 3.25
+
+        analog_signals.append(voltage)
+
+    return analog_signals
 
 if __name__ == '__main__':
 
-    msg = dac_output(1, 4095, output=False)
+    analog_signals = rcv_meas()
+    print(analog_signals)
