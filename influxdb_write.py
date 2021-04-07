@@ -26,7 +26,7 @@ analog_signals = rcv_meas()
 output_list, write_to_db = unit_conv(analog_signals)
 
 if write_to_db:
-    write_to_db = filter_spikes(output_list, write_to_db)
+    write_to_db = filter_spikes(output_list)
 
 Nport = 8086
 
