@@ -17,12 +17,16 @@ from datetime import datetime
 
 from eth_com import rcv_meas
 from unit_conv import unit_conv
+from filter_spikes import filter_spikes
 
 now = datetime.utcnow() # Grafana assumes UTC
 dt_string = now.strftime("%m/%d/%Y %H:%M:%S")
 
 analog_signals = rcv_meas()
 output_list, write_to_db = unit_conv(analog_signals)
+
+if write_to_db:
+    write_to_db = filter_spikes(output_list, write_to_db)
 
 Nport = 8086
 

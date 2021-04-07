@@ -5,7 +5,7 @@ Created on Fri Nov 20 08:58:50 2020
 
 @author: jp
 
-Unit conversion for experiment surveillance with Arduino.
+Unit conversion for experiment monitoring with Arduino.
 
 Takes lab measurement data (analog voltages) in a list, converts each entry
 to corresponding unit and returns them as a list of dictionaries to be stored
