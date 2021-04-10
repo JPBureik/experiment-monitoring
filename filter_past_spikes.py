@@ -22,9 +22,6 @@ import multiprocessing
 
 """ USER INPUT """
 
-# Specify databse to use:
-# database = 'helium2'
-
 # Specify limit for definition of spike in data:
 accepted_range = {}
 accepted_range['sc_vac'] = {'lower': 1e-11, 'upper': 4e-9}  # mbar, no calib
@@ -33,19 +30,18 @@ accepted_range['lab_temperature'] = {'lower': 15, 'upper': 30}  # deg C
 
 class SpikeFilter:
 
-    def __init__(self, database, accepted_range):
-        self.database = database
-        self.client = InfluxDBClient(
-            host='localhost', port=8086, database=self.database
-            )
+    def __init__(self, accepted_range):
         self.accepted_range = accepted_range
-        self.series_list = list(self.accepted_range.keys())
+        self.series_list = []  # list(self.accepted_range.keys())
         self.data = {}
         self.timestamps = {}
         self.spike_indices = {}
         self.spike_timestamps = {}
         self.spike_utimestamps = {}
         self.total_spikes = {}
+        self.set_database()
+        self.display_series()
+        self.set_accepted_range()
 
     @staticmethod
     def is_inbounds(data_point, lower_bound, upper_bound, inclusive=True):
@@ -61,8 +57,22 @@ class SpikeFilter:
         u_time_str = str(u_time)[:-2] + 9 * '0'
         return u_time_str
 
-    def display_series(self):
+    def set_database(self):
+        self.database = input('Specify database:\n')
+        self.client = InfluxDBClient(host='localhost', port=8086,
+                                     database=self.database)
+
+    def set_accepted_range():
         pass
+
+    def display_series(self):
+        series_result = self.client.query('SHOW series').raw
+        self.series_list = [series_result['series'][0]['values'][i][0].
+                            split(',')[0] for i in
+                            range(len(series_result['series'][0]['values']))]
+        print('Measurement series in {}: '.format(self.database))
+        for series in self.series_list:
+            print('\t', series)
 
     def find_spikes(self, series):
         # Get data:
@@ -115,16 +125,10 @@ class SpikeFilter:
 """ MAIN """
 
 
-database = input('Specify database:\n')
-
-begin_time = datetime.datetime.now()
-
-spike_filter = SpikeFilter(database, accepted_range)
+spike_filter = SpikeFilter(accepted_range)
 
 with multiprocessing.Pool() as pool:
     pool.map(spike_filter.find_spikes, spike_filter.series_list)
-
-print(datetime.datetime.now() - begin_time)
 
 # print('Accepted range: {} -> Total spikes: {}: {}; {}: {}'.format(
 #         accepted_range, series_list[0], total_spikes[series_list[0]],
