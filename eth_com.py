@@ -1,4 +1,4 @@
- #!/usr/bin/env python3
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
 Created on Thu Aug 08 10:22:13 2019
@@ -23,11 +23,10 @@ identify the signals to be monitored.
 def rcv_meas():
 
     import socket
-    import struct
-    IP_adr_arduino = '10.117.53.45' # Static IP: IOGS network
+    IP_adr_arduino = '10.117.53.45'  # Static IP: IOGS network
     # IP_adr_arduino = '172.20.217.9' # DHCP: Visitor network - not recommended
 
-    arduino_port = 6574 # Match to server side port
+    arduino_port = 6574  # Match to server side port
 
     buffer_size = 2**12
 
@@ -35,13 +34,13 @@ def rcv_meas():
 
     s.connect((IP_adr_arduino, arduino_port))
 
-    s.sendall(b'a') # Send a non-empty message to initialize TCP/IP com
+    s.sendall(b'a')  # Send a non-empty message to initialize TCP/IP com
 
     # Measurement data: 12-bit int -> receive msg as 2**8 * byte1 + byte2
 
-    analog_signals = []
+    analog_signals = {}
 
-    for i in range(12):
+    for channel in range(12):
 
         # Receive both bytes successively:
         byte1 = s.recv(buffer_size)
@@ -54,9 +53,10 @@ def rcv_meas():
         # Convert to voltage:
         voltage = reconstr / 2**12 * 3.25
 
-        analog_signals.append(voltage)
+        analog_signals[channel] = voltage
 
     return analog_signals
+
 
 if __name__ == '__main__':
 
