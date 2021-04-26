@@ -11,6 +11,7 @@ Takes a list of floats or ints and writes them into a specified influxDB
 database.
 """
 
+
 def influxdb_write():
     """ Receive measurement data, convert and write into influxDB."""
 
@@ -23,7 +24,7 @@ def influxdb_write():
     from unit_conv import unit_conv
 
     # Create timestamp for database:
-    now = datetime.utcnow() # Grafana assumes UTC
+    now = datetime.utcnow()  # Grafana assumes UTC
     dt_string = now.strftime("%m/%d/%Y %H:%M:%S")
 
     # Receive measurements from Arduino:
@@ -56,6 +57,7 @@ def influxdb_write():
 
     # Write to database:
     client.write_points(json_body)
+
 
 if __name__ == '__main__':
 

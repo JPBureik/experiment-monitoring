@@ -12,24 +12,28 @@ to corresponding unit and returns them along with the raw data as a list of
 dictionaries to be stored in a database.
 """
 
+
 def unit_conv(analog_signals):
-    """ Convert measurement data in list of floats from Arduino to corresponding units."""
+    """ Convert measurement data in list of floats from Arduino to
+    corresponding units."""
 
     # Local imports:
     from filter_past_spikes import SpikeFilter
 
     """ ---------- USER INPUT: Measurements ---------- """
-    
+
     # Create list to hold all measurements:
     conv_measurements = []
-    
+
     # Lab temperature:
     lab_temp = {}
     conv_measurements.append(lab_temp)
     lab_temp['measurement'] = 'lab_temperature'
     lab_temp['unit'] = '°C'
     lab_temp['arduino_analog_in'] = 1
-    lab_temp['function'] = lambda v: (10.888 - (((-10.888)**2 + 4 * 0.00347 * (1777.3 - v * 1e3))**(1/2))) / (2 * (-0.00347)) + 30
+    lab_temp['function'] = lambda v: \
+        (10.888 - (((-10.888)**2 + 4 * 0.00347 * (1777.3 - v * 1e3)) **
+                   (1/2))) / (2 * (-0.00347)) + 30
 
     # Science Chamber Vacuum:
     sc_vac = {}
@@ -50,3 +54,11 @@ def unit_conv(analog_signals):
             measurement['value'] = None
 
     return conv_measurements
+
+
+if __name__ == '__main__':
+
+    from eth_com import rcv_meas
+    analog_signals = rcv_meas()
+    conv_measurements = unit_conv(analog_signals)
+    print(conv_measurements)
