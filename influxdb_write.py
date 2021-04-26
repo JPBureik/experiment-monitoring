@@ -41,19 +41,20 @@ def influxdb_write():
     # Create JSON:
     json_body = []
     for measurement in conv_measurements:
-        json_body.append(
-            {
-                "measurement": measurement['measurement'],
-                "tags": {
-                    "unit": measurement['unit'],
-                },
-                "time": dt_string,
-                "fields": {
-                    "value": measurement['value'],
-                    "raw": measurement['raw'],
+        if measurement['value']:
+            json_body.append(
+                {
+                    "measurement": measurement['measurement'],
+                    "tags": {
+                        "unit": measurement['unit'],
+                    },
+                    "time": dt_string,
+                    "fields": {
+                        "value": measurement['value'],
+                        "raw": measurement['raw'],
+                    }
                 }
-            }
-        )
+            )
 
     # Write to database:
     client.write_points(json_body)
