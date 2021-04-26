@@ -2,11 +2,20 @@
 
 # Deploy experiment monitoring software to HeliumServer.
 
-cd /home/jp/Documents/Work/prog/exp_monitor
+# Check for remote flag:
+target="git@heliumserver.local"
+while getopts "r" opt; do
+  case $opt in
+    r) target="git@heliumserver.remote"
+    ;;
+  esac
+done
+
+cd /home/jp/Documents/prog/work/exp_monitor
 tar -czf exp_monitor.tar.gz *.py 
-scp exp_monitor.tar.gz git@heliumserver.local:/mnt/md1
+scp exp_monitor.tar.gz $target:/mnt/md1
 rm exp_monitor.tar.gz
-ssh git@heliumserver.local << EOF
+ssh $target << EOF
     cd /mnt/md1/exp_monitor
     if test -f "../exp_monitor.tar.gz"; then
         rm -r *
