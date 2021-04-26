@@ -8,52 +8,45 @@ Created on Fri Nov 20 08:58:50 2020
 Unit conversion for experiment monitoring with Arduino.
 
 Takes lab measurement data (analog voltages) in a list, converts each entry
-to corresponding unit and returns them as a list of dictionaries to be stored
-in a database.
+to corresponding unit and returns them along with the raw data as a list of
+dictionaries to be stored in a database.
 """
 
 def unit_conv(analog_signals):
     """ Convert measurement data in list of floats from Arduino to corresponding units."""
 
+    # Local imports:
+    from filter_past_spikes import SpikeFilter
 
     """ ---------- USER INPUT: Measurements ---------- """
+    
+    # Create list to hold all measurements:
+    conv_measurements = []
+    
+    # Lab temperature:
+    lab_temp = {}
+    conv_measurements.append(lab_temp)
+    lab_temp['measurement'] = 'lab_temperature'
+    lab_temp['unit'] = '°C'
+    lab_temp['arduino_analog_in'] = 1
+    lab_temp['function'] = lambda v: (10.888 - (((-10.888)**2 + 4 * 0.00347 * (1777.3 - v * 1e3))**(1/2))) / (2 * (-0.00347)) + 30
 
-    # Lab temperature
-    lab_temperature = dict()
-    lab_temperature['unit'] = '°C'
-
-    # Science Chamber Vacuum
-    sc_vac = dict()
+    # Science Chamber Vacuum:
+    sc_vac = {}
+    conv_measurements.append(sc_vac)
+    sc_vac['measurement'] = 'sc_vac'
     sc_vac['unit'] = 'mbar'
+    sc_vac['arduino_analog_in'] = 2
+    sc_vac['function'] = lambda v: 10**(v - 11.5)
 
     """ ---------- Conversion ---------- """
-    # def T(V): return ((V - 2.616) / (-10.9e-3)) - 50
-    def T(V): return (10.888 - (((-10.888)**2 + 4 * 0.00347 * (1777.3 - V * 1e3))**(1/2))) / (2 * (-0.00347)) + 30
 
-    V1 = analog_signals[1]
-    lab_temperature['value'] = T(V1)
+    for measurement in conv_measurements:
+        measurement['raw'] = analog_signals[measurement['arduino_analog_in']]
+        # Check for numerical errors in raw data:
+        if SpikeFilter.is_inbounds(measurement['raw'], 0, 3.3):
+            measurement['value'] = measurement['function'](measurement['raw'])
+        else:
+            measurement['value'] = None
 
-    def P(V): return 10**(V - 10.5)
-
-    V2 = analog_signals[2]
-    sc_vac['value'] = P(V2)
-
-    """ ---------- Value check ---------- """
-    if (((V1 >= 0 and V1 <= 3.3) and (V2 >= 0 and V2 <= 3.3)) and ((lab_temperature['value'] >= -50 and lab_temperature['value'] <= 150) and (sc_vac['value'] >= 1e-11 and sc_vac['value'] <= 1e-2))):
-        write_to_db = True
-    else:
-        write_to_db = False
-
-    # List to be written to database:
-    output_list = []
-    output_list.append(
-        {'measurement': 'lab_temperature',
-         'value': lab_temperature['value'],
-         'unit': lab_temperature['unit']})
-    output_list.append(
-	{'measurement': 'sc_vac',
-	 'value': sc_vac['value'],
-	 'unit': sc_vac['unit']}
-        )
-
-    return output_list, write_to_db
+    return conv_measurements
