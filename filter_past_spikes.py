@@ -62,7 +62,7 @@ class SpikeFilter:
         self.client = InfluxDBClient(host='localhost', port=8086,
                                      database=self.database)
 
-    def set_accepted_range():
+    def set_accepted_range(self):
         pass
 
     def display_series(self):
