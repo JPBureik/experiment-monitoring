@@ -17,9 +17,6 @@ def unit_conv(analog_signals):
     """ Convert measurement data in list of floats from Arduino to
     corresponding units."""
 
-    # Local imports:
-    from filter_past_spikes import SpikeFilter
-
     """ ---------- USER INPUT: Measurements ---------- """
 
     # Create list to hold all measurements:
@@ -41,14 +38,20 @@ def unit_conv(analog_signals):
     sc_vac['measurement'] = 'sc_vac'
     sc_vac['unit'] = 'mbar'
     sc_vac['arduino_analog_in'] = 2
-    sc_vac['function'] = lambda v: 10**(v - 11.5)
+    sc_vac['function'] = lambda v: 0.85 * 10 ** (v - 11.56)
 
     """ ---------- Conversion ---------- """
+
+    def is_inbounds(data_point, lower_bound, upper_bound, inclusive=True):
+        if inclusive:
+            return True if lower_bound <= data_point <= upper_bound else False
+        else:
+            return True if lower_bound < data_point < upper_bound else False
 
     for measurement in conv_measurements:
         measurement['raw'] = analog_signals[measurement['arduino_analog_in']]
         # Check for numerical errors in raw data:
-        if SpikeFilter.is_inbounds(measurement['raw'], 0, 3.3):
+        if is_inbounds(measurement['raw'], 0, 3.3):
             measurement['value'] = measurement['function'](measurement['raw'])
         else:
             measurement['value'] = None

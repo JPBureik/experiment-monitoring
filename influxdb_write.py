@@ -23,6 +23,17 @@ def influxdb_write():
     from eth_com import rcv_meas
     from unit_conv import unit_conv
 
+    def is_inbounds(data_point, lower_bound, upper_bound, inclusive=True):
+        if inclusive:
+            return True if lower_bound <= data_point <= upper_bound else False
+        else:
+            return True if lower_bound < data_point < upper_bound else False
+
+    # Define accepted ranges for spike filter:
+    accepted_range = {}
+    accepted_range['lab_temperature'] = {'lower': 20, 'upper': 30}
+    accepted_range['sc_vac'] = {'lower': 2.3410943978374387e-12, 'upper': 4.671097427789792e-09}
+
     # Create timestamp for database:
     now = datetime.utcnow()  # Grafana assumes UTC
     dt_string = now.strftime("%m/%d/%Y %H:%M:%S")
@@ -38,23 +49,24 @@ def influxdb_write():
     db_name = 'helium2'
     client = InfluxDBClient(host='localhost', port=Nport, database=db_name)
 
-    # Create JSON:
+    # Filter spikes and create JSON:
     json_body = []
     for measurement in conv_measurements:
         if measurement['value']:
-            json_body.append(
-                {
-                    "measurement": measurement['measurement'],
-                    "tags": {
-                        "unit": measurement['unit'],
-                    },
-                    "time": dt_string,
-                    "fields": {
-                        "value": measurement['value'],
-                        "raw": measurement['raw'],
+            if is_inbounds(measurement['value'], accepted_range[measurement['measurement']]['lower'], accepted_range[measurement['measurement']]['upper']):
+                json_body.append(
+                    {
+                        "measurement": measurement['measurement'],
+                        "tags": {
+                            "unit": measurement['unit'],
+                        },
+                        "time": dt_string,
+                        "fields": {
+                            "value": measurement['value'],
+                            "raw": measurement['raw'],
+                        }
                     }
-                }
-            )
+                )
 
     # Write to database:
     client.write_points(json_body)
