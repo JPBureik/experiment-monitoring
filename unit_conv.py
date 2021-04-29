@@ -38,7 +38,7 @@ def unit_conv(analog_signals):
     sc_vac['measurement'] = 'sc_vac'
     sc_vac['unit'] = 'mbar'
     sc_vac['arduino_analog_in'] = 2
-    sc_vac['function'] = lambda v: 0.85 * 10 ** (v - 11.56)
+    sc_vac['function'] = lambda v: 2.05700747e+00 * 10 ** (8.54520722e-01 * v - 1.14291355e+01) + 9.62615028e-12
 
     """ ---------- Conversion ---------- """
 
