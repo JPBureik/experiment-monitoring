@@ -124,11 +124,12 @@ class SpikeFilter:
 
 """ MAIN """
 
+if __name__ == '__main__':
 
-spike_filter = SpikeFilter(accepted_range)
+    spike_filter = SpikeFilter(accepted_range)
 
-with multiprocessing.Pool() as pool:
-    pool.map(spike_filter.find_spikes, spike_filter.series_list)
+    with multiprocessing.Pool() as pool:
+        pool.map(spike_filter.find_spikes, spike_filter.series_list)
 
 # print('Accepted range: {} -> Total spikes: {}: {}; {}: {}'.format(
 #         accepted_range, series_list[0], total_spikes[series_list[0]],
