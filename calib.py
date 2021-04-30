@@ -104,7 +104,7 @@ class Calibrator:
             
     # Add datapoints to calibration:
     def append_calib(self):
-        print('Add data points for the %s to append to its calibration.\n' % self.object_descr)
+        print('Add data points for the %s to improve its calibration.\n' % self.object_descr)
         datetime_id_input = input('Enter date and time for identifier (yyyy-mm-dd-hh-MM):\n')
         datetime_id_input = datetime_id_input.replace('-', '')
         datetime_id = datetime.datetime(int(datetime_id_input[0:4]), int(datetime_id_input[4:6].strip('0')), int(datetime_id_input[6:8].strip('0')), int(datetime_id_input[8:10].strip('0')), int(datetime_id_input[10:12].strip('0')))

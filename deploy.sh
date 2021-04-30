@@ -12,7 +12,7 @@ while getopts "r" opt; do
 done
 
 cd /home/jp/Documents/prog/work/exp_monitor
-tar -czf exp_monitor.tar.gz *.p*
+tar -czf exp_monitor.tar.gz *.py
 scp exp_monitor.tar.gz $target:/mnt/md1
 rm exp_monitor.tar.gz
 ssh $target << EOF
