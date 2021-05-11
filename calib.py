@@ -104,7 +104,7 @@ class Calibrator:
             
     # Add datapoints to calibration:
     def append_calib(self):
-        print('Add data points for the %s to improve its calibration.\n' % self.object_descr)
+        print('\nAdd data points for the %s to improve its calibration.\n' % self.object_descr)
         datetime_id = datetime.datetime.today()
         meas_input = input('Enter measured pressure in mbar (e.g. 1e-10):\n')
         voltage_input = input('Enter measured voltage in V (e.g. 2.9):\n')
