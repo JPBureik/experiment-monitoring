@@ -1,5 +1,5 @@
 /*
- Experiment Surveillance
+ Experiment Monitoring
 
  An ethernet server that reads out all analog inputs
  (whether they are connected or not) and writes them
