@@ -22,6 +22,7 @@ def influxdb_write():
     # Local imports:
     from eth_com import rcv_meas
     from unit_conv import unit_conv
+    from phidgets import temp_meas
 
     def is_inbounds(data_point, lower_bound, upper_bound, inclusive=True):
         if inclusive:
@@ -33,6 +34,8 @@ def influxdb_write():
     accepted_range = {}
     accepted_range['lab_temperature'] = {'lower': 20, 'upper': 30}
     accepted_range['sc_vac'] = {'lower': 2.3410943978374387e-12, 'upper': 3.442785879172718e-09}
+    accepted_range['source_temp'] = {'lower': -200, 'upper': 30}
+
 
     # Create timestamp for database:
     now = datetime.utcnow()  # Grafana assumes UTC
@@ -43,6 +46,10 @@ def influxdb_write():
 
     # Convert:
     conv_measurements = unit_conv(analog_signals)
+
+    # Phidgets:
+    source_temp = temp_meas()
+    conv_measurements.append(source_temp)
 
     # Initialize database client:
     Nport = 8086

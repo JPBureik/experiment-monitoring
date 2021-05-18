@@ -16,7 +16,7 @@ dictionaries to be stored in a database.
 def unit_conv(analog_signals):
     """ Convert measurement data in list of floats from Arduino to
     corresponding units."""
-    
+
     from calib import Calibrator
     sc_vac_calib = Calibrator()
 

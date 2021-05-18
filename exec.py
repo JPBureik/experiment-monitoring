@@ -16,7 +16,7 @@ import time
 from influxdb_write import influxdb_write
 
 # Specify intervall in seconds:
-interval = 1
+interval = 15
 
 # Main loop:
 while True:
