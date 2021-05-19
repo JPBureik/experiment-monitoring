@@ -18,7 +18,7 @@ class Phidget:
         self.measurement_descr = measurement_descr
 
         def onTemperatureChange(self, temperature):
-            print(channel_id[self.getChannel()] + " Temperature: " + str(temperature))
+            print(self.measurement_descr + " Temperature: " + str(temperature))
 
         def onError(self, code, description):
         	print("Code [" + str(self.getChannel()) + "]: " + ErrorEventCode.getName(code))
