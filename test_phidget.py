@@ -49,4 +49,4 @@ all_phidgets.append(tc3)
 
 
 with multiprocessing.Pool() as pool:
-    pool.map(phidget.measure, all_phidgets)
+    pool.map(Phidget.measure, all_phidgets)
