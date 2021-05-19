@@ -44,9 +44,9 @@ def multiproc_fctn(obj_dict):
     tc = Phidget(obj_dict)
     tc.measure()
 
-for phidget in obj_dicts:
-    multiproc_fctn(phidget)
+# for phidget in obj_dicts:
+    # multiproc_fctn(phidget)
 
 
-# with multiprocessing.Pool() as pool:
-    # pool.map(multiproc_fctn, obj_dicts)
+with multiprocessing.Pool() as pool:
+    pool.map(multiproc_fctn, obj_dicts)
