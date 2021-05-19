@@ -9,13 +9,23 @@ import time
 
 class Phidget:
 
-    def __init__(self, phidget_type, hub_idx, hub_serial, hub_channel, measurement_descr):
+    def __init__(self, phidget_type, hub_port, hub_serial, hub_channel, measurement_descr):
 
         self.phidget_type = phidget_type
-        self.hub_idx = hub_idx
+        self.hub_port = hub_port
         self.hub_serial = hub_serial
         self.hub_channel = hub_channel
         self.measurement_descr = measurement_descr
+
+        if self.phidget_type == 'Thermocouple':
+            self.ts_handle = TemperatureSensor()
+            # Set addressing parameters to specify which channel to open:
+            self.ts_handle.setHubPort(self.hub_port)
+            self.ts_handle.setDeviceSerialNumber(self.hub_serial)
+            self.ts_handle.setChannel(self.hub_channel)
+            # Assign any event handlers you need before calling open so that no events are missed:
+            self.ts_handle.setOnTemperatureChangeHandler(onTemperatureChange)
+            self.ts_handle.setOnErrorHandler(onError)
 
     def onTemperatureChange(self, temperature):
         print(channel_id[self.getChannel()] + " Temperature: " + str(temperature))
@@ -28,49 +38,23 @@ class Phidget:
     def measure(self):
         try:
             Log.enable(LogLevel.PHIDGET_LOG_INFO, "phidgetlog.log")
-    		#Create your Phidget channels
-    		temperatureSensor0 = TemperatureSensor()
-    		temperatureSensor1 = TemperatureSensor()
-    		temperatureSensor2 = TemperatureSensor()
 
-    		#Set addressing parameters to specify which channel to open (if any)
-    		temperatureSensor0.setHubPort(4)
-    		temperatureSensor0.setDeviceSerialNumber(561242)
-    		temperatureSensor0.setChannel(0)
-    		temperatureSensor1.setHubPort(4)
-    		temperatureSensor1.setDeviceSerialNumber(561242)
-    		temperatureSensor1.setChannel(1)
-    		temperatureSensor2.setHubPort(4)
-    		temperatureSensor2.setDeviceSerialNumber(561242)
-    		temperatureSensor2.setChannel(2)
+            # Open your Phidgets and wait for attachment:
+            self.ts_handle.openWaitForAttachment(5000)
+            self.ts_handle.openWaitForAttachment(5000)
+            self.ts_handle.openWaitForAttachment(5000)
 
-    		#Assign any event handlers you need before calling open so that no events are missed.
-    		temperatureSensor0.setOnTemperatureChangeHandler(onTemperatureChange)
-    		temperatureSensor0.setOnErrorHandler(onError)
-    		temperatureSensor1.setOnTemperatureChangeHandler(onTemperatureChange)
-    		temperatureSensor1.setOnErrorHandler(onError)
-    		temperatureSensor2.setOnTemperatureChangeHandler(onTemperatureChange)
-    		temperatureSensor2.setOnErrorHandler(onError)
+            time.sleep(5)
 
-    		#Open your Phidgets and wait for attachment
-    		temperatureSensor0.openWaitForAttachment(5000)
-    		temperatureSensor1.openWaitForAttachment(5000)
-    		temperatureSensor2.openWaitForAttachment(5000)
+            # Close your Phidgets once the program is done:
+            self.ts_handle.close()
 
-    		#Do stuff with your Phidgets here or in your event handlers.
 
-    		time.sleep(5)
-
-    		#Close your Phidgets once the program is done.
-    		temperatureSensor0.close()
-    		temperatureSensor1.close()
-    		temperatureSensor2.close()
-
-    	except PhidgetException as ex:
-    		#We will catch Phidget Exceptions here, and print the error informaiton.
-    		traceback.print_exc()
-    		print("")
-    		print("PhidgetException " + str(ex.code) + " (" + ex.description + "): " + ex.details)
+        except PhidgetException as ex:
+            # Catch Phidget Exceptions and print the error information:
+            traceback.print_exc()
+            print("")
+            print("PhidgetException " + str(ex.code) + " (" + ex.description + "): " + ex.details)
 
 tc1 = Phidget('Thermocouple', 4, 561242, 0, 'Source')
 tc2 = Phidget('Thermocouple', 4, 561242, 1, 'A/C')
