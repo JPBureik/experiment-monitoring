@@ -36,10 +36,15 @@ class Phidget:
         # Close your Phidgets once the program is done:
         self.ts_handle.close()
 
+all_phidgets = []
+
 tc1 = Phidget('Thermocouple', 4, 561242, 0, 'Source')
+all_phidgets.append(tc1)
 tc2 = Phidget('Thermocouple', 4, 561242, 1, 'A/C')
+all_phidgets.append(tc2)
 tc3 = Phidget('Thermocouple', 4, 561242, 2, 'Lab')
+all_phidgets.append(tc3)
 
 
-for phidget in [tc1, tc2, tc3]:
+for phidget in all_phidgets:
     phidget.measure()
