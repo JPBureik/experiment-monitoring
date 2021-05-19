@@ -17,6 +17,14 @@ class Phidget:
         self.hub_channel = hub_channel
         self.measurement_descr = measurement_descr
 
+        def onTemperatureChange(self, temperature):
+            print(channel_id[self.getChannel()] + " Temperature: " + str(temperature))
+
+        def onError(self, code, description):
+        	print("Code [" + str(self.getChannel()) + "]: " + ErrorEventCode.getName(code))
+        	print("Description [" + str(self.getChannel()) + "]: " + str(description))
+        	print("----------")
+
         if self.phidget_type == 'Thermocouple':
             self.ts_handle = TemperatureSensor()
             # Set addressing parameters to specify which channel to open:
@@ -26,14 +34,6 @@ class Phidget:
             # Assign any event handlers you need before calling open so that no events are missed:
             self.ts_handle.setOnTemperatureChangeHandler(onTemperatureChange)
             self.ts_handle.setOnErrorHandler(onError)
-
-    def onTemperatureChange(self, temperature):
-        print(channel_id[self.getChannel()] + " Temperature: " + str(temperature))
-
-    def onError(self, code, description):
-    	print("Code [" + str(self.getChannel()) + "]: " + ErrorEventCode.getName(code))
-    	print("Description [" + str(self.getChannel()) + "]: " + str(description))
-    	print("----------")
 
     def measure(self):
         try:
@@ -56,7 +56,7 @@ class Phidget:
             print("")
             print("PhidgetException " + str(ex.code) + " (" + ex.description + "): " + ex.details)
 
-tc1 = Phidget('Thermocouple', 4, 561242, 0, 'Source')
+^tc1 = Phidget('Thermocouple', 4, 561242, 0, 'Source')
 tc2 = Phidget('Thermocouple', 4, 561242, 1, 'A/C')
 tc3 = Phidget('Thermocouple', 4, 561242, 2, 'Lab')
 
