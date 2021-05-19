@@ -7,13 +7,10 @@ import multiprocessing
 
 class Phidget:
 
-    def __init__(self, phidget_type, hub_port, hub_serial, hub_channel, measurement_descr):
+    def __init__(self, obj_dict):
 
-        self.phidget_type = phidget_type
-        self.hub_port = hub_port
-        self.hub_serial = hub_serial
-        self.hub_channel = hub_channel
-        self.measurement_descr = measurement_descr
+        for k, v in obj_dict.items():
+            setattr(self, k, v)
 
         if self.phidget_type == 'Thermocouple':
             self.ts_handle = TemperatureSensor()
