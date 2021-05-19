@@ -42,7 +42,7 @@ class Calibrator:
             self.calib_meas.append((datetime.datetime(2021, 4, 29, 15, 44), (3.7e-10, 1.93)))
             self.calib_meas.append((datetime.datetime(2021, 4, 29, 15, 44), (3.7e-10, 1.93)))
             self.calib_meas.append((datetime.datetime(2021, 4, 29, 15, 44), (3.9e-10, 1.97)))
-            pickle.dump(self.calib_meas, open('calib.p', 'wb' ))
+            # pickle.dump(self.calib_meas, open('calib.p', 'wb' ))
         else:
             self.calib_meas = pickle.load(open('calib.p', 'rb'))
             

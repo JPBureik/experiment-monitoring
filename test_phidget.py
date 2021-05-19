@@ -12,7 +12,7 @@ def main():
 	temperatureSensor0 = TemperatureSensor()
 
 	#Set addressing parameters to specify which channel to open (if any)
-	temperatureSensor0.setHubPort(0)
+	temperatureSensor0.setHubPort(4)
 	temperatureSensor0.setDeviceSerialNumber(561242)
 
 	#Assign any event handlers you need before calling open so that no events are missed.

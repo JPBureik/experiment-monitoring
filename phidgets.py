@@ -22,7 +22,7 @@ def temp_meas():
     temperatureSensor0 = TemperatureSensor.TemperatureSensor()
 
     # Set addressing parameters to specify which channel to open (if any)
-    temperatureSensor0.setHubPort(0)
+    temperatureSensor0.setHubPort(4)
     temperatureSensor0.setDeviceSerialNumber(561242)
 
     # Open your Phidgets and wait for attachment
@@ -36,7 +36,7 @@ def temp_meas():
     source_temp = {}
     source_temp['measurement'] = 'source_temp'
     source_temp['unit'] = '°C'
-    source_temp['phidget_hub'] = 0
+    source_temp['phidget_hub'] = 4
     source_temp['phidget_serial'] = 561242
     source_temp['raw'] = temp
     source_temp['value'] = temp
