@@ -45,7 +45,7 @@ class Phidget:
             self.ts_handle.openWaitForAttachment(5000)
             self.ts_handle.openWaitForAttachment(5000)
 
-            time.sleep(5)
+            time.sleep(1)
 
             # Close your Phidgets once the program is done:
             self.ts_handle.close()
