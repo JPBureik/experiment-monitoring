@@ -1,10 +1,7 @@
 from Phidget22.PhidgetException import *
 from Phidget22.Phidget import *
 from Phidget22.Devices.Log import *
-from Phidget22.LogLevel import *
 from Phidget22.Devices.TemperatureSensor import *
-import traceback
-import time
 import multiprocessing
 
 
@@ -37,16 +34,20 @@ class Phidget:
         # Close your Phidgets once the program is done:
         self.ts_handle.close()
 
-all_phidgets = []
+obj_dicts = []
 
-tc1 = Phidget('Thermocouple', 4, 561242, 0, 'Source')
-all_phidgets.append(tc1)
-tc2 = Phidget('Thermocouple', 4, 561242, 1, 'A/C')
-all_phidgets.append(tc2)
-tc3 = Phidget('Thermocouple', 4, 561242, 2, 'Lab')
-all_phidgets.append(tc3)
+tc1 = {'phidget_type': 'Thermocouple', 'hub_port': 4, 'hub_serial': 561242, 'hub_channel': 0, 'measurement_descr': 'Source'}
+obj_dicts.append(tc1)
+tc2 = {'phidget_type': 'Thermocouple', 'hub_port': 4, 'hub_serial': 561242, 'hub_channel': 1, 'measurement_descr': 'A/C'}
+obj_dicts.append(tc2)
+tc3 = {'phidget_type': 'Thermocouple', 'hub_port': 4, 'hub_serial': 561242, 'hub_channel': 2, 'measurement_descr': 'Lab'}
+obj_dicts.append(tc3)
+
+def multiproc_fctn(obj_dict):
+    tc = Phidget(obj_dict)
+    tc.measure()
 
 
 
 with multiprocessing.Pool() as pool:
-    pool.map(Phidget.measure, all_phidgets)
+    pool.map(multiproc_fctn, obj_dicts)
