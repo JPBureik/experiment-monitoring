@@ -57,4 +57,4 @@ tc3 = Phidget('Thermocouple', 4, 561242, 2, 'Lab')
 
 for phidget in [tc1, tc2, tc3]:
     phidget.measure()
-    time.sleep(1)
+    # time.sleep(1)
