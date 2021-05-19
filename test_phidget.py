@@ -17,10 +17,6 @@ class Phidget:
         self.hub_channel = hub_channel
         self.measurement_descr = measurement_descr
 
-        def onTemperatureChange(self, temperature):
-            # print(self.measurement_descr + " Temperature: " + str(temperature))
-            print(" Temperature: " + str(temperature))
-
         def onError(self, code, description):
         	print("Code [" + str(self.getChannel()) + "]: " + ErrorEventCode.getName(code))
         	print("Description [" + str(self.getChannel()) + "]: " + str(description))
@@ -32,8 +28,6 @@ class Phidget:
             self.ts_handle.setHubPort(self.hub_port)
             self.ts_handle.setDeviceSerialNumber(self.hub_serial)
             self.ts_handle.setChannel(self.hub_channel)
-            # Assign any event handlers you need before calling open so that no events are missed:
-            self.ts_handle.setOnTemperatureChangeHandler(onTemperatureChange)
             self.ts_handle.setOnErrorHandler(onError)
 
     def measure(self):
@@ -45,7 +39,9 @@ class Phidget:
             self.ts_handle.openWaitForAttachment(5000)
             self.ts_handle.openWaitForAttachment(5000)
 
-            time.sleep(1)
+            temp = self.ts_handle.getTemperature()
+
+            print(self.measurement_descr + ' Temperature: ' + temp + ' °C')
 
             # Close your Phidgets once the program is done:
             self.ts_handle.close()
