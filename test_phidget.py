@@ -25,10 +25,10 @@ class Phidget:
 
         temp = self.ts_handle.getTemperature()
 
-        print(self.measurement_descr + ' Temperature: ' + str(temp) + ' °C')
-
         # Close your Phidgets once the program is done:
         self.ts_handle.close()
+
+        return temp
 
 all_phidgets = []
 
@@ -41,4 +41,5 @@ all_phidgets.append(tc3)
 
 
 for phidget in all_phidgets:
-    phidget.measure()
+    temp = phidget.measure()
+    print(phidget.measurement_descr + ' Tempreature: ' + str(temp))
