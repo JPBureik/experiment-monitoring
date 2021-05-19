@@ -44,9 +44,6 @@ class Phidget:
             # Close your Phidgets once the program is done:
             self.ts_handle.close()
 
-            time.sleep(1)
-
-
         except PhidgetException as ex:
             # Catch Phidget Exceptions and print the error information:
             traceback.print_exc()
