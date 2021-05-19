@@ -8,8 +8,10 @@ import time
 
 #Declare any event handlers here. These will be called every time the associated event occurs.
 
+channel_id = {0: 'Source', 1: 'A/C', 2: 'Raman Table'}
+
 def onTemperatureChange(self, temperature):
-	print("Temperature [" + str(self.getChannel()) + "]: " + str(temperature))
+	print(channel_id[self.getChannel()] + " Temperature: " + str(temperature))
 
 def onError(self, code, description):
 	print("Code [" + str(self.getChannel()) + "]: " + ErrorEventCode.getName(code))
