@@ -5,6 +5,7 @@ from Phidget22.LogLevel import *
 from Phidget22.Devices.TemperatureSensor import *
 import traceback
 import time
+import multiprocessing
 
 
 class Phidget:
@@ -46,5 +47,6 @@ tc3 = Phidget('Thermocouple', 4, 561242, 2, 'Lab')
 all_phidgets.append(tc3)
 
 
-for phidget in all_phidgets:
-    phidget.measure()
+
+with multiprocessing.Pool() as pool:
+    pool.map(phidget.measure, all_phidgets)
