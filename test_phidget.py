@@ -35,9 +35,7 @@ class Phidget:
             Log.enable(LogLevel.PHIDGET_LOG_INFO, "phidgetlog.log")
 
             # Open your Phidgets and wait for attachment:
-            self.ts_handle.openWaitForAttachment(5000)
-            self.ts_handle.openWaitForAttachment(5000)
-            self.ts_handle.openWaitForAttachment(5000)
+            self.ts_handle.openWaitForAttachment(1000)
 
             temp = self.ts_handle.getTemperature()
 
