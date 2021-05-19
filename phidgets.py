@@ -13,6 +13,8 @@ Retrieves the values of the connected phidgets and returns them in a list.
 
 def temp_meas():
 
+    # Now use multiprocessing to read out multiple phidgets simultaneously:
+
     from Phidget22.Devices import TemperatureSensor
 
     def onTemperatureChange(temperature):
