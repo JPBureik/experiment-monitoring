@@ -12,7 +12,7 @@ class Phidget:
         self.measurement_descr = measurement_descr
 
         if self.phidget_type == 'Thermocouple':
-            self.ts_handle = TemperatureSensor()
+            self.ts_handle = TemperatureSensor.TemperatureSensor()
             # Set addressing parameters to specify which channel to open:
             self.ts_handle.setHubPort(self.hub_port)
             self.ts_handle.setDeviceSerialNumber(self.hub_serial)
