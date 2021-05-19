@@ -27,7 +27,7 @@ class Phidget:
 
     def measure(self):
         try:
-    		Log.enable(LogLevel.PHIDGET_LOG_INFO, "phidgetlog.log")
+            Log.enable(LogLevel.PHIDGET_LOG_INFO, "phidgetlog.log")
     		#Create your Phidget channels
     		temperatureSensor0 = TemperatureSensor()
     		temperatureSensor1 = TemperatureSensor()
