@@ -33,8 +33,8 @@ class Phidget:
             self.ts_handle.setDeviceSerialNumber(self.hub_serial)
             self.ts_handle.setChannel(self.hub_channel)
             # Assign any event handlers you need before calling open so that no events are missed:
-            self.ts_handle.setOnTemperatureChangeHandler(self.onTemperatureChange)
-            self.ts_handle.setOnErrorHandler(self.onError)
+            self.ts_handle.setOnTemperatureChangeHandler(onTemperatureChange)
+            self.ts_handle.setOnErrorHandler(onError)
 
     def measure(self):
         try:
