@@ -30,16 +30,16 @@ class Phidget:
 
         return temp
 
-all_phidgets = []
+if __name__ == '__main__':
 
-tc1 = Phidget('Thermocouple', 4, 561242, 0, 'Source')
-all_phidgets.append(tc1)
-tc2 = Phidget('Thermocouple', 4, 561242, 1, 'A/C')
-all_phidgets.append(tc2)
-tc3 = Phidget('Thermocouple', 4, 561242, 2, 'Lab')
-all_phidgets.append(tc3)
+    all_phidgets = []
+    tc1 = Phidget('Thermocouple', 4, 561242, 0, 'Source')
+    all_phidgets.append(tc1)
+    tc2 = Phidget('Thermocouple', 4, 561242, 1, 'A/C')
+    all_phidgets.append(tc2)
+    tc3 = Phidget('Thermocouple', 4, 561242, 2, 'Lab')
+    all_phidgets.append(tc3)
 
-
-for phidget in all_phidgets:
-    temp = phidget.measure()
-    print(phidget.measurement_descr + ' Tempreature: ' + str(temp))
+    for phidget in all_phidgets:
+        temp = phidget.measure()
+        print(phidget.measurement_descr + ' Tempreature: ' + str(temp))
