@@ -18,7 +18,8 @@ class Phidget:
         self.measurement_descr = measurement_descr
 
         def onTemperatureChange(self, temperature):
-            print(self.measurement_descr + " Temperature: " + str(temperature))
+            # print(self.measurement_descr + " Temperature: " + str(temperature))
+            print(" Temperature: " + str(temperature))
 
         def onError(self, code, description):
         	print("Code [" + str(self.getChannel()) + "]: " + ErrorEventCode.getName(code))
@@ -32,8 +33,8 @@ class Phidget:
             self.ts_handle.setDeviceSerialNumber(self.hub_serial)
             self.ts_handle.setChannel(self.hub_channel)
             # Assign any event handlers you need before calling open so that no events are missed:
-            self.ts_handle.setOnTemperatureChangeHandler(onTemperatureChange)
-            self.ts_handle.setOnErrorHandler(onError)
+            self.ts_handle.setOnTemperatureChangeHandler(self.onTemperatureChange)
+            self.ts_handle.setOnErrorHandler(self.onError)
 
     def measure(self):
         try:
