@@ -41,7 +41,7 @@ class Phidget:
 
             temp = self.ts_handle.getTemperature()
 
-            print(self.measurement_descr + ' Temperature: ' + temp + ' °C')
+            print(self.measurement_descr + ' Temperature: ' + str(temp) + ' °C')
 
             # Close your Phidgets once the program is done:
             self.ts_handle.close()
