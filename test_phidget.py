@@ -56,7 +56,7 @@ class Phidget:
             print("")
             print("PhidgetException " + str(ex.code) + " (" + ex.description + "): " + ex.details)
 
-^tc1 = Phidget('Thermocouple', 4, 561242, 0, 'Source')
+tc1 = Phidget('Thermocouple', 4, 561242, 0, 'Source')
 tc2 = Phidget('Thermocouple', 4, 561242, 1, 'A/C')
 tc3 = Phidget('Thermocouple', 4, 561242, 2, 'Lab')
 
