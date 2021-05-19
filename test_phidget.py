@@ -58,5 +58,5 @@ tc2 = Phidget('Thermocouple', 4, 561242, 1, 'A/C')
 tc3 = Phidget('Thermocouple', 4, 561242, 2, 'Lab')
 
 
-for phidget in [tc1, tc2, tc3]:
+for phidget in [tc2, tc1, tc3]:
     phidget.measure()
