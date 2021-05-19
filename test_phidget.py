@@ -1,10 +1,4 @@
-from Phidget22.PhidgetException import *
-from Phidget22.Phidget import *
-from Phidget22.Devices.Log import *
-from Phidget22.LogLevel import *
-from Phidget22.Devices.TemperatureSensor import *
-import traceback
-import time
+from Phidget22.Devices import TemperatureSensor
 
 
 class Phidget:
