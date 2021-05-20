@@ -36,6 +36,7 @@ def influxdb_write():
     accepted_range['lab_temp'] = {'lower': 20, 'upper': 30}
     accepted_range['sc_vac'] = {'lower': 2.3410943978374387e-12, 'upper': 3.442785879172718e-09}
     accepted_range['source_temp'] = {'lower': -200, 'upper': 30}
+    accepted_range['a/c_temp'] = {'lower': 20, 'upper': 30}
 
 
     # Create timestamp for database:
