@@ -22,7 +22,7 @@ def influxdb_write():
     # Local imports:
     from eth_com import rcv_meas
     from unit_conv import unit_conv
-    from test_phidget import Phidget
+    from phidget import Phidget
 
 
     def is_inbounds(data_point, lower_bound, upper_bound, inclusive=True):
