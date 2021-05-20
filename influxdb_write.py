@@ -63,6 +63,8 @@ def influxdb_write():
         json_dict = phidget.to_dict(temp)
         conv_measurements.append(json_dict)
 
+    print(conv_measurements)
+
     # Initialize database client:
     Nport = 8086
     db_name = 'helium2'
