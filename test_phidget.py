@@ -12,6 +12,7 @@ class Phidget:
         self.measurement_descr = measurement_descr
 
         if self.phidget_type == 'Thermocouple':
+            self.unit_str = '°C'
             self.ts_handle = TemperatureSensor.TemperatureSensor()
             # Set addressing parameters to specify which channel to open:
             self.ts_handle.setHubPort(self.hub_port)
@@ -30,7 +31,21 @@ class Phidget:
 
         return temp
 
+    def to_dict(self, temp):
+
+        json_dict = {}
+        json_dict['measurement'] = self.measurement_descr.lower() + '_temp'
+        json_dict['unit'] = self.unit_str
+        json_dict['phidget_hub'] = self.hub_port
+        json_dict['phidget_serial'] = self.hub_serial
+        json_dict['raw'] = temp
+        json_dict['value'] = temp
+
+        return json_dict
+
 if __name__ == '__main__':
+
+    # Create from dict method
 
     all_phidgets = []
     tc1 = Phidget('Thermocouple', 4, 561242, 0, 'Source')
