@@ -25,15 +25,15 @@ def unit_conv(analog_signals):
     # Create list to hold all measurements:
     conv_measurements = []
 
-    # Lab temperature:
-    lab_temp = {}
-    conv_measurements.append(lab_temp)
-    lab_temp['measurement'] = 'lab_temp'
-    lab_temp['unit'] = '°C'
-    lab_temp['arduino_analog_in'] = 1
-    lab_temp['function'] = lambda v: \
-        (10.888 - (((-10.888)**2 + 4 * 0.00347 * (1777.3 - v * 1e3)) **
-                   (1/2))) / (2 * (-0.00347)) + 30
+    # Lab temperature: (now handled by phidgets)
+    # lab_temp = {}
+    # conv_measurements.append(lab_temp)
+    # lab_temp['measurement'] = 'lab_temp'
+    # lab_temp['unit'] = '°C'
+    # lab_temp['arduino_analog_in'] = 1
+    # lab_temp['function'] = lambda v: \
+    #     (10.888 - (((-10.888)**2 + 4 * 0.00347 * (1777.3 - v * 1e3)) **
+    #                (1/2))) / (2 * (-0.00347)) + 30
 
     # Science Chamber Vacuum:
     sc_vac = {}

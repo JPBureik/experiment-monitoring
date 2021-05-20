@@ -1,31 +1,60 @@
-from Phidget22.Phidget import *
-from Phidget22.Devices.TemperatureSensor import *
-import time
+from Phidget22.Devices import TemperatureSensor
 
-#Declare any event handlers here. These will be called every time the associated event occurs.
 
-def onTemperatureChange(self, temperature):
-	print("Temperature: " + str(temperature))
+class Phidget:
 
-def main():
-	#Create your Phidget channels
-	temperatureSensor0 = TemperatureSensor()
+    def __init__(self, phidget_type, hub_port, hub_serial, hub_channel, measurement_descr):
 
-	#Set addressing parameters to specify which channel to open (if any)
-	temperatureSensor0.setHubPort(4)
-	temperatureSensor0.setDeviceSerialNumber(561242)
+        self.phidget_type = phidget_type
+        self.hub_port = hub_port
+        self.hub_serial = hub_serial
+        self.hub_channel = hub_channel
+        self.measurement_descr = measurement_descr
 
-	#Assign any event handlers you need before calling open so that no events are missed.
-	temperatureSensor0.setOnTemperatureChangeHandler(onTemperatureChange)
+        if self.phidget_type == 'Thermocouple':
+            self.unit_str = '°C'
+            self.ts_handle = TemperatureSensor.TemperatureSensor()
+            # Set addressing parameters to specify which channel to open:
+            self.ts_handle.setHubPort(self.hub_port)
+            self.ts_handle.setDeviceSerialNumber(self.hub_serial)
+            self.ts_handle.setChannel(self.hub_channel)
 
-	#Open your Phidgets and wait for attachment
-	temperatureSensor0.openWaitForAttachment(5000)
+    def measure(self):
 
-	#Do stuff with your Phidgets here or in your event handlers.
+        # Open your Phidgets and wait for attachment:
+        self.ts_handle.openWaitForAttachment(1000)
 
-	time.sleep(5)
+        temp = self.ts_handle.getTemperature()
 
-	#Close your Phidgets once the program is done.
-	temperatureSensor0.close()
+        # Close your Phidgets once the program is done:
+        self.ts_handle.close()
 
-main()
+        return temp
+
+    def to_dict(self, temp):
+
+        json_dict = {}
+        json_dict['measurement'] = self.measurement_descr.lower() + '_temp'
+        json_dict['unit'] = self.unit_str
+        json_dict['phidget_hub'] = self.hub_port
+        json_dict['phidget_serial'] = self.hub_serial
+        json_dict['raw'] = temp
+        json_dict['value'] = temp
+
+        return json_dict
+
+if __name__ == '__main__':
+
+    # Create from dict method
+
+    all_phidgets = []
+    tc1 = Phidget('Thermocouple', 4, 561242, 0, 'Source')
+    all_phidgets.append(tc1)
+    tc2 = Phidget('Thermocouple', 4, 561242, 1, 'A/C')
+    all_phidgets.append(tc2)
+    tc3 = Phidget('Thermocouple', 4, 561242, 2, 'Lab')
+    all_phidgets.append(tc3)
+
+    for phidget in all_phidgets:
+        temp = phidget.measure()
+        print(phidget.measurement_descr + ' Tempreature: ' + str(temp))

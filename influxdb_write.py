@@ -22,7 +22,8 @@ def influxdb_write():
     # Local imports:
     from eth_com import rcv_meas
     from unit_conv import unit_conv
-    from phidgets import temp_meas
+    from test_phidget import Phidget
+
 
     def is_inbounds(data_point, lower_bound, upper_bound, inclusive=True):
         if inclusive:
@@ -32,9 +33,10 @@ def influxdb_write():
 
     # Define accepted ranges for spike filter:
     accepted_range = {}
-    accepted_range['lab_temp'] = {'lower': 20, 'upper': 30}
+    accepted_range['lab_temp'] = {'lower': 15, 'upper': 30}
     accepted_range['sc_vac'] = {'lower': 2.3410943978374387e-12, 'upper': 3.442785879172718e-09}
     accepted_range['source_temp'] = {'lower': -200, 'upper': 30}
+    accepted_range['a/c_temp'] = {'lower': 15, 'upper': 30}
 
 
     # Create timestamp for database:
@@ -48,8 +50,18 @@ def influxdb_write():
     conv_measurements = unit_conv(analog_signals)
 
     # Phidgets:
-    source_temp = temp_meas()
-    conv_measurements.append(source_temp)
+    all_phidgets = []
+    tc1 = Phidget('Thermocouple', 4, 561242, 0, 'Source')
+    all_phidgets.append(tc1)
+    tc2 = Phidget('Thermocouple', 4, 561242, 1, 'A/C')
+    all_phidgets.append(tc2)
+    tc3 = Phidget('Thermocouple', 4, 561242, 2, 'Lab')
+    all_phidgets.append(tc3)
+
+    for phidget in all_phidgets:
+        temp = phidget.measure()
+        json_dict = phidget.to_dict(temp)
+        conv_measurements.append(json_dict)
 
     # Initialize database client:
     Nport = 8086
