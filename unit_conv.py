@@ -28,7 +28,7 @@ def unit_conv(analog_signals):
     # Lab temperature:
     lab_temp = {}
     conv_measurements.append(lab_temp)
-    lab_temp['measurement'] = 'lab_temperature'
+    lab_temp['measurement'] = 'lab_temp'
     lab_temp['unit'] = '°C'
     lab_temp['arduino_analog_in'] = 1
     lab_temp['function'] = lambda v: \
