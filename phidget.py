@@ -20,18 +20,20 @@ class Phidget:
             self.ts_handle.setChannel(self.hub_channel)
 
     def measure(self):
+        """ Open connection to Phidget, receive measurement and close."""
 
-        # Open your Phidgets and wait for attachment:
+        # Open Phidgets and wait for attachment:
         self.ts_handle.openWaitForAttachment(1000)
 
         temp = self.ts_handle.getTemperature()
 
-        # Close your Phidgets once the program is done:
+        # Close Phidgets once the program is done:
         self.ts_handle.close()
 
         return temp
 
     def to_dict(self, temp):
+        """ Return dict w/ measurement for JSON to store in influxDB."""
 
         json_dict = {}
         json_dict['measurement'] = self.measurement_descr.lower() + '_temp'
@@ -44,8 +46,6 @@ class Phidget:
         return json_dict
 
 if __name__ == '__main__':
-
-    # Create from dict method
 
     all_phidgets = []
     tc1 = Phidget('Thermocouple', 4, 561242, 0, 'Source')
