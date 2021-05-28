@@ -6,7 +6,7 @@ Created on Fri May 28 21:09:53 2021
 @author: jp
 """
 
-import serial
+import serial  # pip3 install pyserial
 
 def tpg261_meas(port):
 
