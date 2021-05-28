@@ -23,6 +23,7 @@ def influxdb_write():
     from eth_com import rcv_meas
     from unit_conv import unit_conv
     from phidget import Phidget
+    from serial_com import tpg261_meas
 
 
     def is_inbounds(data_point, lower_bound, upper_bound, inclusive=True):
@@ -37,6 +38,7 @@ def influxdb_write():
     accepted_range['sc_vac'] = {'lower': 2.3410943978374387e-12, 'upper': 3.442785879172718e-09}
     accepted_range['source_temp'] = {'lower': -200, 'upper': 30}
     accepted_range['a/c_temp'] = {'lower': 15, 'upper': 30}
+    accepted_range['source_vac'] = {'lower': 1e-5, 'upper': 2e3}
 
 
     # Create timestamp for database:
@@ -62,6 +64,10 @@ def influxdb_write():
         temp = phidget.measure()
         json_dict = phidget.to_dict(temp)
         conv_measurements.append(json_dict)
+        
+    # Serial communication:
+    source_vac = tpg261_meas('/dev/ttyUSB0')
+    conv_measurements.append(source_vac)
 
     # Initialize database client:
     Nport = 8086
