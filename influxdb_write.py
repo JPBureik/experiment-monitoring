@@ -38,7 +38,7 @@ def influxdb_write():
     accepted_range['sc_vac'] = {'lower': 2.3410943978374387e-12, 'upper': 3.442785879172718e-09}
     accepted_range['source_temp'] = {'lower': -200, 'upper': 30}
     accepted_range['a/c_temp'] = {'lower': 15, 'upper': 30}
-    accepted_range['source_vac'] = {'lower': 1e-5, 'upper': 2e3}
+    accepted_range['primary_vac'] = {'lower': 1e-5, 'upper': 2e3}
 
 
     # Create timestamp for database:
@@ -66,8 +66,8 @@ def influxdb_write():
         conv_measurements.append(json_dict)
         
     # Serial communication:
-    source_vac = tpg261_meas('/dev/ttyUSB0')
-    conv_measurements.append(source_vac)
+    primary_vac = tpg261_meas('/dev/ttyUSB0')
+    conv_measurements.append(primary_vac)
 
     # Initialize database client:
     Nport = 8086

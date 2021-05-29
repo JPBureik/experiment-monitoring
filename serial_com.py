@@ -26,16 +26,16 @@ def tpg261_meas(port):
     pressure = float(str(serial_rcv).split(',')[1])
     
     # Create dict for JSON:
-    source_vac = {}
-    source_vac['measurement'] = 'source_vac'
-    source_vac['unit'] = 'mbar'
-    source_vac['raw'] = pressure
-    source_vac['value'] = pressure
+    primary_vac = {}
+    primary_vac['measurement'] = 'primary_vac'
+    primary_vac['unit'] = 'mbar'
+    primary_vac['raw'] = pressure
+    primary_vac['value'] = pressure
                 
-    return source_vac
+    return primary_vac
 
 
 if __name__ == '__main__':
 
-    source_vac = tpg261_meas('/dev/ttyUSB0')
-    print(source_vac['measurement'], source_vac['value'], source_vac['unit'])
+    primary_vac = tpg261_meas('/dev/ttyUSB0')
+    print(primary_vac['measurement'], primary_vac['value'], primary_vac['unit'])
