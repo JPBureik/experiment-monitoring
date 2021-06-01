@@ -15,7 +15,7 @@ import time
 # Local imports:
 from influxdb_write import influxdb_write
 
-# Specify intervall in seconds:
+# Specify interval in seconds:
 interval = 15
 
 # Main loop:
