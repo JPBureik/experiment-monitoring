@@ -31,6 +31,10 @@ bounds['a/c_temp'] = {
     'lower': 15,
     'upper': 30
     }
+bounds['water_temp'] = {
+    'lower': 5,
+    'upper': 30
+    }
 bounds['primary_vac'] = {
     'lower': 1e-5,
     'upper': 2e3
