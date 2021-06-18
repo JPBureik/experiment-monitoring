@@ -20,8 +20,8 @@ bounds['lab_temp'] = {
     'upper': 30
     }
 bounds['sc_vac'] = {
-    'lower': 2.3410943978374387e-12,
-    'upper': 3.442785879172718e-09
+    'lower': 2.34-12,
+    'upper': 3.45e-09
     }
 bounds['source_temp'] = {
     'lower': -200,
