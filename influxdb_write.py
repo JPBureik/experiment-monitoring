@@ -20,7 +20,8 @@ def influxdb_write():
     from datetime import datetime
 
     # Local imports:
-    from inbounds_check import bounds, is_inbounds
+    from config import bounds
+    from inbounds_check import is_inbounds
     from eth_com import rcv_meas
     from unit_conv import unit_conv
     from phidget import Phidget
