@@ -36,7 +36,8 @@
     </code>
   * Enable root login via ssh:
     <code>
-    sudo nano /etc/ssh/sshd_config -> set PermitRootLogin yes
+    sudo nano /etc/ssh/sshd_config
+      PermitRootLogin yes
     </code>
   * Reboot RPI:
     <code>
@@ -44,7 +45,7 @@
     </code>
   * SSH into RPI with new password:
     <code>
-    ssh root@IP
+    ssh root@<i>IP</i>
     </code>
   * Create your user account (e.g. <code><i>admin</i></code>) and home directory:
     <code>
