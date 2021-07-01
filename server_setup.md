@@ -49,7 +49,6 @@
   * Create your user account (e.g. `admin`) and home directory:
     <code>
     usermod -l <i>newuser</i> pi
-
     usermod -m -d /home/newuser newuser
     </code>
   * logout
