@@ -118,7 +118,7 @@
     </pre>
   * Create a filesystem on the RAID1 array:
     <pre>
-    sudo mkfs.ext4 -F /dev/md0
+    sudo mkfs.ext4 -F /dev/<i>md0</i>
     </pre>
   * Create a mount point to attach the filesystem (e.g. <code><i>md0</i></code>):
     <pre>
