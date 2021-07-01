@@ -46,14 +46,50 @@
     <code>
     ssh root@IP
     </code>
-  * Create your user account (e.g. `admin`) and home directory:
+  * Create your user account (e.g. <code><i>admin</i></code>) and home directory:
     <code>
-    usermod -l <i>newuser</i> pi
-    usermod -m -d /home/newuser newuser
+    usermod -l <i>admin</i> pi
+    usermod -m -d /home/<i>admin</i> <i>admin</i>
     </code>
-  * logout
-  * ssh newuser@IP (default password: raspberry)
-  * passwd
-  * Set new password for newuser account
-  * Verify new user has sudo privileges: sudo apt-get update
-  * Disable root: sudo passwd -l root
+  * Log back in as new user with default password `raspberry`:
+    <code>
+    logout
+    ssh <i>admin</i>@<i>IP</i>
+    </code>
+  * Set new password for <code><i>admin</i></code> account:
+    <code>
+    passwd
+    </code>
+  * Verify new user has sudo privileges:
+    <code>
+    sudo apt-get update
+    </code>
+  * Disable root:
+    <code>
+    sudo passwd -l root
+    </code>
+
+## Configuring the RPI
+  * Enter configuration menu:
+    <code>
+    sudo raspi-config
+    </code>
+  * Network options: Change hostname (e.g. <code><i>myserver</i></code>):
+    <code>
+    <i>myserver</i>
+    </code>
+  * Reboot:
+    <code>
+    sudo reboot
+    </code>
+  * Log in with new hostname:
+    <code>
+    ssh <i>admin</i>@<i>myserver</i>.local
+  * Make sure everything is up-to-date:
+    <code>
+    sudo apt update && sudo apt -y upgrade
+    </code>
+  * Reboot:
+    <code>
+    sudo reboot
+    </code>
