@@ -145,3 +145,69 @@
     <pre>
     sudo reboot
     </pre>
+
+## Access from outside the IOGS network
+  * By default, <code><i>myserver</i></code> is set up for local access only for security reasons. If port forwarding is used to ssh-tunnel to it directly, you have to consider security in terms of firewalls and surveillance of attempted accesses.
+
+  * Instead, in order to connect from the outside, it is suggested to make use of already existing infrastructure and use a machine for which the ports have already been opened (e.g. <code><i>Pasquano</i></code>) as an ssh proxy.
+  * The Palaiseau VPN has to be enabled for outside access. This guarantees only IOGS staff will be able to access <code><i>myserver</i></code> from the outside.
+  * To jump through <code><i>Pasquano</i></code> to <code><i>myserver</i></code> use the `J` flag for `ssh`:
+    <pre>
+    ssh -J david@10.117.48.105 <i>admin</i>@<i>myserver</i>.local
+    </pre>
+  * And the `o` flag for `scp`:
+    <pre>
+    scp -o 'ProxyJump david@10.117.48.105' <i>test.py</i> <i>admin</i>@<i>myserver</i>.local:/mnt/<i>md0</i>
+  * Shortcuts:
+    - On Linux or Mac: Edit your SSH configuration file (e.g. using `nano`):
+      <pre>
+      sudo nano ~/.ssh/config
+      </pre>
+      At the bottom add:
+      <pre>
+      # SSH tunnel to <i>myserver</i> via <i>Pasquano</i>
+        Host <i>pasquano</i>
+          User <i>pasquano_user</i>
+          HostName <i>pasquano_IP</i>
+        Host <i>myserver</i>.remote
+          HostName <i>myserver</i>.local
+          ProxyJump <i>pasquano</i>
+      </pre>
+      You can now use standard syntax for `ssh` and `scp` commands:
+      *  Opening an ssh session:
+        <pre>
+        ssh <i>admin</i>@<i>myserver</i>.remote
+        </pre>
+      * Copying from local to distant:
+        <pre>
+        scp ~/<i>folder</i>/<i>test.py</i> <i>admin</i>@<i>myserver</i>.remote:/mnt/<i>md0</i>/<i>folder</i>/<i>test.py</i>
+    - On Windows:
+      [Download](https://sourceforge.net/projects/xming/) and install `Xming`.
+      Open `PuTTY`:
+      <pre>
+      Session:
+        &emsp; Host Name: <i>myserver</i>.local
+        &emsp; Port: 22
+      Connection:
+        &emsp; Data:
+        &emsp; &emsp; Auto-login username: <i>admin</i>
+        &emsp; Proxy:
+        &emsp; &emsp; Proxy hostname: <i>pasquano_IP</i>
+        &emsp; &emsp; Port: 22
+        &emsp; &emsp; Username: <i>pasquano_user</i>
+        &emsp; &emsp; Password: <i>pasquano_password</i>
+        &emsp; &emsp; Telnet command, or local proxy command: plink.exe %user@%proxyhost -pw %pass -P %proxyport -nc %host:%port
+        &emsp; SSH:
+        &emsp; &emsp; Enable X11 forwarding: Yes
+      Session:
+        &emsp; Saved Sessions: <i>myserver</i>
+        &emsp; Save
+      Open
+      </pre>
+      You can now copy files from the command prompt using:
+      <pre>
+      pscp -load <i>myserver</i> C:\<i>folder</i>/<i>test</i> <i>myserver</i>.local:/mnt/<i>md0</i>
+  * Setup SSH keys:
+    <pre>
+    ssh-keygen -t ed25519 -C "your_email@example.com"
+    </pre>
