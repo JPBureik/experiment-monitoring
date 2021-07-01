@@ -184,32 +184,28 @@
       [Download](https://sourceforge.net/projects/xming/) and install `Xming`.
       Open `PuTTY`:
       - Session:
-        - Host Name:
-          <pre>
-          <i>myserver</i>.local
-        - Port:
-          <pre>
-          22
-      - Connection:
-        - Data:
         <pre>
-        Auto-login username: <i>admin</i>
-        - Proxy:
-        <pre>
-        Proxy hostname: <i>pasquano_IP</i>
+        Host Name: <i>myserver</i>.local
         Port: 22
-        Username: <i>pasquano_user</i>
-        Password: <i>pasquano_password</i>
-        Telnet command, or local proxy command: plink.exe %user@%proxyhost -pw %pass -P %proxyport -nc %host:%port
+      - Connection:
+        <pre>
+        Data:
+        &emsp; Auto-login username: <i>admin</i>
+        Proxy:
+        &emsp; Proxy hostname: <i>pasquano_IP</i>
+        &emsp; Port: 22
+        &emsp; Username: <i>pasquano_user</i>
+        &emsp; Password: <i>pasquano_password</i>
+        &emsp; Telnet command, or local proxy command: plink.exe %user@%proxyhost -pw %pass -P %proxyport -nc %host:%port
       - SSH:
-        - Enable X11 forwarding:
-          <pre>
-          Yes
+        <pre>
+        Enable X11 forwarding: Yes
       - Session:
         <pre>
         Saved Sessions: <i>myserver</i>
         Save
-      - Open
+    - Open
+      </pre>
       You can now copy files from the command prompt using:
       <pre>
       pscp -load <i>myserver</i> C:\<i>folder</i>/<i>test</i> <i>myserver</i>.local:/mnt/<i>md0</i>
