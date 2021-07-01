@@ -28,7 +28,7 @@
     </code>
   * SSH into RPI with default password `raspberry`:
     <code>
-    ssh pi@IP
+    ssh pi@<i>IP</i>
     </code>
   * Set root password:
     <code>
@@ -37,7 +37,7 @@
   * Enable root login via ssh:
     <code>
     sudo nano /etc/ssh/sshd_config
-      PermitRootLogin yes
+    &emsp; PermitRootLogin yes
     </code>
   * Reboot RPI:
     <code>
