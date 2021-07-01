@@ -1,11 +1,11 @@
 # Experiment Monitoring Server Setup
 
-## Recommended Hardware
+## Hardware Requirements
 
   * Raspberry Pi 4B 8GB
   * Micro SD Card 128GB
   * 5V USB-C Power Supply
-  * 2x 128GB USB thumb drive
+  * 2x 128GB USB key
   * Cooling Case for RPI
 
 #### The instructions below are given for a Linux command line. Replace text in *italitcs*.
@@ -75,7 +75,6 @@
     <code>
     sudo raspi-config
     </code>
-
   * Network options:
     <code>
     hostname
@@ -88,7 +87,6 @@
   * Log in with new hostname:
     <code>
     ssh <i>admin</i>@<i>myserver</i>.local
-    </code>
   * Make sure everything is up-to-date:
     <code>
     sudo apt update && sudo apt -y upgrade
@@ -96,27 +94,4 @@
   * Reboot:
     <code>
     sudo reboot
-    </code>
-
-## Adding external storage devices
-  * Plug in both USB thumb drives and verify that they are recognized as `/dev/sda` and `/dev/sdb`:
-    <code>
-    lsblk
-    </code>
-
-  * Install the RAID software manager:
-    <code>
-    sudo apt-get install mdadm
-    </code>
-  * Create RAID1 array (e.g. <code><i>md0</i></code>):
-  * <code>
-    sudo mdadm --create --verbose /dev/<i>md0</i> --level=1 --raid-devices=2 /dev/sda /dev/sdb
-    </code>
-  * Check progress:
-    <code>
-    cat /proc/mdstat
-    </code>
-  * Create a filesystem on the RAID1 array:
-    <code>
-    sudo mkfs.ext4 -F /dev/md0
     </code>
