@@ -174,7 +174,7 @@
           ProxyJump <i>pasquano</i>
       </pre>
       You can now use standard syntax for `ssh` and `scp` commands:
-      *  Opening an ssh session:
+      *  Opening an SSH session:
           <pre>
           ssh <i>admin</i>@<i>myserver</i>.remote
       * Copying from local to distant:
@@ -183,24 +183,27 @@
     - On Windows:
       [Download](https://sourceforge.net/projects/xming/) and install `Xming`.
       Open `PuTTY`:
-      <pre>
-      Session:
-        &emsp; Host Name: <i>myserver</i>.local
+      - Session:
+        <pre>
+        Host Name: <i>myserver</i>.local
+        Port: 22
+      - Connection:
+        <pre>
+        Data:
+        &emsp; Auto-login username: <i>admin</i>
+        Proxy:
+        &emsp; Proxy hostname: <i>pasquano_IP</i>
         &emsp; Port: 22
-      Connection:
-        &emsp; Data:
-        &emsp; &emsp; Auto-login username: <i>admin</i>
-        &emsp; Proxy:
-        &emsp; &emsp; Proxy hostname: <i>pasquano_IP</i>
-        &emsp; &emsp; Port: 22
-        &emsp; &emsp; Username: <i>pasquano_user</i>
-        &emsp; &emsp; Password: <i>pasquano_password</i>
-        &emsp; &emsp; Telnet command, or local proxy command: plink.exe %user@%proxyhost -pw %pass -P %proxyport -nc %host:%port
-        &emsp; SSH:
-        &emsp; &emsp; Enable X11 forwarding: Yes
-      Session:
-        &emsp; Saved Sessions: <i>myserver</i>
-        &emsp; Save
+        &emsp; Username: <i>pasquano_user</i>
+        &emsp; Password: <i>pasquano_password</i>
+        &emsp; Telnet command, or local proxy command: plink.exe %user@%proxyhost -pw %pass -P %proxyport -nc %host:%port
+      - SSH:
+        <pre>
+        Enable X11 forwarding: Yes
+      - Session:
+        <pre>
+        Saved Sessions: <i>myserver</i>
+        Save
       Open
       </pre>
       You can now copy files from the command prompt using:
