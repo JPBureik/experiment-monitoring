@@ -117,6 +117,30 @@
     cat /proc/mdstat
     </pre>
   * Create a filesystem on the RAID1 array:
-    <code>
+    <pre>
     sudo mkfs.ext4 -F /dev/md0
+    </pre>
+  * Create a mount point to attach the filesystem (e.g. <code><i>md0</i></code>):
+    <pre>
+    sudo mkdir -p /mnt/<i>md0</i>
+    </pre>
+  * Mount the filesystem:
+    <pre>
+    sudo mount /dev/<i>md0</i> /mnt/<i>md0</i>
+    </pre>
+  * Verify the new space is available:
+    <pre>
+    df -h -x devtmpfs -x tmpfs
+    </pre>
+  * Make sure the filesystem is mounted whenever you boot:
+    <pre>
+    sudo echo '/dev/<i>md0</i> /mnt/<i>md0</i> ext4 defaults,noatime 0 1' | sudo tee -a /etc/fstab
+    </pre>
+  * Make sure your raid array starts up correctly on boot:
+    <pre>
+    sudo mdadm --detail --scan | sudo tee -a /etc/mdadm/mdadm.conf
+    </pre>
+  * Reboot:
+    <pre>
+    sudo reboot
     </pre>
