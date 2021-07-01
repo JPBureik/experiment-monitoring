@@ -37,7 +37,7 @@
   * Enable root login via ssh:
     <code>
     sudo nano /etc/ssh/sshd_config
-    &emsp; PermitRootLogin yes
+      &emsp; PermitRootLogin yes
     </code>
   * Reboot RPI:
     <code>
@@ -75,9 +75,10 @@
     <code>
     sudo raspi-config
     </code>
-  * Network options: Change hostname (e.g. <code><i>myserver</i></code>):
+  * Network options:
     <code>
-    <i>myserver</i>
+    hostname
+      &emsp; <i>myserver</i>
     </code>
   * Reboot:
     <code>
