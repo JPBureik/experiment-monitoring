@@ -14,10 +14,10 @@
 
   * [Download](https://www.raspberrypi.org/downloads/raspbian/) and install Raspbian Buster Lite
 
-  * Add an SSH file to the boot SD card:<br>
-    <code>
+  * Add an SSH file to the boot SD card:
+    <pre>
     touch boot/ssh
-    </code>
+    </pre>
   * Get IP address:
     <code>
     ping raspberrypi.local
