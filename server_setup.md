@@ -147,17 +147,17 @@
     </pre>
 
 ## Access from outside the IOGS network
-  * By default, <code><i>myserver</i></code> is set up for local access only for security reasons. If port forwarding is used to ssh-tunnel to it directly, you have to consider security in terms of firewalls and surveillance of attempted accesses.
+  * By default, <code><i>myserver</i></code> is set up for local access only for security reasons. If port forwarding is used to ssh-tunnel to it directly, you have to consider security in terms of firewalls and attempted access surveillance.
 
-  * Instead, in order to connect from the outside, it is suggested to make use of already existing infrastructure and use a machine for which the ports have already been opened (e.g. <code><i>Pasquano</i></code>) as an ssh proxy.
+  * Instead, in order to connect from the outside, it is suggested to make use of already existing infrastructure and use a machine for which the ports have already been opened (e.g. <code><i>Pasquano</i></code>) as an SSH proxy.
   * The Palaiseau VPN has to be enabled for outside access. This guarantees only IOGS staff will be able to access <code><i>myserver</i></code> from the outside.
   * To jump through <code><i>Pasquano</i></code> to <code><i>myserver</i></code> use the `J` flag for `ssh`:
     <pre>
-    ssh -J david@10.117.48.105 <i>admin</i>@<i>myserver</i>.local
+    ssh -J <i>pasquano_user</i>@<pasquano_IP</i> <i>admin</i>@<i>myserver</i>.local
     </pre>
   * And the `o` flag for `scp`:
     <pre>
-    scp -o 'ProxyJump david@10.117.48.105' <i>test.py</i> <i>admin</i>@<i>myserver</i>.local:/mnt/<i>md0</i>
+    scp -o 'ProxyJump <i>pasquano_user</i>@<pasquano_IP</i>' <i>test.py</i> <i>admin</i>@<i>myserver</i>.local:/mnt/<i>md0</i>
   * Shortcuts:
     - On Linux or Mac: Edit your SSH configuration file (e.g. using `nano`):
       <pre>
