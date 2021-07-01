@@ -153,11 +153,11 @@
   * The Palaiseau VPN has to be enabled for outside access. This guarantees only IOGS staff will be able to access <code><i>myserver</i></code> from the outside.
   * To jump through <code><i>Pasquano</i></code> to <code><i>myserver</i></code> use the `J` flag for `ssh`:
     <pre>
-    ssh -J <i>pasquano_user</i>@<pasquano_IP</i> <i>admin</i>@<i>myserver</i>.local
+    ssh -J <i>pasquano_user</i>@<i>pasquano_IP</i> <i>admin</i>@<i>myserver</i>.local
     </pre>
   * And the `o` flag for `scp`:
     <pre>
-    scp -o 'ProxyJump <i>pasquano_user</i>@<pasquano_IP</i>' <i>test.py</i> <i>admin</i>@<i>myserver</i>.local:/mnt/<i>md0</i>
+    scp -o 'ProxyJump <i>pasquano_user</i>@<i>pasquano_IP</i>' <i>test.py</i> <i>admin</i>@<i>myserver</i>.local:/mnt/<i>md0</i>
   * Shortcuts:
     - On Linux or Mac: Edit your SSH configuration file (e.g. using `nano`):
       <pre>
