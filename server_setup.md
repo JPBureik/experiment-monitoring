@@ -175,9 +175,9 @@
       </pre>
       You can now use standard syntax for `ssh` and `scp` commands:
       *  Opening an ssh session:
-        <pre>
-        ssh <i>admin</i>@<i>myserver</i>.remote
-        </pre>
+          <pre>
+          ssh <i>admin</i>@<i>myserver</i>.remote
+          </pre>
       * Copying from local to distant:
         <pre>
         scp ~/<i>folder</i>/<i>test.py</i> <i>admin</i>@<i>myserver</i>.remote:/mnt/<i>md0</i>/<i>folder</i>/<i>test.py</i>
