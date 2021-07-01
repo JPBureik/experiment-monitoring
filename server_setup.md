@@ -19,104 +19,104 @@
     touch boot/ssh
     </pre>
   * Get IP address:
-    <code>
+    <pre>
     ping raspberrypi.local
-    </code>
+    </pre>
   * On your machine add ECDSA host key for RaspberryPi:
-    <code>
+    <pre>
     ssh-keygen -f “/home/<i>user</i>/.ssh/known_hosts” -R “<i>IP</i>”p
-    </code>
+    </pre>
   * SSH into RPI with default password `raspberry`:
-    <code>
+    <pre>
     ssh pi@<i>IP</i>
-    </code>
+    </pre>
   * Set root password:
-    <code>
+    <pre>
     sudo passwd root
-    </code>
+    </pre>
   * Enable root login via ssh:
-    <code>
+    <pre>
     sudo nano /etc/ssh/sshd_config
       &emsp; PermitRootLogin yes
-    </code>
+    </pre>
   * Reboot RPI:
-    <code>
+    <pre>
     sudo reboot
-    </code>
+    </pre>
   * SSH into RPI with new password:
-    <code>
+    <pre>
     ssh root@<i>IP</i>
-    </code>
+    </pre>
   * Create your user account (e.g. <code><i>admin</i></code>) and home directory:
-    <code>
+    <pre>
     usermod -l <i>admin</i> pi
     usermod -m -d /home/<i>admin</i> <i>admin</i>
-    </code>
+    </pre>
   * Log back in as new user with default password `raspberry`:
-    <code>
+    <pre>
     logout
     ssh <i>admin</i>@<i>IP</i>
-    </code>
+    </pre>
   * Set new password for <code><i>admin</i></code> account:
-    <code>
+    <pre>
     passwd
-    </code>
+    </pre>
   * Verify new user has sudo privileges:
-    <code>
+    <pre>
     sudo apt-get update
-    </code>
+    </pre>
   * Disable root:
-    <code>
+    <pre>
     sudo passwd -l root
-    </code>
+    </pre>
 
 ## Configuring the RPI
   * Enter configuration menu:
-    <code>
+    <pre>
     sudo raspi-config
-    </code>
+    </pre>
 
   * Network options:
-    <code>
+    <pre>
     hostname
       &emsp; <i>myserver</i>
-    </code>
+    </pre>
   * Reboot:
-    <code>
+    <pre>
     sudo reboot
-    </code>
+    </pre>
   * Log in with new hostname:
-    <code>
+    <pre>
     ssh <i>admin</i>@<i>myserver</i>.local
-    </code>
+    </pre>
   * Make sure everything is up-to-date:
-    <code>
+    <pre>
     sudo apt update && sudo apt -y upgrade
-    </code>
+    </pre>
   * Reboot:
-    <code>
+    <pre>
     sudo reboot
-    </code>
+    </pre>
 
 ## Adding external storage devices
   * Plug in both USB thumb drives and verify that they are recognized as `/dev/sda` and `/dev/sdb`:
-    <code>
+    <pre>
     lsblk
-    </code>
+    </pre>
 
   * Install the RAID software manager:
-    <code>
+    <pre>
     sudo apt-get install mdadm
-    </code>
+    </pre>
   * Create RAID1 array (e.g. <code><i>md0</i></code>):
-  * <code>
+  * <pre>
     sudo mdadm --create --verbose /dev/<i>md0</i> --level=1 --raid-devices=2 /dev/sda /dev/sdb
-    </code>
+    </pre>
   * Check progress:
-    <code>
+    <pre>
     cat /proc/mdstat
-    </code>
+    </pre>
   * Create a filesystem on the RAID1 array:
     <code>
     sudo mkfs.ext4 -F /dev/md0
-    </code>
+    </pre>
