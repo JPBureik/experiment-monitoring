@@ -14,7 +14,7 @@
 
   * [Download](https://www.raspberrypi.org/downloads/raspbian/) and install Raspbian Buster Lite
 
-  * Add an SSH file to the boot SD card:
+  * Add an SSH file to the boot SD card:<br>
     <code>
     touch boot/ssh
     </code>
