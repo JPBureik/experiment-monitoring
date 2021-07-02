@@ -13,7 +13,7 @@
 
 ## Preparing the RaspberryPi
 
-  * [Download](https://www.raspberrypi.org/downloads/raspbian/) and install Raspbian Buster Lite on the SD card
+  * [Download](https://www.raspberrypi.org/downloads/raspbian/) and install Raspberry Pi OS Lite on the SD card
 
   * Add an SSH file to the boot SD card:
     <pre>
@@ -141,10 +141,11 @@
     <pre>
     sudo mdadm --detail --scan | sudo tee -a /etc/mdadm/mdadm.conf
     </pre>
-  * Reboot:
+  * Important: From this point forward it is no longer recommended to use `sudo reboot` to reboot the server, as this can lead to it no longer starting up correctly. Instead, use
     <pre>
-    sudo reboot
+    sudo shutdown -h now
     </pre>
+    then unplug the power cable once the server is has shut down and plug back in to start back up.
 
 ## Access from outside the IOGS network
   * By default, <code><i>myserver</i></code> is set up for local access only for security reasons. If port forwarding is used to ssh-tunnel to it directly, you have to consider security in terms of firewalls and attempted access surveillance.
