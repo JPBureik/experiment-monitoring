@@ -66,7 +66,7 @@
     <pre>
     sudo apt-get update
     </pre>
-  * Disable root:
+  * Disable root login:
     <pre>
     sudo passwd -l root
     </pre>
@@ -96,7 +96,7 @@
       <pre>
       sudo su
       </pre>
-    - Uncomment the languages of your choice in <code>/etc/locale.gen</<code>, e.g. English and French:
+    - Uncomment the languages of your choice in <code>/etc/locale.gen</code>, e.g. English and French:
       <pre>
       nano /etc/locale.gen
         &emsp; en_GB ISO-8859-1
