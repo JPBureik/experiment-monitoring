@@ -127,6 +127,7 @@
     lsblk
     </pre>
 
+<!--
   * Install the RAID software manager:
     <pre>
     sudo apt-get install mdadm
@@ -168,6 +169,12 @@
     sudo shutdown -h now
     </pre>
     then unplug the power cable once the server has shut down and plug back in to start back up.
+-->
+  * Create a filesystem on both drives:
+    <pre>
+    sudo mkfs.ext4 -F /dev/sda
+    sudo mkfs.ext4 -F /dev/sdb
+    </pre>
 
 ## Access from outside the IOGS network
   * By default, <code><i>myserver</i></code> is set up for local access only for security reasons. If port forwarding is used to ssh-tunnel to it directly, you have to consider security in terms of firewalls and attempted access surveillance.
@@ -232,7 +239,3 @@
       You can now copy files from the command prompt using:
       <pre>
       pscp -load <i>myserver</i> C:\<i>folder</i>/<i>test</i> <i>myserver</i>.local:/mnt/<i>md0</i>
-  * Setup SSH keys:
-    <pre>
-    ssh-keygen -t ed25519 -C "your_email@example.com"
-    </pre>
