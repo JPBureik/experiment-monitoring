@@ -141,7 +141,7 @@
     <pre>
     sudo mdadm --detail --scan | sudo tee -a /etc/mdadm/mdadm.conf
     </pre>
-  * Important: From this point forward it is no longer recommended to use `sudo reboot` to reboot the server, as this can lead to it no longer starting up correctly. Instead, use
+  * <b>Important</b>: From this point forward it is no longer recommended to use `sudo reboot` to reboot the server, as this can lead to a failure during boot that can only be solved by reformatting the SD card. Instead, use
     <pre>
     sudo shutdown -h now
     </pre>
