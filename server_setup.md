@@ -99,6 +99,7 @@
     Now you can log in to <code><i>myserver</i></code> without having to enter your user password just by using:
     <pre>
     ssh <i>admin</i>@<i>myserver</i>.local
+    </pre>
 
 ## Adding external storage devices
   * Plug in both USB thumb drives and verify that they are recognized as `/dev/sda` and `/dev/sdb`:
