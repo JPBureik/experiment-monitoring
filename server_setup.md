@@ -77,15 +77,12 @@
     sudo raspi-config
     </pre>
 
-  * Network options:
+  * System options:
     <pre>
-    hostname
+    S4 Hostname
       &emsp; <i>myserver</i>
     </pre>
-  * Reboot:
-    <pre>
-    sudo reboot
-    </pre>
+    Select `Yes` to reboot.
   * Log in with new hostname:
     <pre>
     ssh <i>admin</i>@<i>myserver</i>.local
@@ -94,10 +91,11 @@
     <pre>
     sudo apt update && sudo apt -y upgrade
     </pre>
-  * Reboot:
+  * On your desktop machine, copy your SSH key to <code><i>myserver</i></code> to avoid having to enter your password at every connection:
     <pre>
     sudo reboot
     </pre>
+    If you don't already have an SSH key on your desktop machine, consult this [guide](https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent).
 
 ## Adding external storage devices
   * Plug in both USB thumb drives and verify that they are recognized as `/dev/sda` and `/dev/sdb`:
@@ -145,7 +143,7 @@
     <pre>
     sudo shutdown -h now
     </pre>
-    then unplug the power cable once the server is has shut down and plug back in to start back up.
+    then unplug the power cable once the server has shut down and plug back in to start back up.
 
 ## Access from outside the IOGS network
   * By default, <code><i>myserver</i></code> is set up for local access only for security reasons. If port forwarding is used to ssh-tunnel to it directly, you have to consider security in terms of firewalls and attempted access surveillance.
