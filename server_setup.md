@@ -175,6 +175,30 @@
     sudo mkfs.ext4 -F /dev/sda
     sudo mkfs.ext4 -F /dev/sdb
     </pre>
+  * Create mount points to attach the filesystems (e.g. <code><i>code</i></code> and <code><i>data</i></code>):
+    <pre>
+    sudo mkdir -p /mnt/<i>code</i>
+    sudo mkdir -p /mnt/<i>data</i>
+    </pre>
+  * Mount the filesystems:
+    <pre>
+    sudo mount /dev/<i>sda</i> /mnt/<i>code</i>
+    sudo mount /dev/<i>sdb</i> /mnt/<i>data</i>
+    </pre>
+  * Verify the new space is available:
+    <pre>
+    df -h -x devtmpfs -x tmpfs
+    </pre>
+  * Make sure the filesystems are mounted whenever you boot:
+    <pre>
+    sudo echo '/dev/<i>sda</i> /mnt/<i>code</i> ext4 defaults,noatime 0 1' | sudo tee -a /etc/fstab
+    sudo echo '/dev/<i>sdb</i> /mnt/<i>data</i> ext4 defaults,noatime 0 1' | sudo tee -a /etc/fstab
+    </pre>
+  * Reboot and verify filesystems are mounted:
+    <pre>
+    sudo reboot
+    ssh <i>admin</i>@<i>myserver</i>.local
+    lsblk
 
 ## Access from outside the IOGS network
   * By default, <code><i>myserver</i></code> is set up for local access only for security reasons. If port forwarding is used to ssh-tunnel to it directly, you have to consider security in terms of firewalls and attempted access surveillance.
