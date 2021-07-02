@@ -91,12 +91,32 @@
     <pre>
     sudo apt update && sudo apt -y upgrade
     </pre>
+  * Set the locales corresponding to your region and languages of choice:
+    - Login as root:
+      <pre>
+      sudo su
+      </pre>
+    - Uncomment the languages of your choice in <code>/etc/locale.gen</<code>, e.g. English and French:
+      <pre>
+      nano /etc/locale.gen
+        &emsp; en_GB ISO-8859-1
+        &emsp; en_GB.UTF-8 UTF-8
+        &emsp; en_US ISO-8859-1
+        &emsp; en_US.UTF-8 UTF-8
+        &emsp; fr_FR ISO-8859-1
+        &emsp; fr_FR.UTF-8 UTF-8
+      </pre>
+    - Generate the new locales and logout of root:
+      <pre>
+      locale-gen
+      exit
+      </pre>
   * On your <b>desktop machine</b>, copy your SSH key to <code><i>myserver</i></code>:
     <pre>
     ssh-copy-id <i>admin</i>@<i>myserver</i>.local
     </pre>
     If you don't already have an SSH key on your desktop machine, consult this [guide](https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent).<br>
-    From now on you can log in to <code><i>myserver</i></code> without having to enter your user password just by using:
+    From now on you can log into <code><i>myserver</i></code> without having to enter your user password just by using:
     <pre>
     ssh <i>admin</i>@<i>myserver</i>.local
     </pre>
