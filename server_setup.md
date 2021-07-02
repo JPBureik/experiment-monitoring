@@ -265,7 +265,7 @@
       pscp -load <i>myserver</i> C:\<i>folder</i>/<i>test</i> <i>myserver</i>.local:/mnt/<i>md0</i>
 
 ## Installing InfluxDB and Grafana
-  * Install InfluxDB:
+  * Install InfluxDB and start the service:
     <pre>
     sudo curl -sL https://repos.influxdata.com/influxdb.key | sudo apt-key add -
     sudo echo "deb https://repos.influxdata.com/ubuntu bionic stable" | sudo tee /etc/apt/sources.list.d/influxdb.list
@@ -275,3 +275,14 @@
     </pre>
 
   * Install Grafana:
+    <pre>
+    wget -q -O - https://packages.grafana.com/gpg.key | sudo apt-key add -
+    echo "deb https://packages.grafana.com/oss/deb stable main" | sudo tee -a /etc/apt/sources.list.d/grafana.list
+    sudo apt-get update
+    sudo apt-get install -y grafana
+    </pre>
+  * Enable and start the Grafana server:
+    <pre>
+    sudo /bin/systemctl enable grafana-server
+    sudo /bin/systemctl start grafana-server
+    </pre>
