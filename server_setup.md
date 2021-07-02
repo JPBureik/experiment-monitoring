@@ -175,15 +175,15 @@
     sudo mkfs.ext4 -F /dev/sda
     sudo mkfs.ext4 -F /dev/sdb
     </pre>
-  * Create mount points to attach the filesystems (e.g. <code><i>code</i></code> and <code><i>data</i></code>):
+  * Create mount points to attach the filesystems (e.g. <code>code</code> and <code>data</code>):
     <pre>
-    sudo mkdir -p /mnt/<i>code</i>
-    sudo mkdir -p /mnt/<i>data</i>
+    sudo mkdir -p /mnt/code
+    sudo mkdir -p /mnt/data
     </pre>
   * Mount the filesystems:
     <pre>
-    sudo mount /dev/<i>sda</i> /mnt/<i>code</i>
-    sudo mount /dev/<i>sdb</i> /mnt/<i>data</i>
+    sudo mount /dev/sda /mnt/code
+    sudo mount /dev/sdb /mnt/data
     </pre>
   * Verify the new space is available:
     <pre>
@@ -191,8 +191,8 @@
     </pre>
   * Make sure the filesystems are mounted whenever you boot:
     <pre>
-    sudo echo '/dev/<i>sda</i> /mnt/<i>code</i> ext4 defaults,noatime 0 1' | sudo tee -a /etc/fstab
-    sudo echo '/dev/<i>sdb</i> /mnt/<i>data</i> ext4 defaults,noatime 0 1' | sudo tee -a /etc/fstab
+    sudo echo '/dev/sda /mnt/code ext4 defaults,noatime 0 1' | sudo tee -a /etc/fstab
+    sudo echo '/dev/sdb /mnt/data ext4 defaults,noatime 0 1' | sudo tee -a /etc/fstab
     </pre>
   * Reboot and verify filesystems are mounted:
     <pre>
