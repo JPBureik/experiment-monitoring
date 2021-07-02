@@ -91,9 +91,9 @@
     <pre>
     sudo apt update && sudo apt -y upgrade
     </pre>
-  * On your desktop machine, copy your SSH key to <code><i>myserver</i></code> to avoid having to enter your password at every connection:
+  * On your <b>desktop machine</b>, copy your SSH key to <code><i>myserver</i></code> to avoid having to enter your password at every connection:
     <pre>
-    sudo reboot
+    ssh-copy-id <i>admin</i>@<i>myserver</i>.local
     </pre>
     If you don't already have an SSH key on your desktop machine, consult this [guide](https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent).
 
