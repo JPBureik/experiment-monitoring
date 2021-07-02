@@ -111,6 +111,18 @@
     <pre>
     sudo apt update && sudo apt -y upgrade
     </pre>
+  * Create an SSH key with your IOGS e-mail address:
+    <pre>
+    ssh-keygen -t rsa -b 4096 -C "<i>first</i>.<i>last</i>@institutoptique.fr"
+    </pre>
+    Press `Enter` to use the default option for filepath and passphrase.
+  * Add the SSH key to the ssh-agent:
+    <pre>
+    eval "$(ssh-agent -s)"
+    ssh-add ~/.ssh/id_rsa
+    </pre>
+  * Install Git:
+
   * On your <b>desktop machine</b>, copy your SSH key to <code><i>myserver</i></code>:
     <pre>
     ssh-copy-id <i>admin</i>@<i>myserver</i>.local
@@ -285,4 +297,11 @@
     <pre>
     sudo /bin/systemctl enable grafana-server
     sudo /bin/systemctl start grafana-server
+    </pre>
+
+## Setting up the Experiment Monitoring software:
+  * Download the Experiment Monitoring software:
+    <pre>
+    cd /mnt/code
+    git clone git@quantumgitserver.local:helium-lattice/experiment-monitoring.git
     </pre>
