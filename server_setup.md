@@ -263,3 +263,15 @@
       You can now copy files from the command prompt using:
       <pre>
       pscp -load <i>myserver</i> C:\<i>folder</i>/<i>test</i> <i>myserver</i>.local:/mnt/<i>md0</i>
+
+## Installing InfluxDB and Grafana
+  * Install InfluxDB:
+    <pre>
+    sudo curl -sL https://repos.influxdata.com/influxdb.key | sudo apt-key add -
+    sudo echo "deb https://repos.influxdata.com/ubuntu bionic stable" | sudo tee /etc/apt/sources.list.d/influxdb.list
+    sudo apt update
+    sudo apt install influxdb
+    sudo systemctl start influxdb
+    </pre>
+
+  * Install Grafana:
