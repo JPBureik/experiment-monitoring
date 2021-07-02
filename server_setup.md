@@ -82,14 +82,10 @@
     S4 Hostname
       &emsp; <i>myserver</i>
     </pre>
-    Select `Yes` to reboot.
+    Select `Finish` then `Yes` to reboot.
   * Log in with new hostname:
     <pre>
     ssh <i>admin</i>@<i>myserver</i>.local
-    </pre>
-  * Make sure everything is up-to-date:
-    <pre>
-    sudo apt update && sudo apt -y upgrade
     </pre>
   * Set the locales corresponding to your region and languages of choice:
     - Login as root:
@@ -111,6 +107,10 @@
       locale-gen
       exit
       </pre>
+  * Make sure everything is up-to-date:
+    <pre>
+    sudo apt update && sudo apt -y upgrade
+    </pre>
   * On your <b>desktop machine</b>, copy your SSH key to <code><i>myserver</i></code>:
     <pre>
     ssh-copy-id <i>admin</i>@<i>myserver</i>.local
