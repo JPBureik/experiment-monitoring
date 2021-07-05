@@ -111,6 +111,18 @@
     <pre>
     sudo apt update && sudo apt -y upgrade
     </pre>
+  * To enable X11 forwarding, install the X_Windows package:
+    <pre>
+    sudo apt install xorg
+    </pre>
+  * Check correct value for `DISPLAY` environment parameter:
+    <pre>
+    echo $DISPLAY
+    </pre>
+    This should return <code>localhost:10.0</code>. If not, set the `DISPLAY` parameter manually:
+    <pre>
+    export DISPLAY=localhost:10.0
+    </pre>
   * Create an SSH key with your IOGS e-mail address:
     <pre>
     ssh-keygen -t rsa -b 4096 -C "<i>first</i>.<i>last</i>@institutoptique.fr"
