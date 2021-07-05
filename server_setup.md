@@ -312,10 +312,10 @@
         Save
         </pre>
       - Open<br>
-      You can now copy files from the command prompt using:
-      <pre>
-      pscp -load <i>myserver</i> C:\<i>folder</i>/<i>test</i> <i>myserver</i>.local:/mnt/<i>md0</i>
-      </pre>
+        You can now copy files from the command prompt using:
+        <pre>
+        pscp -load <i>myserver</i> C:\<i>folder</i>/<i>test</i> <i>myserver</i>.local:/mnt/<i>md0</i>
+        </pre>
 
 ## Installing InfluxDB and Grafana
   * Install InfluxDB and start the service:
