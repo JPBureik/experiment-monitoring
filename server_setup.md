@@ -123,9 +123,15 @@
     <pre>
     export DISPLAY=localhost:10.0
     </pre>
-    Now you can start up remote applications but forward the application display to your local machine by using the `X` flag with `ssh`:
+    Now you can start up remote applications but forward the application display to your local machine by using the `X` flag with `ssh`. Log back in wuth X11 forwarding enabled:
     <pre>
+    exit
     ssh -X <i>admin</i>@<i>myserver</i>.local
+    </pre>
+    This also enables the use of tools such as `xclip` that allow you to copy a command line output to the clipboard. This is useful for setting up SSH keys.
+  * Install `xclip`:
+    <pre>
+    sudo apt install xclip
     </pre>
   * Create an SSH key with your IOGS e-mail address:
     <pre>
@@ -137,6 +143,11 @@
     eval "$(ssh-agent -s)"
     ssh-add ~/.ssh/id_rsa
     </pre>
+  * Copy the public key to your clipboard:
+    <pre>
+    cat ~/.ssh/id_rsa.pub | xclip -sel clip
+    </pre>
+  * Add the SSH key to your QuantumGitLab account: In your web browser go to `quantumgitserver.local`, enter your IOGS e-mail and your password. Then in the upper right hand corner click onto your icon and go to `Preferences`. From the column on the left hand side, choose `SSH keys`. Click on the `Key` text field and press `Ctrl+V` to paste the SSH key you've copied to your clipboard. Give it an appropriate `Title` (e.g. <i>MyServer</i>). Leave the `Expires at` field blank unless you have a reason to have your key expire at some point, then click `Add key`. You can now clone repositories on QuantumGitLab from <code><i>myserver</i></code>. You can use the same procedure to authorize <code><i>myserver</i></code> for GitHub connections.  
   * Install Git:
 
   * On your <b>desktop machine</b>, copy your SSH key to <code><i>myserver</i></code>:
