@@ -348,7 +348,7 @@
   * Download the Experiment Monitoring software:
     <pre>
     cd /mnt/code
-    git clone git@quantumgitserver.local:helium-lattice/experiment-monitoring.git
+    git clone -o quantumgitserver git@quantumgitserver.local:helium-lattice/experiment-monitoring.git
     </pre>
   * Install the required Python libraries:
     <pre>
@@ -381,20 +381,31 @@
     </pre>
     Verify the Phidgets are seen by your USB interface:
     <pre>
+    ssh -X <i>admin</i>@<i>myserver</i>.local
     dmesg | tail
     </pre>
   * Test the Phidgets drivers with Python:
     <pre>
-    ssh -X <i>admin</i>@<i>myserver</i>.local
     cd /tmp
     wget https://www.phidgets.com/downloads/phidget22/examples/python/Manager/Phidget22_HelloWorld_Python_Ex.zip
     unzip Phidget22_HelloWorld_Python_Ex.zip
     python3 HelloWorld.py
     </pre>
     This last command should list all of your connected Phidgets.
+  * Set up the InfluxDB database (e.g. <i>mydatabase</i>):
+    <pre>
+    influx -precision rfc3339
+    CREATE DATABASE <i>mydatabase</i>
+    </pre>
+    Add this name in the config file of the Experiment Monitoring Python package:
+    nano /mnt/code/experiment-monitoring/config.py
+      &emsp; database_name = <i>mydatabase</i>
+    git add .
+    git commit -m "Specified influxdb database name"
+    git push quantumgitserver master
   * Manually execute one data acquisition cycle to check for errors:
     <pre>
-    python3 /mnt/code/experiment-monitoring/exec.py
+    python3 /mnt/code/experiment-monitoring/influxdb_write.py
     </pre>
 
 ## Backup to oa-data
