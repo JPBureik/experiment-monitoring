@@ -397,12 +397,14 @@
     influx -precision rfc3339
     CREATE DATABASE <i>mydatabase</i>
     </pre>
-    Add this name in the config file of the Experiment Monitoring Python package:
+    Add this name in the config file of the Experiment Monitoring Python package and sync with QuantumGitServer:
+    <pre>
     nano /mnt/code/experiment-monitoring/config.py
       &emsp; database_name = <i>mydatabase</i>
     git add .
     git commit -m "Specified influxdb database name"
     git push quantumgitserver master
+    </pre>
   * Manually execute one data acquisition cycle to check for errors:
     <pre>
     python3 /mnt/code/experiment-monitoring/influxdb_write.py
