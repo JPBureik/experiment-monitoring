@@ -425,7 +425,7 @@
     influx -precision rfc3339
     USE <i>mydatabase</i>
     SELECT * FROM <i>myseries</i>
-    exit
+    EXIT
     </pre>
   * If the data acquisition script executes without any errors, setup its automatic continuous execution via a Linux service:
     <pre>
