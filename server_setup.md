@@ -123,7 +123,7 @@
     <pre>
     export DISPLAY=localhost:10.0
     </pre>
-    Now you can start up remote applications but forward the application display to your local machine by using the `X` flag with `ssh`. Log back in wuth X11 forwarding enabled:
+    Now you can start up remote applications but forward the application display to your local machine by using the `X` flag with `ssh`. Log back in with X11 forwarding enabled:
     <pre>
     exit
     ssh -X <i>admin</i>@<i>myserver</i>.local
@@ -137,7 +137,7 @@
     <pre>
     ssh-keygen -t rsa -b 4096 -C "<i>first</i>.<i>last</i>@institutoptique.fr"
     </pre>
-    Press `Enter` to use the default option for filepath and passphrase.
+    Press `Enter` to use the default options for filepath and passphrase.
   * Add the SSH key to the ssh-agent:
     <pre>
     eval "$(ssh-agent -s)"
@@ -149,15 +149,17 @@
     </pre>
   * Add the SSH key to your QuantumGitLab account: In your web browser go to `quantumgitserver.local`, enter your IOGS e-mail and your password. Then in the upper right hand corner click onto your icon and go to `Preferences`. From the column on the left hand side, choose `SSH keys`. Click on the `Key` text field and press `Ctrl+V` to paste the SSH key you've copied to your clipboard. Give it an appropriate `Title` (e.g. <i>MyServer</i>). Leave the `Expires at` field blank unless you have a reason to have your key expire at some point, then click `Add key`. You can now clone repositories on QuantumGitLab from <code><i>myserver</i></code>. You can use the same procedure to authorize <code><i>myserver</i></code> for GitHub connections.  
   * Install Git:
-
+    <pre>
+    sudo apt-get install git
+    </pre>
   * On your <b>desktop machine</b>, copy your SSH key to <code><i>myserver</i></code>:
     <pre>
     ssh-copy-id <i>admin</i>@<i>myserver</i>.local
     </pre>
-    If you don't already have an SSH key on your desktop machine, consult this [guide](https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent).<br>
+    If you don't already have an SSH key on your desktop machine, repeat the steps above for generating a new SSH key and adding it to the ssh-agent.<br>
     From now on you can log into <code><i>myserver</i></code> without having to enter your user password just by using:
     <pre>
-    ssh <i>admin</i>@<i>myserver</i>.local
+    ssh -X <i>admin</i>@<i>myserver</i>.local
     </pre>
 
 ## Adding external storage devices
