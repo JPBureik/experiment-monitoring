@@ -344,7 +344,7 @@
     &emsp; sudo service grafana-server restart
     </pre>
 
-## Setting up Experiment Monitoring:
+## Setting up the Experiment Monitoring:
   * Download the Experiment Monitoring software:
     <pre>
     cd /mnt/code
@@ -400,7 +400,7 @@
     Add this name in the config file of the Experiment Monitoring Python package and sync with QuantumGitServer:
     <pre>
     nano /mnt/code/experiment-monitoring/config.py
-      &emsp; database_name = <i>mydatabase</i>
+      &emsp; database_name = '<i>mydatabase</i>'
     git add .
     git commit -m "Specified influxdb database name"
     git push quantumgitserver master
