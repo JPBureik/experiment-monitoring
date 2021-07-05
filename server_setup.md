@@ -311,7 +311,7 @@
         Saved Sessions: <i>myserver</i>
         Save
         </pre>
-      - Open
+      - Open<br>
       You can now copy files from the command prompt using:
       <pre>
       pscp -load <i>myserver</i> C:\<i>folder</i>/<i>test</i> <i>myserver</i>.local:/mnt/<i>md0</i>
