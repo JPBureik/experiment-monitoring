@@ -465,7 +465,7 @@
     <i>myserver</i>.local:3000
     </pre>
     The user name and password for the first connection are by default both `admin`. Change the password as prompted immediately after the first login.<br>
-    After logging in, go to the settings page from the icon on the upper right hand side. Change the `Name` and `Description` according to your situation. Under `Auto refresh` add the following options:
+    Click on your user icon on the lower left hand side to edit your profile preferences. Then go to the settings page from the icon on the upper right hand side. Change the `Name` and `Description` according to your situation. Under `Auto refresh` add the following options:
     <pre>
     5s,10s,30s,1m,5m,15m,30m,1h,2h,1d
     </pre>
@@ -482,9 +482,13 @@
     Data source: InfluxDB
     From <i>myseries</i> WHERE
     SELECT field(value)
+    GROUP BY
     ORDER BY TIME ascending
     </pre>
-    On the right hand side, enter the name of <code><i>myseries</i></code> and its description in the corresponding fields, then click `Apply` and `Save`. You can add multiple time series in the same graph by adding another query (`B`) on the lower left hand side.
+    On the right hand side, enter the name of <code><i>myseries</i></code> and its description in the corresponding fields. Add its unit below `Standard options`, then click `Apply` and `Save`. You can add multiple time series in the same graph by adding another query (`B`) on the lower left hand side. On the upper right hand side, choose the time interval specified in <code>/mnt/code/experiment-monitoring/config.py</code> for the Grafana interface to automatically update. To add a gauge that displays the current value, proceed similarly but choose `Gauge` from the dropdown menu on the upper right hand side and in the `SELECT` row enter:
+    <pre>
+    SELECT field(value) last()
+    </pre>
 
 ## Setting up automatic alerts
 
