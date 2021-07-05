@@ -123,6 +123,10 @@
     <pre>
     export DISPLAY=localhost:10.0
     </pre>
+    Now you can start up remote applications but forward the application display to your local machine by using the `X` flag with SSH:
+    <pre>
+    ssh -X <i>admin</i>@<i>myserver</i>.local
+    </pre>
   * Create an SSH key with your IOGS e-mail address:
     <pre>
     ssh-keygen -t rsa -b 4096 -C "<i>first</i>.<i>last</i>@institutoptique.fr"
