@@ -409,6 +409,45 @@
     <pre>
     python3 /mnt/code/experiment-monitoring/influxdb_write.py
     </pre>
+  * If the data acquisition script executes without any errors, setup its automatic continuous execution via a Linux service:
+    <pre>
+    cd /lib/systemd/system
+    sudo nano exp_monitor.service
+      &emsp; [Unit]
+      &emsp; Description=Experiment Monitoring Software
+      &emsp; After=multi-user.target
+
+      &emsp; [Service]
+      &emsp; Type=simple
+      &emsp; ExecStart=/usr/bin/python3 /mnt/code/exec.py
+      &emsp; Restart=always
+      &emsp; RestartSec=15s         
+      &emsp; User=admin   
+
+      &emsp; [Install]
+      &emsp; WantedBy=multi-user.target
+    sudo chmod 644 /lib/systemd/system/exp_monitor.service
+    sudo chmod +x /mnt/code/experiment-monitoring/exec.py
+    sudo systemctl daemon-reload
+    sudo systemctl enable exp_monitor.service
+    sudo systemctl start exp_monitor.service
+    </pre>
+    Now you can start/stop/restart the execution of the Experiment Monitoring software using:
+    <pre>
+    sudo systemctl start/stop/restart exp_monitor.service
+    </pre>
+    You can relaunch the daemon using:
+    <pre>
+    sudo systemctl daemon-reexec
+    </pre>
+    You can check the status of the execution using:
+    <pre>
+    sudo systemctl status exp_monitor.service
+    </pre>
+    You can check the execution log using:
+    <pre>
+    sudo journalctl -f -u exp_monitor.service
+    </pre>
 
 ## Backup to oa-data
 Mount oa-data:
