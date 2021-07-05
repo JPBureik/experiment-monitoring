@@ -72,7 +72,8 @@
     </pre>
 
 ## Configuring the RPI
-  * Enter configuration menu:
+  * Set the host name of your server:<br>
+      Enter configuration menu:
     <pre>
     sudo raspi-config
     </pre>
@@ -235,6 +236,12 @@
     sudo echo '/dev/sda /mnt/code ext4 defaults,noatime 0 1' | sudo tee -a /etc/fstab
     sudo echo '/dev/sdb /mnt/data ext4 defaults,noatime 0 1' | sudo tee -a /etc/fstab
     </pre>
+  * Give write permissions:
+    <pre>
+    cd /mnt
+    sudo chmod a+w code
+    sudo chmod a+w data
+    </pre>
   * Reboot and verify filesystems are mounted:
     <pre>
     sudo reboot
@@ -328,7 +335,7 @@
     sudo /bin/systemctl start grafana-server
     </pre>
 
-## Setting up the Experiment Monitoring software:
+## Setting up Experiment Monitoring:
   * Download the Experiment Monitoring software:
     <pre>
     cd /mnt/code
