@@ -480,7 +480,7 @@
   * Create a new dashboard from the `+` sign on the left hand side. Save it and name it according to your situation. Add a new panel from the icon on the upper right hand side. Choose `Add an empty panel`, then enter the following to monitor the measurement series <code><i>myseries</i></code> as specified in <code>/mnt/code/experiment-monitoring/config.py</code>:
     <pre>
     Data source: InfluxDB
-    From <i>myseries</i> WHERE
+    FROM <i>myseries</i> WHERE
     SELECT field(value)
     GROUP BY
     ORDER BY TIME ascending
