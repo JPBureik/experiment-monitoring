@@ -420,6 +420,13 @@
     <pre>
     python3 /mnt/code/experiment-monitoring/influxdb_write.py
     </pre>
+  * Verify that the data is being written into your database:
+    <pre>
+    influx -precision rfc3339
+    USE <i>mydatabase</i>
+    SELECT * FROM <i>myseries</i>
+    exit
+    </pre>
   * If the data acquisition script executes without any errors, setup its automatic continuous execution via a Linux service:
     <pre>
     cd /lib/systemd/system
