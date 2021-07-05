@@ -108,6 +108,10 @@
       locale-gen
       exit
       </pre>
+  * Set system time for InfluxDB time stamps:
+    <pre>
+    sudo timedatectl set-timezone Europe/Paris
+    </pre>
   * Make sure everything is up-to-date:
     <pre>
     sudo apt update && sudo apt -y upgrade
@@ -334,6 +338,11 @@
     sudo /bin/systemctl enable grafana-server
     sudo /bin/systemctl start grafana-server
     </pre>
+  * Start Grafana automatically after reboot:
+    <pre>
+    sudo nano /etc/rc.local
+    &emsp; sudo service grafana-server restart
+    </pre>
 
 ## Setting up Experiment Monitoring:
   * Download the Experiment Monitoring software:
@@ -341,3 +350,56 @@
     cd /mnt/code
     git clone git@quantumgitserver.local:helium-lattice/experiment-monitoring.git
     </pre>
+  * Install the required Python libraries:
+    <pre>
+    sudo apt install python3-pip
+    sudo apt-get install python-dev libatlas-base-dev libopenjp2-7 libtiff5
+    pip3 install numpy influxdb Phidget22 pyserial scipy matplotlib
+    </pre>
+  * Install Phidgets drivers:
+    <pre>
+    cd /tmp
+    wget https://www.phidgets.com/downloads/phidget22/libraries/linux/libphidget22.tar.gz
+    tar zxvf libphidget22.tar.gz
+    cd libphidget22-* <i>(auto-complete with Tab)</i>
+    ./configure
+    make
+    sudo make install
+    </pre>
+    Add  `/usr/local/lib` to the system-wide library path:
+    <pre>
+    sudo su -
+    echo /usr/local/lib >> /etc/ld.so.conf && sudo ldconfig
+    exit
+    </pre>
+    Extend the USB access rules:
+    <pre>
+    sudo usermod -a -G dialout $USER
+    sudo cp plat/linux/udev/99-libphidget22.rules /etc/udev/rules.d
+    sudo udevadm control --reload
+    sudo reboot
+    </pre>
+    Verify the Phidgets are seen by your USB interface:
+    <pre>
+    dmesg | tail
+    </pre>
+  * Test the Phidgets drivers with Python:
+    <pre>
+    ssh -X <i>admin</i>@<i>myserver</i>.local
+    cd /tmp
+    wget https://www.phidgets.com/downloads/phidget22/examples/python/Manager/Phidget22_HelloWorld_Python_Ex.zip
+    unzip Phidget22_HelloWorld_Python_Ex.zip
+    python3 HelloWorld.py
+    </pre>
+    This last command should list all of your connected Phidgets.
+  * Manually execute one data acquisition cycle to check for errors:
+    <pre>
+    python3 /mnt/code/experiment-monitoring/exec.py
+    </pre>
+
+## Backup to oa-data
+Mount oa-data:
+sudo mount -t cifs -o user='jan-philipp.bureik',sec=ntlm,workgroup=domain.iogs,vers=1.0 //oa-data.domain.iogs/Lattice\ Gases/pc_backups /mnt/oa-data
+Backup all hard drives (e.g. /dev/sda):
+sudo dd if=/dev/sda bs=64K conv=noerror,sync status=progress | gzip -c > /mnt/oa-data/backup_heliumserver_2021_04_29/backup_heliumserver_sda_2021_04_29.img.gz
+Write shell script for this.
