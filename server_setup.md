@@ -333,6 +333,12 @@
     sudo apt-get update
     sudo apt-get install -y grafana
     </pre>
+  * Edit the `[panels]` section in the Grafana settings file:
+    <pre>
+    sudo nano /etc/grafana/grafana.ini
+    &emsp; [panels]
+    &emsp; enable_alpha = false
+    </pre>
   * Enable and start the Grafana server:
     <pre>
     sudo /bin/systemctl enable grafana-server
@@ -405,6 +411,10 @@
     git commit -m "Specified influxdb database name"
     git push quantumgitserver master
     </pre>
+  * Set up the Experiment Monitoring software for your experiment:
+    <pre>
+    nano /mnt/code/experiment-monitoring/config.py
+    </pre>
   * Manually execute one data acquisition cycle to check for errors:
     <pre>
     python3 /mnt/code/experiment-monitoring/influxdb_write.py
@@ -454,7 +464,30 @@
     <pre>
     <i>myserver</i>.local:3000
     </pre>
-    The user name and password for the first connection are by default both `admin`. Change the password as prompted immediately after the first login.
+    The user name and password for the first connection are by default both `admin`. Change the password as prompted immediately after the first login.<br>
+    After logging in, go to the settings page from the icon on the upper right hand side. Change the `Name` and `Description` according to your situation. Under `Auto refresh` add the following options:
+    <pre>
+    5s,10s,30s,1m,5m,15m,30m,1h,2h,1d
+    </pre>
+  * Add a data source from the configuration icon on the left hand side. Choose `InfluxDB`, then enter:
+    <pre>
+    HTTP
+    &emsp; URL: http://localhost:8086/
+    InfluxDB Detaisl
+    &emsp; Database: <i>mydatabase</i>
+    </pre>
+    Click `Save & Test`.
+  * Create a new dashboard from the `+` sign on the left hand side. Save it and name it according to your situation. Add a new panel from the icon on the upper right hand side. Choose `Add an empty panel`, then enter the following to monitor the measurement series <code><i>myseries</i></code> as specified in <code>/mnt/code/experiment-monitoring/config.py</code>:
+  <pre>
+  Data source: InfluxDB
+  From <i>myseries</i> WHERE
+  SELECT field(value)
+  ORDER BY TIME ascending
+  </pre>
+  On the right hand side, enter the name of <code><i>myseries</i></code> and its description in the corresponding fields, then click `Apply` and `Save`. You can add multiple time series in the same graph by adding another query (`B`) on the lower left hand side.
+
+## Setting up automatic alerts
+
 
 ## Backup to oa-data
 Mount oa-data:
