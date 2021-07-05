@@ -123,7 +123,7 @@
     <pre>
     export DISPLAY=localhost:10.0
     </pre>
-    Now you can start up remote applications but forward the application display to your local machine by using the `X` flag with SSH:
+    Now you can start up remote applications but forward the application display to your local machine by using the `X` flag with `ssh`:
     <pre>
     ssh -X <i>admin</i>@<i>myserver</i>.local
     </pre>
@@ -226,7 +226,7 @@
     <pre>
     sudo reboot
     ssh <i>admin</i>@<i>myserver</i>.local
-    lsblk
+    lsblk</pre>
 
 ## Access from outside the IOGS network
   * By default, <code><i>myserver</i></code> is set up for local access only for security reasons. If port forwarding is used to ssh-tunnel to it directly, you have to consider security in terms of firewalls and attempted access surveillance.
