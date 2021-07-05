@@ -344,7 +344,7 @@
     &emsp; sudo service grafana-server restart
     </pre>
 
-## Setting up the Experiment Monitoring:
+## Setting up the continuous data acquisition:
   * Download the Experiment Monitoring software:
     <pre>
     cd /mnt/code
@@ -448,6 +448,13 @@
     <pre>
     sudo journalctl -f -u exp_monitor.service
     </pre>
+
+## Setting up the data monitoring:
+  * Access the Grafana interface from a web browser by navigating to:
+    <pre>
+    <i>myserver</i>.local:3000
+    </pre>
+    The user name and password for the first connection are by default both `admin`. Change the password as prompted immediately after the first login.
 
 ## Backup to oa-data
 Mount oa-data:
