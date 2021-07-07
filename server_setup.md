@@ -514,7 +514,7 @@
     &emsp; from_address = grafana@<i>experiment_name</i>.institutoptique.fr
     &emsp; from_name = Grafana <i>Experiment Name</i>
     </pre>
-  * Set up a new Grafana notification channel:
+  * Set up a new Grafana notification channel:<br>
     In the Grafana web interface, click the `Alerting` bell icon on the left hand side, choose `Notification channels`, then click on `Add channel`. Enter the following:
     <pre>
     Name: E-Mail Notification
@@ -522,7 +522,7 @@
     Addresses: <i>all addresses that are to be notified in case of alerts, separated by ";"</i>
     </pre>
     Check the `Default` and `Include image` options in `Notification settings`, then click on `Test`. All recipients specified in `Addresses` should have received a test e-mail.
-  * Set up alerts:
+  * Set up alerts:<br>
     From your dashboard, choose a time series graph, click on `Edit` and then on `Alert`. Enter the conditions under which you want to receive an automatic alert e-mail for that measurement, and how to handle no data or error situations. Enter a message describing the alert situation, then click on `Test rule`. If the threshold set for the alert is below the current value, the fourth line should read:
     <pre>
     condition evals: "false = false"
