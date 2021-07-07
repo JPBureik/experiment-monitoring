@@ -499,6 +499,29 @@
     </pre>
 
 ## Setting up automatic alerts
+  * Edit the Grafana configuration file:
+    <pre>
+    nano /etc/grafana/grafana.ini
+    &emsp; [smtp]
+    &emsp; enabled = true
+    &emsp; host = smtps.universite-paris-saclay.fr:465
+    &emsp; user = <i>first</i>.<i>last</i>@institutoptique.fr
+    &emsp; # If the password contains # or ; you have to wrap it with triple quotes. Ex """#password;"""
+    &emsp; password = <i>iogs_mail_pwd</i>
+    &emsp; ;cert_file =
+    &emsp; ;key_file =
+    &emsp; skip_verify = true
+    &emsp; from_address = grafana@<i>experiment_name</i>.institutoptique.fr
+    &emsp; from_name = Grafana <i>Experiment Name</i>
+    </pre>
+  * Set up a new Grafana notification channel:
+    In the Grafana web interface, click the `Alerting` bell icon on the left hand side, choose `Notification channels`, then click on `Add channel`. Enter the following:
+    <pre>
+    Name: E-Mail Notification
+    Type: E-Mail
+    Addresses: <i>all addresses that are to be notified in case of alerts, separated by ";"</i>
+    </pre>
+    Check the `Default` and `Include image` options in `Notification settings`, then click on `Test`. All recipients specified in `Addresses` should have received a test e-mail.
 
 
 ## Backup to oa-data
