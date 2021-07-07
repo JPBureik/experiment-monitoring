@@ -522,7 +522,17 @@
     Addresses: <i>all addresses that are to be notified in case of alerts, separated by ";"</i>
     </pre>
     Check the `Default` and `Include image` options in `Notification settings`, then click on `Test`. All recipients specified in `Addresses` should have received a test e-mail.
-
+  * Set up alerts:
+    From your dashboard, choose a time series graph, click on `Edit` and then on `Alert`. Enter the conditions under which you want to receive an automatic alert e-mail for that measurement, and how to handle no data or error situations. Enter a message describing the alert situation, then click on `Test rule`. If the threshold set for the alert is below the current value, the fourth line should read:
+    <pre>
+    condition evals: "false = false"
+    </pre>
+    Now change the threshold value to be below your current value and re-execute the rule test. The same line should now read:
+    <pre>
+    condition evals: "true = true"
+    </pre>
+    Change the threshold value back to the alert threshold, then on the upper right hand side click on `Apply` and save the dashboard by clicking on the save icon on the upper right hand side of the dashboard.<br>
+    You can find an overview of all your alert rules by clicking on the `Alerting` bell icon and then choosing `Alert rules`.
 
 ## Backup to oa-data
 Mount oa-data:
