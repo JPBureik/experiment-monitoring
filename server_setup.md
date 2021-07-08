@@ -153,10 +153,13 @@
     cat ~/.ssh/id_rsa.pub | xclip -sel clip
     </pre>
   * Add the SSH key to your QuantumGitLab account: In your web browser go to `quantumgitserver.local`, enter your IOGS e-mail and your password. Then in the upper right hand corner click onto your icon and go to `Preferences`. From the column on the left hand side, choose `SSH keys`. Click on the `Key` text field and press `Ctrl+V` to paste the SSH key you've copied to your clipboard. Give it an appropriate `Title` (e.g. <i>MyServer</i>). Leave the `Expires at` field blank unless you have a reason to have your key expire at some point, then click `Add key`. You can now clone repositories on QuantumGitLab from <code><i>myserver</i></code>. You can use the same procedure to authorize <code><i>myserver</i></code> for GitHub connections.  
-  * Install Git:
+  * Install and configure Git:
     <pre>
     sudo apt-get install git
+    git config --global user.email "<i>you</i>@<i>example.com</i>"
+    git config --global user.name "<i>Your Name</i>"
     </pre>
+    where <code><i>you</i>@<i>example.com</i></code> is the e-mail address you want associated with Git on <code><i>myserver</i></code>.
   * On your <b>desktop machine</b>, copy your SSH key to <code><i>myserver</i></code>:
     <pre>
     ssh-copy-id <i>admin</i>@<i>myserver</i>.local
