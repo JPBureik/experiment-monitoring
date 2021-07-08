@@ -263,7 +263,7 @@
     Now to access the Grafana interface from the outside, all you need to do is enable the IOGS Palaiseau VPN, open a terminal window, type `grafana` and then in your web browser go to `http://localhost:8080/`.
 
 ## Adding external storage devices
-  * Plug in both USB thumb drives and verify that they are recognized as `/dev/sda` and `/dev/sdb`:
+  * SSH back into <i>myserver</i>. Plug in both USB thumb drives and verify that they are recognized as `/dev/sda` and `/dev/sdb`:
     <pre>
     lsblk
     </pre>
