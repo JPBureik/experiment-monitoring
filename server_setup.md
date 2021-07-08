@@ -176,49 +176,6 @@
     lsblk
     </pre>
 
-<!--
-  * Install the RAID software manager:
-    <pre>
-    sudo apt-get install mdadm
-    </pre>
-  * Create RAID1 array (e.g. <code><i>md0</i></code>):
-  * <pre>
-    sudo mdadm --create --verbose /dev/<i>md0</i> --level=1 --raid-devices=2 /dev/sda /dev/sdb
-    </pre>
-  * Check progress:
-    <pre>
-    cat /proc/mdstat
-    </pre>
-  * Create a filesystem on the RAID1 array:
-    <pre>
-    sudo mkfs.ext4 -F /dev/<i>md0</i>
-    </pre>
-  * Create a mount point to attach the filesystem (e.g. <code><i>md0</i></code>):
-    <pre>
-    sudo mkdir -p /mnt/<i>md0</i>
-    </pre>
-  * Mount the filesystem:
-    <pre>
-    sudo mount /dev/<i>md0</i> /mnt/<i>md0</i>
-    </pre>
-  * Verify the new space is available:
-    <pre>
-    df -h -x devtmpfs -x tmpfs
-    </pre>
-  * Make sure the filesystem is mounted whenever you boot:
-    <pre>
-    sudo echo '/dev/<i>md0</i> /mnt/<i>md0</i> ext4 defaults,noatime 0 1' | sudo tee -a /etc/fstab
-    </pre>
-  * Make sure your raid array starts up correctly on boot:
-    <pre>
-    sudo mdadm --detail --scan | sudo tee -a /etc/mdadm/mdadm.conf
-    </pre>
-  * <b>Important</b>: From this point forward it is no longer recommended to use `sudo reboot` to reboot the server, as this can lead to a failure during boot that can only be solved by reformatting the SD card. Instead, use
-    <pre>
-    sudo shutdown -h now
-    </pre>
-    then unplug the power cable once the server has shut down and plug back in to start back up.
--->
   * Create a filesystem on both drives:
     <pre>
     sudo mkfs.ext4 -F /dev/sda
