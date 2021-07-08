@@ -314,6 +314,8 @@
     sudo systemctl start influxdb
     </pre>
 
+  * Change the default save location for InfluxDB data:
+
   * Install Grafana:
     <pre>
     wget -q -O - https://packages.grafana.com/gpg.key | sudo apt-key add -
@@ -326,6 +328,62 @@
     sudo nano /etc/grafana/grafana.ini
     &emsp; [panels]
     &emsp; enable_alpha = false
+    </pre>
+  * Install the Grafana Image Renderer:<br>
+    First, install Node:
+    <pre>
+    sudo apt-get update && sudo apt-get upgrade
+    cd /tmp
+    wget https://nodejs.org/dist/v14.17.3/node-v14.17.3-linux-armv7l.tar.xz
+    tar xf node-v14.17.3-linux-armv7l.tar.xz
+    cd node-v14.17.3-linux-armv7l
+    sudo cp -R * /usr/local/
+    </pre>
+    Check if the installation was successful:
+    <pre>
+    node -v
+    </pre>
+    This should give the version number `v14.17.3`.<br>
+    Now switch to root and install the Grafana Image Renderer:
+    <pre>
+    sudo su
+    cd /var/lib/grafana/plugins
+    git clone https://github.com/grafana/grafana-image-renderer
+    cd grafana-image-renderer
+    npm -g install yarn
+    npm -g install typescript
+    npm config set unsafe-perm=true
+    sudo npm i grpc
+    sudo npm i husky
+    sudo npm i puppeteer
+    sudo npm i postinstall
+    sudo npm i install
+    sudo npm install
+    cd src/plugin/v2
+    </pre>
+    Now add the ignore line at the following three places to tell Typescript to ignore what follows:
+    <pre>
+    nano grpc_plugin.ts
+    &emsp; const rendererV2ProtoDescriptor = grpc.loadPackageDefinition(rendererV2PackageDef);
+    &emsp; const pluginV2ProtoDescriptor = grpc.loadPackageDefinition(pluginV2PackageDef);
+
+    &emsp; // @ts-ignore: the nested grpc objects are not recognized by ts
+    &emsp; export class RenderGRPCPluginV2 implements GrpcPlugin {
+    &emsp;   constructor(private config: PluginConfig, private log: Logger) {
+    &emsp;     populateConfigFromEnv(this.config);
+    &emsp;   }
+
+    &emsp;   async grpcServer(server: grpc.Server) {
+    &emsp;     const browser = createBrowser(this.config.rendering, this.log);
+    &emsp;     const pluginService = new PluginGRPCServer(browser, this.log);
+
+    &emsp;     const rendererServiceDef = rendererV2ProtoDescriptor['pluginextensionv2']['Renderer']['service'];
+    &emsp;     // @ts-ignore: the nested grpc objects are not recognized by ts
+    &emsp;     server.addService(rendererServiceDef, pluginService as any);
+
+    &emsp;     const pluginServiceDef = pluginV2ProtoDescriptor['pluginv2']['Diagnostics']['service'];
+    &emsp;     // @ts-ignore: the nested grpc objects are not recognized by ts
+    &emsp;     server.addService(pluginServiceDef, pluginService as any);
     </pre>
   * Enable and start the Grafana server:
     <pre>
@@ -344,11 +402,12 @@
     cd /mnt/code
     git clone -o quantumgitserver git@quantumgitserver.local:helium-lattice/experiment-monitoring.git
     </pre>
-  * Install the required Python libraries:
+
+  * Install the required packages and Python libraries:
     <pre>
     sudo apt install python3-pip
-    sudo apt-get install python-dev libatlas-base-dev libopenjp2-7 libtiff5
-    pip3 install numpy influxdb Phidget22 pyserial scipy matplotlib
+    sudo apt-get install libatlas-base-dev libopenjp2-7 libtiff5 python-dev
+    pip3 install influxdb matplotlib numpy Phidget22 pyserial scipy
     </pre>
   * Install Phidgets drivers:
     <pre>
@@ -464,6 +523,7 @@
     <pre>
     5s,10s,30s,1m,5m,15m,30m,1h,2h,1d
     </pre>
+
   * Add a data source from the configuration icon on the left hand side. Choose `InfluxDB`, then enter:
     <pre>
     HTTP
@@ -509,6 +569,7 @@
     telnet <i>smtp_server</i> <i>port</i>
     </pre>
     where <code><i>smtp_server</i></code> could be e.g. <code>smtp.gmail.com</code> and the port will be either `465` (SSL) or `587` (TLS/STARTTLS).
+
   * Set up a new Grafana notification channel:<br>
     In the Grafana web interface, click the `Alerting` bell icon on the left hand side, choose `Notification channels`, then click on `Add channel`. Enter the following:
     <pre>
