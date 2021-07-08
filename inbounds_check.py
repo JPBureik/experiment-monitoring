@@ -19,6 +19,14 @@ bounds['lab_temp'] = {
     'lower': 15,
     'upper': 30
     }
+bounds['zeeman1_temp'] = {
+    'lower': 15,
+    'upper': 120
+    }
+bounds['zeeman2_temp'] = {
+    'lower': 15,
+    'upper': 120
+    }
 bounds['sc_vac'] = {
     'lower': 2.3410943978374387e-12,
     'upper': 3.442785879172718e-09
