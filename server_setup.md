@@ -154,7 +154,7 @@
     <pre>
     cat ~/.ssh/id_rsa.pub | xclip -sel clip
     </pre>
-  * Add the SSH key to your QuantumGitLab account: In your web browser go to `quantumgitserver.local`, enter your IOGS e-mail and your password. Then in the upper right hand corner click onto your icon and go to `Preferences`. From the column on the left hand side, choose `SSH keys`. Click on the `Key` text field and press `Ctrl+V` to paste the SSH key you've copied to your clipboard. Give it an appropriate `Title` (e.g. <i>MyServer</i>). Leave the `Expires at` field blank unless you have a reason to have your key expire at some point, then click `Add key`. You can now clone repositories on QuantumGitLab from <code><i>myserver</i></code>. You can use the same procedure to authorize <code><i>myserver</i></code> for GitHub connections.  
+  * Add the SSH key to your QuantumGitLab account: In your web browser on the machine that you used to ssh into your RaspberryPi, go to `quantumgitserver.local`, enter your IOGS e-mail and your password. Then in the upper right hand corner click onto your icon and go to `Preferences`. From the column on the left hand side, choose `SSH keys`. Click on the `Key` text field and press `Ctrl+V` to paste the SSH key you've copied to your clipboard. Give it an appropriate `Title` (e.g. <i>MyServer</i>). Leave the `Expires at` field blank unless you have a reason to have your key expire at some point, then click `Add key`. You can now clone repositories on QuantumGitLab from <code><i>myserver</i></code>. You can use the same procedure to authorize <code><i>myserver</i></code> for GitHub connections.  
   * Install and configure Git:
     <pre>
     sudo apt-get install git
@@ -171,48 +171,6 @@
     <pre>
     ssh -X <i>admin</i>@<i>myserver</i>.local
     </pre>
-
-## Adding external storage devices
-  * Plug in both USB thumb drives and verify that they are recognized as `/dev/sda` and `/dev/sdb`:
-    <pre>
-    lsblk
-    </pre>
-
-  * Create a filesystem on both drives:
-    <pre>
-    sudo mkfs.ext4 -F /dev/sda
-    sudo mkfs.ext4 -F /dev/sdb
-    </pre>
-  * Create mount points to attach the filesystems (e.g. <code>code</code> and <code>data</code>):
-    <pre>
-    sudo mkdir -p /mnt/code
-    sudo mkdir -p /mnt/data
-    </pre>
-  * Mount the filesystems:
-    <pre>
-    sudo mount /dev/sda /mnt/code
-    sudo mount /dev/sdb /mnt/data
-    </pre>
-  * Verify the new space is available:
-    <pre>
-    df -h -x devtmpfs -x tmpfs
-    </pre>
-  * Make sure the filesystems are mounted whenever you boot:
-    <pre>
-    sudo echo '/dev/sda /mnt/code ext4 defaults,noatime 0 1' | sudo tee -a /etc/fstab
-    sudo echo '/dev/sdb /mnt/data ext4 defaults,noatime 0 1' | sudo tee -a /etc/fstab
-    </pre>
-  * Give write permissions:
-    <pre>
-    cd /mnt
-    sudo chmod a+w code
-    sudo chmod a+w data
-    </pre>
-  * Reboot and verify filesystems are mounted:
-    <pre>
-    sudo reboot
-    ssh <i>admin</i>@<i>myserver</i>.local
-    lsblk</pre>
 
 ## Access from outside the IOGS network
   * By default, <code><i>myserver</i></code> is set up for local access only for security reasons. If port forwarding is used to ssh-tunnel to it directly, you have to consider security in terms of firewalls and attempted access surveillance.
@@ -303,6 +261,47 @@
     </pre>
     Now to access the Grafana interface from the outside, all you need to do is enable the IOGS Palaiseau VPN, open a terminal window, type `grafana` and then in your web browser go to `http://localhost:8080/`.
 
+## Adding external storage devices
+  * Plug in both USB thumb drives and verify that they are recognized as `/dev/sda` and `/dev/sdb`:
+    <pre>
+    lsblk
+    </pre>
+
+  * Create a filesystem on both drives:
+    <pre>
+    sudo mkfs.ext4 -F /dev/sda
+    sudo mkfs.ext4 -F /dev/sdb
+    </pre>
+  * Create mount points to attach the filesystems (e.g. <code>code</code> and <code>data</code>):
+    <pre>
+    sudo mkdir -p /mnt/code
+    sudo mkdir -p /mnt/data
+    </pre>
+  * Mount the filesystems:
+    <pre>
+    sudo mount /dev/sda /mnt/code
+    sudo mount /dev/sdb /mnt/data
+    </pre>
+  * Verify the new space is available:
+    <pre>
+    df -h -x devtmpfs -x tmpfs
+    </pre>
+  * Make sure the filesystems are mounted whenever you boot:
+    <pre>
+    sudo echo '/dev/sda /mnt/code ext4 defaults,noatime 0 1' | sudo tee -a /etc/fstab
+    sudo echo '/dev/sdb /mnt/data ext4 defaults,noatime 0 1' | sudo tee -a /etc/fstab
+    </pre>
+  * Give write permissions:
+    <pre>
+    cd /mnt
+    sudo chmod a+w code
+    sudo chmod a+w data
+    </pre>
+  * Reboot and verify filesystems are mounted:
+    <pre>
+    sudo reboot
+    ssh <i>admin</i>@<i>myserver</i>.local
+    lsblk</pre>
 
 ## Installing InfluxDB and Grafana
   * Install InfluxDB and start the service:
