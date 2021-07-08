@@ -361,9 +361,10 @@
     sudo npm install
     cd src/plugin/v2
     </pre>
-    Now add the ignore line at the following three places to tell Typescript to ignore what follows:
+    Now add the `// @ts-ignore:` line at the following three places to tell Typescript to ignore what follows:
     <pre>
     nano grpc_plugin.ts
+    &emsp; ...
     &emsp; const rendererV2ProtoDescriptor = grpc.loadPackageDefinition(rendererV2PackageDef);
     &emsp; const pluginV2ProtoDescriptor = grpc.loadPackageDefinition(pluginV2PackageDef);
 
