@@ -514,6 +514,8 @@
     &emsp; from_address = grafana@<i>experiment_name</i>.institutoptique.fr
     &emsp; from_name = Grafana <i>Experiment Name</i>
     </pre>
+    __Note about the notification e-mail server:__<br>
+    The network infrastructure at IOGS is currently set up in such a way that SMTP connections are only allowed for one host, that is `smtps.universite-paris-saclay.fr` on port `465`. The only type of e-mail address available for Grafana notification is thus your IOGS e-mail address. It is important to note, however, that your e-mail account will be blocked by the <i>Service Info</i> when they detect that you send a large volume of e-mails; keep this in mind when setting up the automatic alerts in Grafana.
   * Set up a new Grafana notification channel:<br>
     In the Grafana web interface, click the `Alerting` bell icon on the left hand side, choose `Notification channels`, then click on `Add channel`. Enter the following:
     <pre>
