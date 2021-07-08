@@ -6,7 +6,7 @@
   * Micro SD Card 128GB
   * 5V USB-C Power Supply
   * 2x 128GB USB thumb drive
-  * Cooling Case for RPI
+  * Cooling Case for RaspberryPi
   * PC with an SD card reader
 
 #### The instructions below are given for a Linux command line. SSH will generally work from the command prompt on Windows 10 and newer. Replace text in *italitcs*.
@@ -15,13 +15,13 @@
 
   * In order to have internet access, declare the MAC address of the RaspberryPi at the [Service Info](https://ticket.institutoptique.fr/front/helpdesk.public.php?create_ticket=1), specifying explicitly that the new machine is a headless RaspberryPi.
 
-  * [Download](https://www.raspberrypi.org/downloads/raspbian/) and install Raspberry Pi OS Lite on the SD card
+  * [Download](https://www.raspberrypi.org/downloads/raspbian/) and install Raspberry Pi OS Lite on the SD card.
 
   * Add an SSH file to the boot SD card:
     <pre>
     touch boot/ssh
     </pre>
-  * Get IP address:
+  * Put the RaspberryPi in its cooling case. Install it in the lab and connect the Ethernet and power cables. Then from any computer inside the IOGS network, get the RaspberryPi's IP address:
     <pre>
     ping raspberrypi.local
     </pre>
@@ -29,7 +29,7 @@
     <pre>
     ssh-keygen -f “/home/<i>user</i>/.ssh/known_hosts” -R “<i>IP</i>”p
     </pre>
-  * SSH into RPI with default password `raspberry`:
+  * SSH into the RaspberryPi with default password `raspberry`:
     <pre>
     ssh pi@<i>IP</i>
     </pre>
@@ -42,11 +42,11 @@
     sudo nano /etc/ssh/sshd_config
       &emsp; PermitRootLogin yes
     </pre>
-  * Reboot RPI:
+  * Reboot the RaspberryPi:
     <pre>
     sudo reboot
     </pre>
-  * SSH into RPI with new password:
+  * SSH into the RaspberryPi with new password:
     <pre>
     ssh root@<i>IP</i>
     </pre>
@@ -73,7 +73,7 @@
     sudo passwd -l root
     </pre>
 
-## Configuring the RPI
+## Configuring the RaspberryPi
   * Set the host name of your server:<br>
       Enter configuration menu:
     <pre>
