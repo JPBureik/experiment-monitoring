@@ -46,7 +46,7 @@
     <pre>
     sudo reboot
     </pre>
-  * SSH into the RaspberryPi with new password:
+  * SSH into the RaspberryPi with the new password:
     <pre>
     ssh root@<i>IP</i>
     </pre>
@@ -184,8 +184,9 @@
   * And the `o` flag for `scp`:
     <pre>
     scp -o 'ProxyJump <i>pasquano_user</i>@<i>pasquano_IP</i>' <i>test.py</i> <i>admin</i>@<i>myserver</i>.local:/mnt/<i>md0</i>
-  * Shortcut for the IOGS Palaiseau VPN (Linux only):
+  * Shortcut for the IOGS Palaiseau VPN (Linux only) on your <b>desktop machine</b>:
     <pre>
+    sudo apt-get install expect
     nano ~/Documents/prog/expect/launcher
     &emsp; #!/bin/bash
     &emsp; cd /etc/openvpn/client && openvpn /etc/openvpn/client/PAL-VPN.ovpn
@@ -202,7 +203,7 @@
     &emsp; alias pvpn="cd ~/Documents/prog/expect && sudo ./pvpn"
     </pre>
     Now to launch the IOGS Palaiseau VPN all you need to do is open a terminal window and type `pvpn`. No need to re-enter username and password.
-  * Shortcuts for the Shell:
+  * Shortcuts for the Shell on your <b>desktop machine</b>:
     - On Linux or Mac: Edit your SSH configuration file:
       <pre>
       sudo nano ~/.ssh/config
@@ -254,7 +255,7 @@
         <pre>
         pscp -load <i>myserver</i> C:\<i>folder</i>/<i>test</i> <i>myserver</i>.local:/mnt/<i>md0</i>
         </pre>
-  * Shortcut for Grafana:
+  * Shortcut for Grafana on your <b>desktop machine</b>:
     <pre>
     nano ~/.bashrc
     &emsp; alias grafana="ssh -L 8080:<i>myserver</i>.local:3000 <i>pasquano_user</i>@<i>pasquano_IP</i>"
