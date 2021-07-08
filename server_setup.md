@@ -2,11 +2,11 @@
 
 ## Recommended Hardware
 
-  * Raspberry Pi 4B 8GB
-  * Micro SD Card 128GB
-  * 5V USB-C Power Supply
-  * 2x 128GB USB thumb drive
-  * Cooling Case for RaspberryPi
+  * [Raspberry Pi 4B 8GB](https://fr.farnell.com/raspberry-pi/rpi4-modbp-8gb/raspberry-pi-4-model-b-cortex/dp/3369503)
+  * [Micro SD Card 128GB](https://fr.farnell.com/sandisk/sdsqxcy-128g-gn6ma/extreme-pro-c10-microsdhc-128gb/dp/3410257)
+  * [5V USB-C Power Supply](https://fr.farnell.com/raspberry-pi/sc0213/alimentation-rpi-usb-c-5-1v-3a/dp/3106941)
+  * 2x [128GB USB thumb drive](https://www.amazon.fr/Integral-Fusion-Lecteur-Flash-Silver/dp/B018C5A0PE/ref=psdc_2908498031_t4_B07MDXBTL1)
+  * [Cooling Case for RaspberryPi](https://www.amazon.fr/GeeekPi-Raspberry-Ventilateur-40X40X10mm-Dissipateurs/dp/B07XCKNM8J/ref=sr_1_6?__mk_fr_FR=%C3%85M%C3%85%C5%BD%C3%95%C3%91&dchild=1&keywords=boitier+raspberry+pi+4&qid=1625738015&sr=8-6)
   * PC with an SD card reader
 
 #### The instructions below are given for a Linux command line. SSH will generally work from the command prompt on Windows 10 and newer. Replace text in *italitcs*.
