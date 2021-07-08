@@ -238,7 +238,8 @@
     &emsp; expect "Enter Auth Password:"
     &emsp; send -- "<i>my_passwd</i>\n"
     &emsp; interact
-    alias pvpn="cd ~/Documents/prog/expect && sudo ./pvpn"
+    sudo nano ~/.bashrc
+    &emsp; alias pvpn="cd ~/Documents/prog/expect && sudo ./pvpn"
     </pre>
     Now to launch the IOGS Palaiseau VPN all you need to do is open a terminal window and type `pvpn`. No need to re-enter username and password.
   * Shortcuts for the Shell:
