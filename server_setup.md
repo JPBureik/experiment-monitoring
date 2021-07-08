@@ -13,6 +13,8 @@
 
 ## Preparing the RaspberryPi
 
+  * Declare the MAC address of the RaspberryPi at the [Service Info](https://ticket.institutoptique.fr/front/helpdesk.public.php?create_ticket=1) so that it can have internet access.
+
   * [Download](https://www.raspberrypi.org/downloads/raspbian/) and install Raspberry Pi OS Lite on the SD card
 
   * Add an SSH file to the boot SD card:
@@ -294,7 +296,7 @@
         <pre>
         pscp -load <i>myserver</i> C:\<i>folder</i>/<i>test</i> <i>myserver</i>.local:/mnt/<i>md0</i>
         </pre>
-  * Shortcuts for Grafana:
+  * Shortcut for Grafana:
     <pre>
     nano ~/.bashrc
     &emsp; alias grafana="ssh -L 8080:<i>myserver</i>.local:3000 <i>pasquano_user</i>@<i>pasquano_IP</i>"
