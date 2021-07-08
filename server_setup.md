@@ -294,6 +294,13 @@
         <pre>
         pscp -load <i>myserver</i> C:\<i>folder</i>/<i>test</i> <i>myserver</i>.local:/mnt/<i>md0</i>
         </pre>
+  * Shortcuts for Grafana:
+    <pre>
+    nano ~/.bashrc
+    &emsp; alias grafana="ssh -L 8080:<i>myserver</i>.local:3000 <i>pasquano_user</i>@<i>pasquano_IP</i>"
+    </pre>
+    Now to access the Grafana interface from the outside, all you need to do is enable the IOGS Palaiseau VPN, open a terminal window, type `grafana` and then in your web browser go to `http://localhost:8080/`.
+
 
 ## Installing InfluxDB and Grafana
   * Install InfluxDB and start the service:
