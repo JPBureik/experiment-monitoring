@@ -641,8 +641,14 @@
     You can find an overview of all your alert rules by clicking on the `Alerting` bell icon and then choosing `Alert rules`.
 
 ## Backup to oa-data
-Mount oa-data:
-sudo mount -t cifs -o user='jan-philipp.bureik',sec=ntlm,workgroup=domain.iogs,vers=1.0 //oa-data.domain.iogs/Lattice\ Gases/pc_backups /mnt/oa-data
-Backup all hard drives (e.g. /dev/sda):
-sudo dd if=/dev/sda bs=64K conv=noerror,sync status=progress | gzip -c > /mnt/oa-data/backup_heliumserver_2021_04_29/backup_heliumserver_sda_2021_04_29.img.gz
-Write shell script for this.
+  * Mount oa-data:
+    <pre>
+    sudo mount -t cifs -o user='<i>first</i>.<i>last</i>',sec=ntlm,workgroup=domain.iogs,vers=1.0 //oa-data.domain.iogs/<i>oa_data_share</i>/pc_backups /mnt/oa-data
+    </pre>
+
+  * Backup all hard drives:
+    <pre>
+    sudo dd if=/dev/sda bs=64K conv=noerror,sync status=progress | gzip -c > /mnt/oa-data/backup_<i>myserver</i>_<i>yyyy</i>_<i>mm</i>_<i>dd</i>/backup_<i>myserver</i>_sda_<i>yyyy</i>_<i>mm</i>_<i>dd</i>.img.gz
+
+## Known bugs and problems
+  * The Grafana Image Renderer does not work on the ARM processor of the RaspberryPi. Therefore your alert e-mails do not contain a snapshot of the time series that causes the alert.
