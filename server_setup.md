@@ -447,13 +447,23 @@
 -->
 ## Setting up automatic backups
   * On your <code><i>oa_data_share</i></code> create a directory <code>pc_backups</code> and therein one for <code><i>myserver</i></code>.
+
+  * Set up your credentials file on <i>myserver</i>:
+    <pre>
+    sudo nano /root/.smbcredentials_oa-data
+    &emsp; username=<i>first</i>.<i>last</i>
+    &emsp; password=<i>_oa_data_pwd</i>
+    sudo chmod 600 /root/.smbcredentials_oa-data
+    </pre>
+  * Add <code><i>oa_data_share</i></code> to your <code>fstab</code>:
+    sudo nano /etc/fstab
+    &emsp; //oa-data.domain.iogs/<i>oa_data_share>/i>/pc_backups/<i>myserver</i> /mnt/oa-data cifs vers=3.0,workgroup=domain.iogs,credentials=/root/.smbcredentials_oa-data
+    </pre>
   * Mount oa-data:
     <pre>
-    sudo mkdir /mnt/oa-data
-    sudo mount -t cifs -o user='<i>first</i>.<i>last</i>',workgroup=domain.iogs,vers=3.0 //oa-data.domain.iogs/<i>oa_data_share</i>/pc_backups/<i>myserver</i> /mnt/oa-data
+    sudo mount -a
     </pre>
-
-  * Backup all data thumb drive:
+  * Backup the data thumb drive:
     <pre>
     sudo dd if=/dev/sdb bs=64K conv=noerror,sync status=progress | gzip -c > /mnt/oa-data/backup_<i>myserver</i>_<i>yyyy</i>_<i>mm</i>_<i>dd</i>/backup_<i>myserver</i>_sdb_<i>yyyy</i>_<i>mm</i>_<i>dd</i>.img.gz
     </pre>
