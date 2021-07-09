@@ -456,6 +456,7 @@
     sudo chmod 600 /root/.smbcredentials_oa-data
     </pre>
   * Add <code><i>oa_data_share</i></code> to your <code>fstab</code>:
+    <pre>
     sudo nano /etc/fstab
     &emsp; //oa-data.domain.iogs/<i>oa_data_share>/i>/pc_backups/<i>myserver</i> /mnt/oa-data cifs vers=3.0,workgroup=domain.iogs,credentials=/root/.smbcredentials_oa-data
     </pre>
