@@ -315,7 +315,21 @@
     </pre>
 
   * Change the default save location for InfluxDB data:
-
+    <pre>
+    mkdir /mnt/data/influxdb
+    sudo chown -R influxdb:influxdb /mnt/data/influxdb
+    nano /etc/influxdb/influxdb.conf
+    &emsp; ...
+    &emsp; [meta]
+    &emsp;   # Where the metadata/raft database is stored
+    &emsp;   dir = "/mnt/data/influxdb/meta"
+    &emsp; ...
+    &emsp; [data]
+    &emsp;   # The directory where the TSM storage engine stores TSM files.
+    &emsp;   dir = "/mnt/data/influxdb/data"
+    &emsp;   # The directory where the TSM storage engine stores WAL files.
+    &emsp;  wal-dir = "/mnt/data/influxdb/wal"
+    </pre>
   * Install Grafana:
     <pre>
     wget -q -O - https://packages.grafana.com/gpg.key | sudo apt-key add -
@@ -609,7 +623,7 @@
     Type: E-Mail
     Addresses: <i>all addresses that are to be notified in case of alerts, separated by ";"</i>
     </pre>
-    Check the `Default` and `Include image` options in `Notification settings`, then click on `Test`. All recipients specified in `Addresses` should have received a test e-mail.
+    Check the `Default` option in `Notification settings`, then click on `Test`. All recipients specified in `Addresses` should have received a test e-mail.
   * Set up alerts:<br>
     From your dashboard, choose a time series graph, click on `Edit` and then on `Alert`. Enter the conditions under which you want to receive an automatic alert e-mail for that measurement, and how to handle no data or error situations. Enter a message describing the alert situation, then click on `Test rule`. If the threshold set for the alert is below the current value, the fourth line should read:
     <pre>
