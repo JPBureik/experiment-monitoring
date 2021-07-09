@@ -329,6 +329,17 @@
     &emsp; [panels]
     &emsp; enable_alpha = false
     </pre>
+  * Enable and start the Grafana server:
+    <pre>
+    sudo /bin/systemctl enable grafana-server
+    sudo /bin/systemctl start grafana-server
+    </pre>
+  * Start Grafana automatically after reboot:
+    <pre>
+    sudo nano /etc/rc.local
+    &emsp; sudo service grafana-server restart
+    </pre>
+  <!--
   * Install the Grafana Image Renderer:<br>
     First, install Node:
     <pre>
@@ -350,6 +361,7 @@
     cd /var/lib/grafana/plugins
     git clone https://github.com/grafana/grafana-image-renderer
     cd grafana-image-renderer
+    npm -g install npm
     npm -g install yarn
     npm -g install typescript
     npm config set unsafe-perm=true
@@ -359,11 +371,10 @@
     sudo npm i postinstall
     sudo npm i install
     sudo npm install
-    cd src/plugin/v2
     </pre>
     Now add the `// @ts-ignore:` line at the following three places to tell Typescript to ignore what follows:
     <pre>
-    nano grpc_plugin.ts
+    nano src/plugin/v2/grpc_plugin.ts
     &emsp; ...
     &emsp; const rendererV2ProtoDescriptor = grpc.loadPackageDefinition(rendererV2PackageDef);
     &emsp; const pluginV2ProtoDescriptor = grpc.loadPackageDefinition(pluginV2PackageDef);
@@ -386,16 +397,36 @@
     &emsp;     // @ts-ignore: the nested grpc objects are not recognized by ts
     &emsp;     server.addService(pluginServiceDef, pluginService as any);
     </pre>
-  * Enable and start the Grafana server:
+    Build the plugin, copy it, then install Chromium and make the renderer plugin use its executable:
     <pre>
-    sudo /bin/systemctl enable grafana-server
-    sudo /bin/systemctl start grafana-server
+    yarn install --pure-lockfile
+    yarn run build
+    cp plugin_start_linux_amd64 plugin_start_linux_arm
+    sudo apt-get install chromium-browser libxdamage1 libxext6 libxi6 libxtst6 libnss3 libnss3 libcups2 libxss1 libxrandr2 libasound2 libatk1.0-0 libatk-bridge2.0-0 libpangocairo-1.0-0 libpango-1.0-0 libcairo2 libatspi2.0-0 libgtk3.0-cil libgdk3.0-cil libx11-xcb-dev
+    nano plugin_start_linux_arm
+    &emsp; #!/bin/bash
+    &emsp; DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+    &emsp; export GF_RENDERER_PLUGIN_CHROME_BIN="/usr/bin/chromium-browser"
+    &emsp; export GF_RENDERER_PLUGIN_IGNORE_HTTPS_ERRORS=true
+    &emsp; node ${DIR}/build/app.js
     </pre>
-  * Start Grafana automatically after reboot:
+    Edit the Grafana configuration file:
     <pre>
-    sudo nano /etc/rc.local
-    &emsp; sudo service grafana-server restart
+    nano /etc/grafana/grafana.ini
+    &emsp; [plugins]
+    &emsp; allow_loading_unsigned_plugins = "grafana-image-renderer"
+    &emsp; ...
+    &emsp; allow_embedding = true
     </pre>
+    Now restart Grafana:
+    <pre>
+    systemctl restart grafana-server.service
+    </pre>
+    After ten seconds, verify that the plugin has been loaded successfully:
+    <pre>
+    systemctl status grafana-server.service
+    </pre>
+    -->
 
 ## Setting up the continuous data acquisition:
   * Download the Experiment Monitoring software:
