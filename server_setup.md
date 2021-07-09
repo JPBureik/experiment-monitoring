@@ -376,13 +376,14 @@
     <pre>
     sudo su
     cd /var/lib/grafana/plugins
-    git clone https://github.com/grafana/grafana-image-renderer
+    git clone --depth 1 --branch v1.0.12 https://github.com/grafana/grafana-image-renderer.git
     cd grafana-image-renderer
     npm -g install npm
     npm -g install yarn
     npm -g install typescript
     npm config set unsafe-perm=true
     sudo npm i grpc
+    npm audit fix
     sudo npm i husky
     sudo npm i puppeteer
     sudo npm i postinstall
@@ -443,7 +444,7 @@
     <pre>
     systemctl status grafana-server.service
     </pre>
-    -->
+-->
 
 ## Setting up the continuous data acquisition:
   * Download the Experiment Monitoring software:
