@@ -446,28 +446,41 @@
     </pre>
 -->
 ## Setting up automatic backups
-  * On your <code><i>oa_data_share</i></code> create a directory <code>pc_backups</code> and therein one for <code><i>myserver</i></code>.
+  * On your <code><i>oa-data_share</i></code> create a directory <code>pc_backups</code> and therein one for <code><i>myserver</i></code>.
 
   * Set up your credentials file on <code><i>myserver</i></code>:
     <pre>
     sudo nano /root/.smbcredentials_oa-data
     &emsp; username=<i>first</i>.<i>last</i>
-    &emsp; password=<i>_oa_data_pwd</i>
+    &emsp; password=<i>oa-data_pwd</i>
     sudo chmod 600 /root/.smbcredentials_oa-data
     </pre>
-  * Add <code><i>oa_data_share</i></code> to your <code>fstab</code>:
+  * Add <code><i>oa-data_share</i></code> to your <code>fstab</code>:
     <pre>
     sudo nano /etc/fstab
-    &emsp; //oa-data.domain.iogs/<i>oa_data_share</i>/pc_backups/<i>myserver</i> /mnt/oa-data cifs vers=3.0,workgroup=domain.iogs,credentials=/root/.smbcredentials_oa-data
+    &emsp; //oa-data.domain.iogs/<i>oa-data_share</i>/pc_backups/<i>myserver</i> /mnt/oa-data cifs vers=3.0,workgroup=domain.iogs,_netdev,credentials=/root/.smbcredentials_oa-data
     </pre>
-  * Mount oa-data:
+  * Mount <code><i>oa-data_share</i></code>:
     <pre>
     sudo mount -a
     </pre>
-  * Backup the data thumb drive:
+  * Create a shell script for automatic backups:
     <pre>
-    sudo dd if=/dev/sdb bs=64K conv=noerror,sync status=progress | gzip -c > /mnt/oa-data/backup_<i>myserver</i>_<i>yyyy</i>_<i>mm</i>_<i>dd</i>/backup_<i>myserver</i>_sdb_<i>yyyy</i>_<i>mm</i>_<i>dd</i>.img.gz
+    cd
+    nano backup
+    &emsp; #!/bin/sh
+    &emsp; backup_dir=/mnt/<i>oa-data_share</i>/<i>myserver</i>_backup_$(date +'%Y_%m_%d')
+    &emsp; mkdir -p $backup_dir/data
+    &emsp; echo "Backing up InfluxDB ..."
+    &emsp; influxd backup -database <i>mydatabase</i> $backup_dir/data
+    &emsp; echo "Backing up SD card ..."
+    &emsp; sudo dd if=/dev/mmcblk0 bs=64K conv=noerror,sync status=progress | gzip -c > $backup_dir/mmcblk0.img.gz
+    chmod u+x backup
     </pre>
+  * Create the first backup. This can take some time:
+  * <pre>
+    sudo ~/backup
+    </pre>    
 
 ## Setting up the continuous data acquisition:
   * Download the Experiment Monitoring software:
