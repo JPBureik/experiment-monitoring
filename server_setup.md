@@ -305,13 +305,12 @@
     lsblk</pre>
 
 ## Installing InfluxDB and Grafana
-  * Install InfluxDB and start the service:
+  * Install InfluxDB:
     <pre>
     sudo curl -sL https://repos.influxdata.com/influxdb.key | sudo apt-key add -
     sudo echo "deb https://repos.influxdata.com/ubuntu bionic stable" | sudo tee /etc/apt/sources.list.d/influxdb.list
     sudo apt update
     sudo apt install influxdb
-    sudo systemctl start influxdb
     </pre>
 
   * Change the default save location for InfluxDB data:
@@ -328,7 +327,11 @@
     &emsp;   # The directory where the TSM storage engine stores TSM files.
     &emsp;   dir = "/mnt/data/influxdb/data"
     &emsp;   # The directory where the TSM storage engine stores WAL files.
-    &emsp;  wal-dir = "/mnt/data/influxdb/wal"
+    &emsp;   wal-dir = "/mnt/data/influxdb/wal"
+    </pre>
+  * Start the InfluxDB Daemon:
+    <pre>
+    sudo systemctl start influxdb
     </pre>
   * Install Grafana:
     <pre>
