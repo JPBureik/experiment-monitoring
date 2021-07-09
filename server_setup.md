@@ -448,7 +448,7 @@
 ## Setting up automatic backups
   * On your <code><i>oa_data_share</i></code> create a directory <code>pc_backups</code> and therein one for <code><i>myserver</i></code>.
 
-  * Set up your credentials file on <i>myserver</i>:
+  * Set up your credentials file on <code><i>myserver</i></code>:
     <pre>
     sudo nano /root/.smbcredentials_oa-data
     &emsp; username=<i>first</i>.<i>last</i>
