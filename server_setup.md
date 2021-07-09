@@ -446,7 +446,7 @@
     </pre>
 -->
 ## Setting up automatic backups
-  * On your <code><i>oa_data_share</i></code> create a directory <code>pc_backups</code> and in there <i>myserver</i>.
+  * On your <code><i>oa_data_share</i></code> create a directory <code>pc_backups</code> and therein one for <code><i>myserver</i></code>.
   * Mount oa-data:
     <pre>
     sudo mkdir /mnt/oa-data
