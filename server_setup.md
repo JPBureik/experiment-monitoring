@@ -478,7 +478,7 @@
     chmod u+x backup
     </pre>
   * Create the first backup. This can take some time:
-  * <pre>
+    <pre>
     sudo ~/backup
     </pre>    
 
