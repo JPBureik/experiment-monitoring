@@ -445,6 +445,16 @@
     systemctl status grafana-server.service
     </pre>
 -->
+## Setting up automatic backups
+  * Mount oa-data:
+    <pre>
+    sudo mount -t cifs -o user='<i>first</i>.<i>last</i>',sec=ntlm,workgroup=domain.iogs,vers=1.0 //oa-data.domain.iogs/<i>oa_data_share</i>/pc_backups /mnt/oa-data
+    </pre>
+
+  * Backup all data thumb drive:
+    <pre>
+    sudo dd if=/dev/sdb bs=64K conv=noerror,sync status=progress | gzip -c > /mnt/oa-data/backup_<i>myserver</i>_<i>yyyy</i>_<i>mm</i>_<i>dd</i>/backup_<i>myserver</i>_sdb_<i>yyyy</i>_<i>mm</i>_<i>dd</i>.img.gz
+    </pre>
 
 ## Setting up the continuous data acquisition:
   * Download the Experiment Monitoring software:
@@ -640,16 +650,5 @@
     Change the threshold value back to the alert threshold, then on the upper right hand side click on `Apply` and save the dashboard by clicking on the save icon on the upper right hand side of the dashboard.<br>
     You can find an overview of all your alert rules by clicking on the `Alerting` bell icon and then choosing `Alert rules`.
 
-## Backup to oa-data
-  * Mount oa-data:
-    <pre>
-    sudo mount -t cifs -o user='<i>first</i>.<i>last</i>',sec=ntlm,workgroup=domain.iogs,vers=1.0 //oa-data.domain.iogs/<i>oa_data_share</i>/pc_backups /mnt/oa-data
-    </pre>
-
-  * Backup all hard drives:
-    <pre>
-    sudo dd if=/dev/sda bs=64K conv=noerror,sync status=progress | gzip -c > /mnt/oa-data/backup_<i>myserver</i>_<i>yyyy</i>_<i>mm</i>_<i>dd</i>/backup_<i>myserver</i>_sda_<i>yyyy</i>_<i>mm</i>_<i>dd</i>.img.gz
-    </pre>
-
 ## Known bugs and problems
-  * The Grafana Image Renderer does not work on the ARM processor of the RaspberryPi. Therefore your alert e-mails do not contain a snapshot of the time series that causes the alert.
+  * The Grafana Image Renderer is not available for the ARM processor of the RaspberryPi. Therefore the alert e-mails do not contain a snapshot of the time series that causes the alert.
