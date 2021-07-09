@@ -446,9 +446,11 @@
     </pre>
 -->
 ## Setting up automatic backups
+  * On your <code><i>oa_data_share</i></code> create a directory <code>pc_backups</code> and in there <i>myserver</i>.
   * Mount oa-data:
     <pre>
-    sudo mount -t cifs -o user='<i>first</i>.<i>last</i>',sec=ntlm,workgroup=domain.iogs,vers=1.0 //oa-data.domain.iogs/<i>oa_data_share</i>/pc_backups /mnt/oa-data
+    sudo mkdir /mnt/oa-data
+    sudo mount -t cifs -o user='<i>first</i>.<i>last</i>',workgroup=domain.iogs,vers=3.0 //oa-data.domain.iogs/<i>oa_data_share</i>/pc_backups/<i>myserver</i> /mnt/oa-data
     </pre>
 
   * Backup all data thumb drive:
