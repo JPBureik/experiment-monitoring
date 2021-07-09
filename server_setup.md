@@ -649,6 +649,7 @@
   * Backup all hard drives:
     <pre>
     sudo dd if=/dev/sda bs=64K conv=noerror,sync status=progress | gzip -c > /mnt/oa-data/backup_<i>myserver</i>_<i>yyyy</i>_<i>mm</i>_<i>dd</i>/backup_<i>myserver</i>_sda_<i>yyyy</i>_<i>mm</i>_<i>dd</i>.img.gz
+    </pre>
 
 ## Known bugs and problems
   * The Grafana Image Renderer does not work on the ARM processor of the RaspberryPi. Therefore your alert e-mails do not contain a snapshot of the time series that causes the alert.
