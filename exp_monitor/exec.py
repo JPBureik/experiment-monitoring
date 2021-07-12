@@ -11,9 +11,13 @@ specified function at the rate given by the specified interval.
 
 # Standard library imports:
 import time
+import sys
+
+# Set path:
+sys.path.append(".")
 
 # Local imports:
-from classes/influxdb_write import influxdb_write
+from classes.influxdb_write import influxdb_write
 
 # Specify interval in seconds:
 interval = 15
