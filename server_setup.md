@@ -471,9 +471,7 @@
     &emsp; #!/bin/sh
     &emsp; backup_dir=/mnt/<i>oa-data_share</i>/<i>myserver</i>_backup_$(date +'%Y_%m_%d')
     &emsp; mkdir -p $backup_dir/data
-    &emsp; echo "Backing up InfluxDB ..."
     &emsp; influxd backup -database <i>mydatabase</i> $backup_dir/data
-    &emsp; echo "Backing up SD card ..."
     &emsp; sudo dd if=/dev/mmcblk0 bs=64K conv=noerror,sync status=progress | gzip -c > $backup_dir/mmcblk0.img.gz
     &emsp; find /mnt/oa-data/ -type d -mtime +2 -exec rm -rf {} \;
     chmod u+x backup
