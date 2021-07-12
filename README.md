@@ -15,7 +15,7 @@ A central server gathers data from different sources, writes them into a databas
 
 ## Setup
 
-  * Hardware requirements & preparing the server: See server_setup.md.
+  * Hardware requirements & preparing the server: See `server_setup.md`.
 
   * Working with existing interfaces:
     - `config.py` is all you need to modify.
