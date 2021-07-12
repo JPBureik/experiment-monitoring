@@ -13,7 +13,7 @@ specified function at the rate given by the specified interval.
 import time
 
 # Local imports:
-from influxdb_write import influxdb_write
+from classes/influxdb_write import influxdb_write
 
 # Specify interval in seconds:
 interval = 15
