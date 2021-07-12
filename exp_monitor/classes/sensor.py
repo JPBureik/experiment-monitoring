@@ -5,7 +5,7 @@ Created on Wed Jun 30 12:33:08 2021
 
 @author: jp
 
-Implements the Sensor Class for experiment monitoring.
+Implements the abstract Sensor Class for experiment monitoring.
 
 All interfaces for acquiring data can be implemented as instantiations of this
 class.
@@ -14,9 +14,10 @@ class.
 
 class Sensor:
 
-    def __init__(self, type, descr, conversion_fctn):
+    def __init__(self, type, descr, unit, conversion_fctn):
         self.type = type
         self.descr = descr
+        self.unit = unit
         self._bounds = None
         self._conversion_fctn = conversion_fctn
 
