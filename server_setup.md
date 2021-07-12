@@ -479,8 +479,8 @@
   * Automate daily backups with `cron`:
     <pre>
     crontab -e
-    &emsp; 30 2 * * * sudo /home/<i>admin</i>/backup
-    </pre>    
+    &emsp; 0 4 * * * sudo /home/<i>admin</i>/backup
+    </pre>
 
 ## Setting up the continuous data acquisition:
   * Download the Experiment Monitoring software:
