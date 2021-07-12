@@ -536,7 +536,7 @@
     influx -precision rfc3339
     CREATE DATABASE <i>mydatabase</i>
     </pre>
-    Add this name in the config file of the Experiment Monitoring Python package and sync with QuantumGitServer:
+    Add this name in the config file of the Experiment Monitoring Python package. Remember to `commit` and `push` everytime you make a modification to the data acquisition code on <code><i>myserver</i></code>:
     <pre>
     nano /mnt/code/experiment-monitoring/config.py
       &emsp; database_name = '<i>mydatabase</i>'
