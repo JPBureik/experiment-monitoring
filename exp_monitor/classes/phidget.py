@@ -56,6 +56,10 @@ if __name__ == '__main__':
     all_phidgets.append(tc3)
     tc4 = Phidget('Thermocouple', 4, 561242, 3, 'Water')
     all_phidgets.append(tc4)
+    tc5 = Phidget('Thermocouple', 5, 561242, 0, 'Zeeman1')
+    all_phidgets.append(tc5)
+    tc6 = Phidget('Thermocouple', 5, 561242, 1, 'Zeeman2')
+    all_phidgets.append(tc6)
 
     for phidget in all_phidgets:
         temp = phidget.measure()
