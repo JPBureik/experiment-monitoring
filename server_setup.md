@@ -508,13 +508,14 @@
     git commit -m "Specified influxdb database name"
     git push quantumgitserver master
     </pre>
+  * Connect all of the devices that you want to monitor.
   * Set up the Experiment Monitoring software for your experiment:
     <pre>
-    nano /mnt/code/experiment-monitoring/config.py
+    nano /mnt/code/experiment-monitoring/exp_monitor/config.py
     </pre>
   * Manually execute one data acquisition cycle to check for errors:
     <pre>
-    python3 /mnt/code/experiment-monitoring/influxdb_write.py
+    python3 /mnt/code/experiment-monitoring/exp_monitor/classes/influxdb_write.py
     </pre>
   * Verify that the data is being written into your database:
     <pre>
@@ -533,7 +534,7 @@
 
       &emsp; [Service]
       &emsp; Type=simple
-      &emsp; ExecStart=/usr/bin/python3 /mnt/code/exec.py
+      &emsp; ExecStart=/usr/bin/python3 /mnt/code/experiment-monitoring/exp_monitor/exec.py
       &emsp; Restart=always
       &emsp; RestartSec=15s         
       &emsp; User=admin   
@@ -541,7 +542,7 @@
       &emsp; [Install]
       &emsp; WantedBy=multi-user.target
     sudo chmod 644 /lib/systemd/system/exp_monitor.service
-    sudo chmod +x /mnt/code/experiment-monitoring/exec.py
+    sudo chmod +x /mnt/code/experiment-monitoring/exp_monitor/exec.py
     sudo systemctl daemon-reload
     sudo systemctl enable exp_monitor.service
     sudo systemctl start exp_monitor.service
