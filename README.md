@@ -25,4 +25,5 @@ A central server gathers data from different sources, writes them into a databas
 ## Guide to the individual modules:
 
   * config.py: Main configuration file.
+
   * ...
