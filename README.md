@@ -15,6 +15,7 @@ A central server gathers data from different sources, writes them into a databas
 ## Setup
 
   * Hardware requirements & server setup: See `server_setup.md`.
+  * ADC setup: See `adc_setup.md`. Only needed if you want to monitor analog signals.
   * Working with existing interfaces:
     - `config.py` is all you need to modify.
   * Adding your own interfaces:
@@ -22,7 +23,7 @@ A central server gathers data from different sources, writes them into a databas
 
 ## Guide to the repository structure:
 
-  * `arduino_exp_monitor`: Contains script to run on ADC.
+  * `adc`: Contains script to run on ADC.
   * `calibrations`: Contains calibration data and scripts for all equipment.
   * `classes`: Contains driver classes for all interfaces.
   * `utilities`: Contains interface-independent functions.
