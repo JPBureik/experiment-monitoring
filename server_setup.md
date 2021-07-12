@@ -652,7 +652,7 @@
     where the time argument corresponds to the Unix time stamp of the data point. Start InfluxDB without the `-precision rfc3339` flag to show Unix time stamps for the time series instead of normal time stamps.<br>
     If you ever want to delete a measurement series in InfluxDB, use:
     <pre>
-    DROP MEASUREMENT <i>nyseries</i>
+    DROP MEASUREMENT <i>myseries</i>
     </pre>
     If you want to rename a measurement series, stop the continuous data acquisition, then copy all data grouped by tags into a new series:
     <pre>
@@ -677,10 +677,11 @@
     0    <i>227293</i>
     </pre>
     Check that <i>new_series</i> is present and that its data is identical with <i>old_series</i>:
+    <pre>
     SHOW SERIES
     SELECT * FROM "<i>old_series</i>" WHERE time >= now() - 5m
     SELECT * FROM "<i>new_series</i>" WHERE time >= now() - 5m
-    <pre>
+    </pre>
     If comparison shows equivalence, change the data reference in the corresponding Grafana widgets to the new series.
     Change the data acquisition program so that its `json` output corresponds to the new database name.
     Restart the continuous execution of the data acquisition program and check that no new values are added to <i>old_series</i> in InfluxDB, and that data carries over from <i>new_series</i> and that new data is correctly written into <i>new_series</i>. If so, delete the old series in InfluxDB:
