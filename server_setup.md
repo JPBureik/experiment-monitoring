@@ -649,7 +649,7 @@
       <pre>
       DELETE FROM "<i>my_series</i>" WHERE time = <i>1605871624000000000</i>
       </pre>
-      where the time argument corresponds to the Unix time stamp of the data point. Start InfluxDB without the `-precision rfc3339` flag to show Unix time stamps for the time series instead of normal time stamps.
+      where the time argument corresponds to the Unix time stamp of the data point. Start InfluxDB without the `-precision rfc3339` flag to show Unix time stamps for the time series instead of normal time stamps. The Python script `spike_filter.py` contains a static method on its class that converts Unix time to normal time.
     * If you ever want to delete a measurement series in InfluxDB, use:
       <pre>
       DROP MEASUREMENT <i>myseries</i>
