@@ -640,9 +640,9 @@
     <pre>
     SHOW SERIES
     </pre>
-    Show data from <i>myseries</i> for the last 5 minutes, or for any time range you want:
+    Show data from <i>myseries</i> for the last <i>5 minutes</i>, or for any time range you want:
     <pre>
-    SELECT "value" FROM "<i>myseries</i>" WHERE time >= now() - 5m
+    SELECT "value" FROM "<i>myseries</i>" WHERE time >= now() - <i>5m</i>
     SELECT "value" FROM "<i>myseries</i>" WHERE time >= '<i>2020-01-12T00:00:00-04:00</i>' AND time <  '<i>2020-01-13T00:00:00-04:00</i>'
     </pre>
     If you want to delete specific data points from <i>myseries</i>, use:
