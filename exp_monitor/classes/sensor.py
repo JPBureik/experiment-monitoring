@@ -7,8 +7,8 @@ Created on Wed Jun 30 12:33:08 2021
 
 Implements the abstract Sensor Class for experiment monitoring.
 
-All interfaces for acquiring data can be implemented as instantiations of this
-class.
+All interfaces for acquiring data should be child classes that inherit from
+this class.
 """
 
 
