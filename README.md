@@ -20,7 +20,11 @@ A central server gathers data from different sources, writes them into a databas
   * Adding your own interfaces:
     - Write a class to drive your sensor/equipment and interface it with `config.py`.
 
-## Guide to the individual modules:
+## Guide to the repository structure:
 
+  * `arduino_exp_monitor`: Contains script to run on ADC.
+  * `calibrations`: Contains calibration data and scripts for all equipment.
+  * `classes`: Contains driver classes for all interfaces.
+  * `utilities`: Contains interface-independent functions.
   * `config.py`: Main configuration file.
-  * ...
+  * `exec.py`: Main execution file for Linux service.
