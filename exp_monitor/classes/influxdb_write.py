@@ -19,13 +19,16 @@ def influxdb_write():
     from influxdb import InfluxDBClient
     from datetime import datetime
 
+    # Set path:
+    sys.path.append(".")
+
     # Local imports:
     from config import bounds
-    from inbounds_check import is_inbounds
-    from eth_com import rcv_meas
-    from unit_conv import unit_conv
-    from phidget import Phidget
-    from serial_com import tpg261_meas
+    from utilities.inbounds_check import is_inbounds
+    from utilities.eth_com import rcv_meas
+    from classes.unit_conv import unit_conv
+    from classes.phidget import Phidget
+    from classes.serial_com import tpg261_meas
 
     # Create timestamp for database:
     now = datetime.utcnow()  # Grafana assumes UTC
