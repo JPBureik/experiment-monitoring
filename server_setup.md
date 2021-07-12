@@ -475,11 +475,13 @@
     &emsp; influxd backup -database <i>mydatabase</i> $backup_dir/data
     &emsp; echo "Backing up SD card ..."
     &emsp; sudo dd if=/dev/mmcblk0 bs=64K conv=noerror,sync status=progress | gzip -c > $backup_dir/mmcblk0.img.gz
+    &emsp; find /mnt/oa-data/ -type d -mtime +2 -exec rm -rf {} \;
     chmod u+x backup
     </pre>
-  * Create the first backup. This can take some time:
+  * Automate daily backups with `cron`:
     <pre>
-    sudo ~/backup
+    crontab -e
+    &emsp; 30 2 * * * sudo /home/admin/backup
     </pre>    
 
 ## Setting up the continuous data acquisition:
