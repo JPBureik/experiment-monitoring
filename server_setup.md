@@ -636,58 +636,59 @@
     influx -precision rfc3339
     USE <i>mydatabase>
     </pre>
-    Get an overview of all your measurement series:
-    <pre>
-    SHOW SERIES
-    </pre>
-    Show data from <i>myseries</i> for the last <i>5 minutes</i>, or for any time range you want:
-    <pre>
-    SELECT "value" FROM "<i>myseries</i>" WHERE time >= now() - <i>5m</i>
-    SELECT "value" FROM "<i>myseries</i>" WHERE time >= '<i>2020-01-12T00:00:00-04:00</i>' AND time <  '<i>2020-01-13T00:00:00-04:00</i>'
-    </pre>
-    If you want to delete specific data points from <i>myseries</i>, use:
-    <pre>
-    DELETE FROM "<i>my_series</i>" WHERE time = <i>1605871624000000000</i>
-    </pre>
-    where the time argument corresponds to the Unix time stamp of the data point. Start InfluxDB without the `-precision rfc3339` flag to show Unix time stamps for the time series instead of normal time stamps.<br>
-    If you ever want to delete a measurement series in InfluxDB, use:
-    <pre>
-    DROP MEASUREMENT <i>myseries</i>
-    </pre>
-    If you want to rename a measurement series, stop the continuous data acquisition, then copy all data grouped by tags into a new series:
-    <pre>
-    SHOW TAG KEYS FROM <i>old_series</i>
-    </pre>
-    Example output:
-    <pre>
-    name: <i>old_series</i>
-    tagKey
-    ------
-    <i>my_tag</i>
-    </pre>
-    Copy:
-    <pre>
-    SELECT * INTO <i>new_series</i> FROM <i>old_series</i> GROUP BY <i>my_tag</i>
-    </pre>
-    Example output:
-    <pre>
-    name: result
-    time written
-    ---- -------
-    0    <i>227293</i>
-    </pre>
-    Check that <i>new_series</i> is present and that its data is identical with <i>old_series</i>:
-    <pre>
-    SHOW SERIES
-    SELECT * FROM "<i>old_series</i>" WHERE time >= now() - 5m
-    SELECT * FROM "<i>new_series</i>" WHERE time >= now() - 5m
-    </pre>
-    If comparison shows equivalence, change the data reference in the corresponding Grafana widgets to the new series.
-    Change the data acquisition program so that its `json` output corresponds to the new database name.
-    Restart the continuous execution of the data acquisition program and check that no new values are added to <i>old_series</i> in InfluxDB, and that data carries over from <i>new_series</i> and that new data is correctly written into <i>new_series</i>. If so, delete the old series in InfluxDB:
-    <pre>
-    DROP MEASUREMENT old_series
-    </pre>
+    * Get an overview of all your measurement series:
+      <pre>
+      SHOW SERIES
+      </pre>
+    * Show data from <i>myseries</i> for the last <i>5 minutes</i>, or for any time range you want:
+      <pre>
+      SELECT "value" FROM "<i>myseries</i>" WHERE time >= now() - <i>5m</i>
+      SELECT "value" FROM "<i>myseries</i>" WHERE time >= '<i>2020-01-12T00:00:00-04:00</i>' AND time <  '<i>2020-01-13T00:00:00-04:00</i>'
+      </pre>
+    * If you want to delete specific data points from <i>myseries</i>, use:
+      <pre>
+      DELETE FROM "<i>my_series</i>" WHERE time = <i>1605871624000000000</i>
+      </pre>
+      where the time argument corresponds to the Unix time stamp of the data point. Start InfluxDB without the `-precision rfc3339` flag to show Unix time stamps for the time series instead of normal time stamps.
+    * If you ever want to delete a measurement series in InfluxDB, use:
+      <pre>
+      DROP MEASUREMENT <i>myseries</i>
+      </pre>
+    * If you want to rename a measurement series, stop the continuous data acquisition, then copy all data grouped by tags into a new series:
+      <pre>
+      SHOW TAG KEYS FROM <i>old_series</i>
+      </pre>
+      Example output:
+      <pre>
+      name: <i>old_series</i>
+      tagKey
+      ------
+      <i>my_tag</i>
+      </pre>
+      Copy:
+      <pre>
+      SELECT * INTO <i>new_series</i> FROM <i>old_series</i> GROUP BY <i>my_tag</i>
+      </pre>
+      Example output:
+      <pre>
+      name: result
+      time written
+      ---- -------
+      0    <i>227293</i>
+      </pre>
+      Check that <i>new_series</i> is present and that its data is identical with <i>old_series</i>:
+      <pre>
+      SHOW SERIES
+      SELECT * FROM "<i>old_series</i>" WHERE time >= now() - 5m
+      SELECT * FROM "<i>new_series</i>" WHERE time >= now() - 5m
+      </pre>
+      If comparison shows equivalence, change the data reference in the corresponding Grafana widgets to the new series.
+      Change the data acquisition program so that its `json` output corresponds to the new database name.
+      Restart the continuous execution of the data acquisition program and check that no new values are added to <i>old_series</i> in InfluxDB, and that data carries over from <i>new_series</i> and that new data is correctly written into <i>new_series</i>. If so, delete the old series in InfluxDB:
+      <pre>
+      DROP MEASUREMENT old_series
+      </pre>
+    * The experiment monitoring software suite also contains a Python script (`spike_filter.py`) that allows you to interact with InfluxDB and delete values, e.g. for spikes in acquired data.
 
 
 
