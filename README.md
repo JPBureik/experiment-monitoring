@@ -26,6 +26,7 @@ A central server gathers data from different sources, writes them into a databas
   * `adc`: Contains script to run on ADC.
   * `calibrations`: Contains calibration data and scripts for all equipment.
   * `classes`: Contains driver classes for all interfaces.
+  * `tests`: Contains unit tests and tests for the Phidget class.
   * `utilities`: Contains interface-independent functions.
   * `config.py`: Main configuration file.
   * `exec.py`: Main execution file for Linux service.
