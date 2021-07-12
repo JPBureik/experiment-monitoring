@@ -63,4 +63,4 @@ if __name__ == '__main__':
 
     for phidget in all_phidgets:
         temp = phidget.measure()
-        print(phidget.measurement_descr + ' Temperature: ' + str(temp))
+        print(phidget.measurement_descr + ' Tempreature: ' + str(temp))

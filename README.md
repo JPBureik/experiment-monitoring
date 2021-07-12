@@ -19,7 +19,7 @@ A central server gathers data from different sources, writes them into a databas
   * Working with existing interfaces:
     - `config.py` is all you need to modify.
   * Adding your own interfaces:
-    - Write a child class to inherit from `sensor.py` to drive your sensor/equipment and interface it with `config.py`.
+    - Write a subclass to inherit from `sensor.py` to drive your sensor/equipment and interface it with `config.py`.
 
 ## Guide to the repository structure:
 
