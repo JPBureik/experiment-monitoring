@@ -23,7 +23,7 @@ def unit_conv(analog_signals):
     # Set path:
     sys.path.append(".")
 
-    from ../calibrations.calib import Calibrator
+    from ..calibrations.calib import Calibrator
     sc_vac_calib = Calibrator()
 
     """ ---------- USER INPUT: Measurements ---------- """
