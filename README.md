@@ -14,11 +14,11 @@ A central server gathers data from different sources, writes them into a databas
 
 ## Setup
 
-  * Hardware requirements & preparing the server: See `server_setup.md`.
+  * Hardware requirements & server setup: See `server_setup.md`.
   * Working with existing interfaces:
     - `config.py` is all you need to modify.
   * Adding your own interfaces:
-    - Write a class to drive your sensor/equipment and interface it with `config.py`.
+    - Write a child class to inherit from `sensor.py` to drive your sensor/equipment and interface it with `config.py`.
 
 ## Guide to the repository structure:
 
