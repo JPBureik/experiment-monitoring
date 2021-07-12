@@ -445,42 +445,6 @@
     systemctl status grafana-server.service
     </pre>
 -->
-## Setting up automatic backups
-  * On your <code><i>oa-data_share</i></code> create a directory <code>pc_backups</code> and therein one for <code><i>myserver</i></code>.
-
-  * Set up your credentials file on <code><i>myserver</i></code>:
-    <pre>
-    sudo nano /root/.smbcredentials_oa-data
-    &emsp; username=<i>first</i>.<i>last</i>
-    &emsp; password=<i>oa-data_pwd</i>
-    sudo chmod 600 /root/.smbcredentials_oa-data
-    </pre>
-  * Add <code><i>oa-data_share</i></code> to your <code>fstab</code>:
-    <pre>
-    sudo nano /etc/fstab
-    &emsp; //oa-data.domain.iogs/<i>oa-data_share</i>/pc_backups/<i>myserver</i> /mnt/oa-data cifs vers=3.0,workgroup=domain.iogs,_netdev,credentials=/root/.smbcredentials_oa-data
-    </pre>
-  * Mount <code><i>oa-data_share</i></code>:
-    <pre>
-    sudo mount -a
-    </pre>
-  * Create a shell script for automatic backups:
-    <pre>
-    cd
-    nano backup
-    &emsp; #!/bin/sh
-    &emsp; backup_dir=/mnt/<i>oa-data_share</i>/<i>myserver</i>_backup_$(date +'%Y_%m_%d')
-    &emsp; mkdir -p $backup_dir/data
-    &emsp; influxd backup -database <i>mydatabase</i> $backup_dir/data
-    &emsp; sudo dd if=/dev/mmcblk0 bs=64K conv=noerror,sync status=progress | gzip -c > $backup_dir/mmcblk0.img.gz
-    &emsp; find /mnt/oa-data/ -type d -mtime +2 -exec rm -rf {} \;
-    chmod u+x backup
-    </pre>
-  * Automate daily backups with `cron`:
-    <pre>
-    crontab -e
-    &emsp; 0 4 * * * sudo /home/<i>admin</i>/backup
-    </pre>
 
 ## Setting up the continuous data acquisition:
   * Download the Experiment Monitoring software:
@@ -597,6 +561,43 @@
     You can check the execution log using:
     <pre>
     sudo journalctl -f -u exp_monitor.service
+    </pre>
+
+## Setting up automatic backups
+  * On your <code><i>oa-data_share</i></code> create a directory <code>pc_backups</code> and therein one for <code><i>myserver</i></code>.
+
+  * Set up your credentials file on <code><i>myserver</i></code>:
+    <pre>
+    sudo nano /root/.smbcredentials_oa-data
+    &emsp; username=<i>first</i>.<i>last</i>
+    &emsp; password=<i>oa-data_pwd</i>
+    sudo chmod 600 /root/.smbcredentials_oa-data
+    </pre>
+  * Add <code><i>oa-data_share</i></code> to your <code>fstab</code>:
+    <pre>
+    sudo nano /etc/fstab
+    &emsp; //oa-data.domain.iogs/<i>oa-data_share</i>/pc_backups/<i>myserver</i> /mnt/oa-data cifs vers=3.0,workgroup=domain.iogs,_netdev,credentials=/root/.smbcredentials_oa-data
+    </pre>
+  * Mount <code><i>oa-data_share</i></code>:
+    <pre>
+    sudo mount -a
+    </pre>
+  * Create a shell script for automatic backups:
+    <pre>
+    cd
+    nano backup
+    &emsp; #!/bin/sh
+    &emsp; backup_dir=/mnt/<i>oa-data_share</i>/<i>myserver</i>_backup_$(date +'%Y_%m_%d')
+    &emsp; mkdir -p $backup_dir/data
+    &emsp; influxd backup -database <i>mydatabase</i> $backup_dir/data
+    &emsp; sudo dd if=/dev/mmcblk0 bs=64K conv=noerror,sync status=progress | gzip -c > $backup_dir/mmcblk0.img.gz
+    &emsp; find /mnt/oa-data/ -type d -mtime +2 -exec rm -rf {} \;
+    chmod u+x backup
+    </pre>
+  * Automate daily backups with `cron`:
+    <pre>
+    crontab -e
+    &emsp; 0 4 * * * sudo /home/<i>admin</i>/backup
     </pre>
 
 ## Setting up the data monitoring:
