@@ -639,7 +639,7 @@
     Get an overview of all your measurement series:
     <pre>
     SHOW SERIES
-    </i>
+    </pre>
     Show data from <i>myseries</i> for the last 5 minutes, or for any time range you want:
     <pre>
     SELECT "value" FROM "<i>myseries</i>" WHERE time >= now() - 5m
