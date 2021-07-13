@@ -1,17 +1,17 @@
 # Experiment Monitoring Server Setup
 
 # Table of Contents
-1. [Recommended Hardware](#recommended-hardware)
-2. [Preparing the RaspberryPi](#preparing-the-raspberrypi)
-3. [Configuring the RaspberryPi](#configuring-the-raspberrypi)
-4. [Access from outside the IOGS network](#access-from-outside-the-iogs-network)
-5. [Adding external storage devices](#adding-external-storage-devices)
-6. [Installing InfluxDB and Grafana](#installing-influxdb-and-grafana)
-7. [Setting up the continuous data acquisition](#setting-up-the-continuous-data-acquisition)
-8. [Setting up automatic backups](#setting-up-automatic-backups)
-9. [Setting up the data monitoring](#setting-up-the-data-monitoring)
-10. [Setting up automatic alerts](#setting-up-automatic-alerts)
-11. [Known bugs and problems](#known-bugs-and-problems)
+  * [Recommended Hardware](#recommended-hardware)
+  * [Preparing the RaspberryPi](#preparing-the-raspberrypi)
+  * [Configuring the RaspberryPi](#configuring-the-raspberrypi)
+  * [Access from outside the IOGS network](#access-from-outside-the-iogs-network)
+  * [Adding external storage devices](#adding-external-storage-devices)
+  * [Installing InfluxDB and Grafana](#installing-influxdb-and-grafana)
+  * [Setting up the continuous data acquisition](#setting-up-the-continuous-data-acquisition)
+  * [Setting up automatic backups](#setting-up-automatic-backups)
+  * [Setting up the data monitoring](#setting-up-the-data-monitoring)
+  * [Setting up automatic alerts](#setting-up-automatic-alerts)
+  * [Known bugs and problems](#known-bugs-and-problems)
 
 ## Recommended Hardware
 
