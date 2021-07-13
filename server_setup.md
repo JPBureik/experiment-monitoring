@@ -603,6 +603,7 @@
     sudo crontab -e
     &emsp; 0 4 * * * /home/<i>admin</i>/backup >> /home/<i>admin</i>/.backup_log_$(date +'%Y_%m_%d') 2>&1
     </pre>
+  * In case of problems with the backup, you can consult the backup log at <code>/home/<i>admin</i>/.backup_log_<i>01_01_2020</i></code>. By default the backups from the last two days are kept and the next oldest one is deleted after creation of a new one. The same applies to the backup logs. You can change this behavior by changing the argument of the `-mtime` flags in the `find` calls of the backup script.
 
 ## Setting up the data monitoring:
   * Access the Grafana interface from a web browser by navigating to:
