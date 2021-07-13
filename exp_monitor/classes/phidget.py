@@ -1,11 +1,21 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Wed Jun 30 12:33:08 2021
+
+@author: jp
+
+Implements the Phidget Class for experiment monitoring.
+"""
+
+
 from Phidget22.Devices import TemperatureSensor
 
 
-class Phidget:
+class Phidget(Sensor):
 
-    def __init__(self, phidget_type, hub_port, hub_serial, hub_channel, measurement_descr):
-
-        self.phidget_type = phidget_type
+    def __init__(self, type, descr, unit, conversion_fctn, hub_port, hub_serial, hub_channel):
+        super().__init__(type, descr, unit, conversion_fctn)
         self.hub_port = hub_port
         self.hub_serial = hub_serial
         self.hub_channel = hub_channel
