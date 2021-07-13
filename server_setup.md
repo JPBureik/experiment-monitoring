@@ -1,10 +1,17 @@
 # Experiment Monitoring Server Setup
 
 # Table of Contents
-1. [Example](#example)
-2. [Example2](#example2)
-3. [Third Example](#third-example)
-4. [Fourth Example](#fourth-examplehttpwwwfourthexamplecom)
+1. [Recommended Hardware](#recommended-hardware)
+2. [Preparing the RaspberryPi](#preparing-the-raspberrypi)
+3. [Configuring the RaspberryPi](#configuring-the-raspberrypi)
+4. [Access from outside the IOGS network](#access-from-outside-the-iogs-network)
+5. [Adding external storage devices](#adding-external-storage-devices)
+6. [Installing InfluxDB and Grafana](#installing-influxdb-and-grafana)
+7. [Setting up the continuous data acquisition](#setting-up-the-continuous-data-acquisition)
+8. [Setting up automatic backups](#setting-up-automatic-backups)
+9. [Setting up the data monitoring](#setting-up-the-data-monitoring)
+10. [Setting up automatic alerts](#setting-up-automatic-alerts)
+11. [Known bugs and problems](#known-bugs-and-problems)
 
 ## Recommended Hardware
 
@@ -452,7 +459,7 @@
     </pre>
 -->
 
-## Setting up the continuous data acquisition:
+## Setting up the continuous data acquisition
   * Download the Experiment Monitoring software:
     <pre>
     cd /mnt/code
@@ -613,7 +620,7 @@
     </pre>
   * In case of problems with the backup, you can consult the backup log at <code>/home/<i>admin</i>/.backup_log_<i>2021_05_20</i></code>. By default the backups from the last two days are kept and the next oldest one is deleted after creation of a new one. The same applies to the backup logs. You can change this behavior by changing the argument of the `-mtime` flags in the `find` calls of the backup script.
 
-## Setting up the data monitoring:
+## Setting up the data monitoring
   * Access the Grafana interface from a web browser by navigating to:
     <pre>
     <i>myserver</i>.local:3000
@@ -703,13 +710,6 @@
       </pre>
     * The experiment monitoring software suite also contains a Python script (`spike_filter.py`) that allows you to interact with InfluxDB and delete values, e.g. for spikes in acquired data.
 
-
-
-
-
-
-
-
 ## Setting up automatic alerts
   * Edit the Grafana configuration file:
     <pre>
@@ -757,8 +757,3 @@
 
 ## Known bugs and problems
   * The Grafana Image Renderer is not available for the ARM processor of the RaspberryPi. Therefore the alert e-mails do not contain a snapshot of the time series that causes the alert.
-
-## Example
-## Example2
-## Third Example
-## [Fourth Example](http://www.fourthexample.com)
