@@ -565,7 +565,7 @@
     </pre>
 
 ## Setting up automatic backups
-  * On your <code><i>oa-data_share</i></code> create a directory <code>pc_backups</code> and therein one for <code><i>myserver</i></code>. On <i>myserver</i> create a mount point for <i>oa-data_share</i>:
+  * On your <code><i>oa-data_share</i></code> create a directory <code>pc_backups</code> and therein one for <code><i>myserver</i></code>. On <code><i>myserver</i></code> create a mount point for <i>oa-data_share</i>:
     <pre>
     mkdir /mnt/oa-data
     </pre>
