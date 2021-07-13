@@ -597,8 +597,9 @@
     </pre>
   * Automate daily backups with `cron`:
     <pre>
-    crontab -e
-    &emsp; 0 4 * * * sudo /home/<i>admin</i>/backup
+    touch /home/<i>admin</i>/.backup_log
+    sudo crontab -e
+    &emsp; 0 4 * * * /home/<i>admin</i>/backup >> /home/<i>admin</i>/.backup_log 2>&1
     </pre>
 
 ## Setting up the data monitoring:
