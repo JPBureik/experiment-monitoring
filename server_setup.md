@@ -593,13 +593,15 @@
     &emsp; influxd backup -database <i>mydatabase</i> $backup_dir/data
     &emsp; sudo dd if=/dev/mmcblk0 bs=64K conv=noerror,sync status=progress | gzip -c > $backup_dir/mmcblk0.img.gz
     &emsp; find /mnt/oa-data/ -type d -mtime +2 -exec rm -rf {} \;
+    &emsp; touch /home/<i>admin</i>/.backup_log_$(date +'%Y_%m_%d')
+    &emsp; find /home/<i>admin</i>/.backup_log_* -type f -mtime +2 -exec rm -rf {} \;
     chmod u+x backup
     </pre>
   * Automate daily backups with `cron`:
     <pre>
     touch /home/<i>admin</i>/.backup_log
     sudo crontab -e
-    &emsp; 0 4 * * * /home/<i>admin</i>/backup >> /home/<i>admin</i>/.backup_log 2>&1
+    &emsp; 0 4 * * * /home/<i>admin</i>/backup >> /home/<i>admin</i>/.backup_log_$(date +'%Y_%m_%d') 2>&1
     </pre>
 
 ## Setting up the data monitoring:
