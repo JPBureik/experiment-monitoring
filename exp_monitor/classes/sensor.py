@@ -20,42 +20,56 @@ class Sensor:
         self.type = type  # str
         self.descr = descr  # str
         self.unit = unit  # str
-        self._bounds = None  # {'lower': float, 'upper': float}
-        self._alert = False  # bool
-        self._alert_value = None  # float
         self.conversion_fctn = conversion_fctn  # function_object
-        self._path = PATH(".")
+        self._bounds = None  # {'lower': float, 'upper': float}
+        self._filter_spikes = None  # float
+        self._alert = None  # {'value': float, 'duration': float [min]}
+        self._alert_cond = None  # {'value': float, 'duration': float [min]}
+        self._path = Path(".")
 
     @property
     def bounds(self):
-        """Set bounds for measured values to filter spikes."""
+        """Set bounds to limit the range of incoming measured values."""
         return self._bounds
 
     @bounds.setter
     def bounds(self, bounds):
         self._bounds = bounds
 
-    @bounds.deleter
-    def bounds(self):
-        del self._bounds
-
     @property
     def alert(self):
-        """Set bounds for measured values to filter spikes."""
-        return self._bounds
+        """Set value and duration for automatic alerts."""
+        return self._alert
 
-    @bounds.setter
-    def alert(self, bounds):
-        self._bounds = bounds
+    @alert.setter
+    def alert(self, alert):
+        self._alert = alert
 
-    @bounds.deleter
-    def alert(self):
-        del self._bounds
+    @property
+    def filter_spikes(self):
+        """Set value for spike filetring."""
+        return self._filter_spikes
+
+    @filter_spikes.setter
+    def filter_spikes(self, filter_spikes):
+        self._filter_spikes = filter_spikes
+
+    def initialize(self):
+        """Open the connection to the sensor."""
+        pass
+
+    def close(self):
+        """Open the connection to the sensor."""
+        pass
+
+    def measure(self):
+        """Return the received measurement values from sensor."""
+        pass
 
     def conversion(self, value):
         """Perform conversion to proper unit."""
         return self._conversion_fctn(value)
 
-    def measure(self):
-        """Receive measurement values from sensor."""
+    def to_json(self):
+        """Return dict w/ measurement for JSON to store in influxDB."""
         pass
