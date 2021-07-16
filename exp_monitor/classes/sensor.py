@@ -11,9 +11,6 @@ All interfaces for acquiring data should be subclasses that inherit from this
 class.
 """
 
-# Standard library imports:
-from pathlib import Path
-
 class Sensor:
 
     def __init__(self, type, descr, unit, conversion_fctn):
@@ -25,7 +22,6 @@ class Sensor:
         self._filter_spikes = None  # float
         self._alert = None  # {'value': float, 'duration': float [min]}
         self._alert_cond = None  # {'value': float, 'duration': float [min]}
-        self._path = Path(".")
 
     @property
     def bounds(self):
@@ -54,16 +50,19 @@ class Sensor:
     def filter_spikes(self, filter_spikes):
         self._filter_spikes = filter_spikes
 
-    def initialize(self):
+    def connect(self):
         """Open the connection to the sensor."""
         pass
 
-    def close(self):
+    def disconnect(self):
         """Open the connection to the sensor."""
         pass
 
-    def measure(self):
+    def measure(self, verbose=False):
         """Return the received measurement values from sensor."""
+        if verbose:
+            # Print measurement
+            pass
         pass
 
     def conversion(self, value):
@@ -71,5 +70,9 @@ class Sensor:
         return self._conversion_fctn(value)
 
     def to_json(self):
-        """Return dict w/ measurement for JSON to store in influxDB."""
-        pass
+        """Return dict w/ measurement in JSON format to store in influxDB."""
+        self.json_dict = {}
+        self.json_dict['measurement'] = self.descr.lower() + '_temp'
+        self.json_dict['unit'] = self.unit
+        self.json_dict['value'] = self.measurement
+        return self.json_dict

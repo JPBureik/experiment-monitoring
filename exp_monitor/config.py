@@ -12,38 +12,23 @@ information in all sections for the proposed sensors and lab equipment below,
 or feel free to add any new hardware interface you want to connect.
 """
 
+# Import base class:
+from exp_monitor.classes.sensor import Sensor
 
-# 1 -- Define bounds for incoming data:
-bounds = {}
-bounds['lab_temp'] = {
-    'lower': 15,
-    'upper': 30
-    }
-bounds['zeeman1_temp'] = {
-    'lower': 15,
-    'upper': 120
-    }
-bounds['zeeman2_temp'] = {
-    'lower': 15,
-    'upper': 120
-    }    
-bounds['sc_vac'] = {
-    'lower': 2.34-12,
-    'upper': 3.45e-09
-    }
-bounds['source_temp'] = {
-    'lower': -200,
-    'upper': 30
-    }
-bounds['a/c_temp'] = {
-    'lower': 15,
-    'upper': 30
-    }
-bounds['water_temp'] = {
-    'lower': 5,
-    'upper': 30
-    }
-bounds['primary_vac'] = {
-    'lower': 1e-5,
-    'upper': 2e3
-    }
+# Import all specific sensor classes:
+from exp_monitor.classes.phidget_tc import PhidgetTC
+
+# Setup Phidgets:
+tc1 = PhidgetTC('Source', 4, 0)
+tc1.bounds = {'lower': -200, 'upper': 25}
+tc2 = PhidgetTC('A/C', 4, 1)
+tc2.bounds = {'lower': 15, 'upper': 30}
+tc3 = PhidgetTC('Lab', 4, 2)
+tc3.bounds = {'lower': 15, 'upper': 30}
+tc4 = PhidgetTC('Water', 4, 3)
+tc4.bounds = {'lower': 5, 'upper': 30}
+tc5 = PhidgetTC('Zeeman1', 5, 0)
+tc5.bounds = {'lower': 15, 'upper': 120}
+tc6 = PhidgetTC('Zeeman2', 5, 1)
+tc6.bounds = {'lower': 15, 'upper': 120}
+tc_list = [tc1, tc2, tc3, tc4, tc5, tc6]
