@@ -460,11 +460,13 @@
 -->
 
 ## Setting up the continuous data acquisition
-  * Download the Experiment Monitoring software:
+  * Download the Experiment Monitoring software and add its location to your `PYTHONPATH`:
     <pre>
     cd /mnt/code
     git clone -o quantumgitserver git@quantumgitserver.local:helium-lattice/experiment-monitoring.git
+    echo export PYTHONPATH=\$PYTHONPATH':/mnt/code/experiment-monitoring' >> ~/.bashrc
     </pre>
+    If on your setup the git repository is located at a different location, be sure to modify the last of the above commands accordingly.
 
   * Install the required packages and Python libraries:
     <pre>
@@ -754,6 +756,10 @@
     </pre>
     Change the threshold value back to the alert threshold, then on the upper right hand side click on `Apply` and save the dashboard by clicking on the save icon on the upper right hand side of the dashboard.<br>
     You can find an overview of all your alert rules by clicking on the `Alerting` bell icon and then choosing `Alert rules`.
+
+## Setting up the InfluxDB retention policy
+  * ...
+
 
 ## Known bugs and problems
   * The Grafana Image Renderer is not available for the ARM processor of the RaspberryPi. Therefore the alert e-mails do not contain a snapshot of the time series that causes the alert.
