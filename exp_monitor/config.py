@@ -17,7 +17,7 @@ from exp_monitor.classes.sensor import Sensor
 
 # Import all specific sensor classes:
 from exp_monitor.classes.phidget_tc import PhidgetTC
-from exp_monitor.classes.tpg261 import tpg261
+from exp_monitor.classes.tpg261 import TPG261
 
 # Setup Phidgets:
 tc1 = PhidgetTC('Source', 4, 0)
