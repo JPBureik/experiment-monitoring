@@ -24,6 +24,7 @@ class TPG261(Sensor):
         self.timeout = 1
         self.conversion_fctn = lambda p: float(str(p).split(',')[1])
         super().__init__(self.type, descr, self.unit, self.conversion_fctn)
+        self.port = port
 
     def connect(self):
         pass
