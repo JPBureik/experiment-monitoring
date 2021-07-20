@@ -57,5 +57,5 @@ class PhidgetTC(Sensor):
 # Execution:
 if __name__ == '__main__':
 
-    for tc in [tc1, tc2, tc3, tc4, tc5, tc6]:
-       tc.measure(verbose=True)
+    from exp_monitor.config import tc_list
+    for tc in tc_list: tc.measure(verbose=True)
