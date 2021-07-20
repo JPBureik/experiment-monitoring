@@ -17,6 +17,7 @@ from exp_monitor.classes.sensor import Sensor
 
 # Import all specific sensor classes:
 from exp_monitor.classes.phidget_tc import PhidgetTC
+from exp_monitor.classes.serial_com import tpg261
 
 # Setup Phidgets:
 tc1 = PhidgetTC('Source', 4, 0)
@@ -32,3 +33,6 @@ tc5.bounds = {'lower': 15, 'upper': 120}
 tc6 = PhidgetTC('Zeeman2', 5, 1)
 tc6.bounds = {'lower': 15, 'upper': 120}
 tc_list = [tc1, tc2, tc3, tc4, tc5, tc6]
+
+# Setup serial devices:
+primary_vac = tpg261_meas('/dev/ttyUSB0')
