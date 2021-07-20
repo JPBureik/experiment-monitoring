@@ -18,6 +18,7 @@ from exp_monitor.classes.sensor import Sensor
 class TPG261(Sensor):
 
     def __init__(self, descr, port):
+        self.type = 'Vacuum Gauge'
         self.unit = 'mbar'
         self.baudrate = 9600
         self.timeout = 1
