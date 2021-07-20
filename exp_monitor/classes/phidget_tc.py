@@ -41,14 +41,14 @@ class PhidgetTC(Sensor):
 
     def measure(self, verbose=False):
         # Open:
-        self.initialize()
+        self.connect()
         # Receive temperature value:
         self.measurement = self.ts_handle.getTemperature()
         # Print measurement:
         if verbose:
             print(self.descr, self.measurement, self.unit)
         # Close:
-        self.close()
+        self.disconnect()
 
     def to_json(self):
         return super().to_json()
