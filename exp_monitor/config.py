@@ -35,4 +35,4 @@ tc6.bounds = {'lower': 15, 'upper': 120}
 tc_list = [tc1, tc2, tc3, tc4, tc5, tc6]
 
 # Setup serial devices:
-primary_vac = tpg261_meas('/dev/ttyUSB0')
+primary_vac = TPG261('primary_vac', '/dev/ttyUSB0')
