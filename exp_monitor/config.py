@@ -12,12 +12,11 @@ information in all sections for the proposed sensors and lab equipment below,
 or feel free to add any new hardware interface you want to connect.
 """
 
-# Import base class:
-from exp_monitor.classes.sensor import Sensor
-
 # Import all specific sensor classes:
 from exp_monitor.classes.phidget_tc import PhidgetTC
 from exp_monitor.classes.tpg261 import TPG261
+from exp_monitor.adc.arduino_adc import ArduinoADC
+from exp_monitor.classes.tpg300 import TPG300
 
 # Setup Phidgets:
 tc1 = PhidgetTC('Source', 4, 0)
@@ -36,3 +35,7 @@ tc_list = [tc1, tc2, tc3, tc4, tc5, tc6]
 
 # Setup serial devices:
 primary_vac = TPG261('primary_vac', '/dev/ttyUSB0')
+
+# Setup analog devices via Arduino:
+arduino_adc = ArduinoADC()
+sc_vac = TPG300('sc_vac')

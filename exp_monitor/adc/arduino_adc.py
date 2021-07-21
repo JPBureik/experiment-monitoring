@@ -1,0 +1,63 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Wed Jul 21 10:54:18 2021
+
+@author: jp
+
+Implements the ArduinoADC Class for experiment monitoring.
+
+This module reads out all 12 Analog Input signals sent from the Arduino over
+TCP/IP and returns them as floats in a list.
+
+The entries of the list correspond to the Analog Inputs in ascending order,
+i.e. A0 through A11.
+
+Note that it always returns a list of length 12, regardless of how many Analog
+Inputs are used. The unused analog pins will float, so be sure to correctly
+identify the signals to be monitored.
+"""
+
+# Standard library imports:
+import socket
+import pickle
+
+# Local imports:
+from exp_monitor.classes.sensor import Sensor
+
+
+class ArduinoADC(Sensor):
+
+    def __init__(self):
+        self.type = 'ADC'
+        self.descr = 'Arduino Analog-to-Digital Converter'
+        self.unit = 'V'
+        self.buffer_size = 2**12
+        self.volt_limit = 3.25
+        self.conversion_fctn = lambda v_int: v_int / self.buffer_size * self.volt_limit
+        super().__init__(self.type, descr, self.unit, self.conversion_fctn)
+        self.IP = '10.117.53.45'  # Static IP: IOGS network
+        #self.IP = '172.20.217.9' # DHCP: Visitor network - not recommended
+        self.port = 6574  # Match to server side port
+        self.soc = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.analog_signals = {}
+
+    def connect(self):
+        self.soc.connect((self.IP, self.port))
+        self.soc.sendall(b'a')  # Send a non-empty message to initialize TCP/IP com
+
+    def measure(self):
+        # Measurement data: 12-bit int -> receive msg as 2**8 * byte1 + byte2
+        for channel in range(12):
+            # Receive both bytes successively:
+            byte1 = self.soc.recv(buffer_size)
+            byte2 = self.soc.recv(buffer_size)
+            # Restore original 12-bit integer:
+            self.v_int = 2**8*(int.from_bytes(byte1, 'little')) +\
+                int.from_bytes(byte2, 'little')
+            self.measurement = super().conversion_fctn(self.v_int)
+            self.analog_signals[channel] = voltage
+
+
+    def _store_analog_values(self):
+        pickle.dump(self.analog_signals)

@@ -55,7 +55,7 @@ class Sensor:
         pass
 
     def disconnect(self):
-        """Open the connection to the sensor."""
+        """Close the connection to the sensor."""
         pass
 
     def measure(self, verbose=False):
