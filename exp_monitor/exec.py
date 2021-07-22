@@ -28,6 +28,6 @@ for name in dir():
 # Execute measure method for every user-defined object:
 while True:
 
-    for data_source in user_objects:
-        data_source.measure(verbose=True)
+    for data_source in user_objects.keys():
+        user_objects[data_source].measure(verbose=True)
     time.sleep(interval)
