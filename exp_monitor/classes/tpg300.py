@@ -20,14 +20,13 @@ class TPG300(Sensor):
         self.unit = 'mbar'
         self.arduino_channel = 1
         self._calib = Calibrator()
-        self.numerical_precision = 3
         self.conversion_fctn = self._calib.calib_fctn
         super().__init__(self.type, descr, self.unit, self.conversion_fctn)
 
     def measure(self, verbose=False):
         arduino_adc = ArduinoADC()
         voltage = arduino_adc.measure()[self.arduino_channel]
-        pressure = round(self.conversion_fctn(voltage), self.numerical_precision)
+        pressure = self.conversion_fctn(voltage)
         if verbose:
             print(pressure)
 
