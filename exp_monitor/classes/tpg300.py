@@ -19,7 +19,7 @@ class TPG300(Sensor):
     def __init__(self, descr):
         self.type = 'Vacuum Gauge'
         self.unit = 'mbar'
-        self.arduino_channel = 1
+        self.arduino_channel = 2
         self._calib = Calibrator()
         self.conversion_fctn = self._calib.calib_fctn
         super().__init__(self.type, descr, self.unit, self.conversion_fctn)
