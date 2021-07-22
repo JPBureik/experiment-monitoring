@@ -72,13 +72,14 @@ if __name__ == '__main__':
 
     import time
     ctr = 0
+    test_range = 100
     arduino_adc = ArduinoADC()
-    for i in range(100):
+    for i in range(test_range):
         print(i)
         analog_signals = arduino_adc.measure()
         for ai_channel in range(12):
             print('Channel', ai_channel, '\t', analog_signals[ai_channel], 'V')
             if analog_signals[ai_channel] > 3.3:
                 ctr += 1
-    print('Total spikes: {} / {} ~ {}%'.format(ctr, 100*12, ctr/(100*12)))
+    print('Total spikes: {} / {} ~ {}%'.format(ctr, test_range*12, ctr/(test_range*12)))
         # time.sleep(2)
