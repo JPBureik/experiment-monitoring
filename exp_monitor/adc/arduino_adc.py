@@ -58,11 +58,8 @@ class ArduinoADC(Sensor):
             v_int = 2**8*(int.from_bytes(byte1, 'little')) +\
                 int.from_bytes(byte2, 'little')
             # Limit to Arduino voltage range to filter badly converted values:
-            if 0 <= v_int <= self.volt_limit:
-                v = round(self.conversion_fctn(v_int), self.numerical_precision)
-            else:
-                v = None
-            self.analog_signals[channel] = v
+            v = round(self.conversion_fctn(v_int), self.numerical_precision)
+            self.analog_signals[channel] = v if 0 <= v <= self.volt_limit else None
         self.disconnect()
         # Buffer time:
         time.sleep(0.1)
