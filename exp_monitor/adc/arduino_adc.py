@@ -73,7 +73,8 @@ class ArduinoADC(Sensor):
 # Execution:
 if __name__ == '__main__':
 
-    arduino_adc = ArduinoADC()
-    analog_signals = arduino_adc.measure()
-    for ai_channel in range(12):
-        print('Channel', ai_channel, '\t', analog_signals[ai_channel], 'V')
+    for i in range(10):
+        arduino_adc = ArduinoADC()
+        analog_signals = arduino_adc.measure()
+        for ai_channel in range(12):
+            print('Channel', ai_channel, '\t', analog_signals[ai_channel], 'V')
