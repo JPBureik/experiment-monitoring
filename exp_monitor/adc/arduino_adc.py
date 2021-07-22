@@ -45,7 +45,7 @@ class ArduinoADC(Sensor):
         try:
             self.soc.connect((self.IP, self.port))
         except OSError:
-            pass
+            print('Already connected!')
         finally:
             self.soc.sendall(b'a')  # Send a non-empty message to initialize TCP/IP com
 
