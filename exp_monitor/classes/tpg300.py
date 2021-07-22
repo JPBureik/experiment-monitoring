@@ -27,7 +27,7 @@ class TPG300(Sensor):
     def measure(self, verbose=False):
         arduino_adc = ArduinoADC()
         voltage = arduino_adc.measure()[self.arduino_channel]
-        pressure = self.conversion_fctn(voltage)
+        self.measurement = self.conversion_fctn(voltage)
         if verbose:
             print(self.descr, self.measurement, self.unit)
 
