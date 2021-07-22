@@ -68,4 +68,4 @@ if __name__ == '__main__':
 
     arduino_adc = ArduinoADC()
     for ai_channel in range(12):
-        print('Channel', ai_channel, ':', arduino_adc.measure(ai_channel))
+        print('Channel', ai_channel, '\t:', arduino_adc.measure(ai_channel))
