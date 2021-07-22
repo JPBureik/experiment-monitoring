@@ -20,6 +20,7 @@ identify the signals to be monitored.
 
 # Standard library imports:
 import socket
+import time
 
 # Local imports:
 from exp_monitor.classes.sensor import Sensor
@@ -56,6 +57,8 @@ class ArduinoADC(Sensor):
             self.v_int = 2**8*(int.from_bytes(byte1, 'little')) +\
                 int.from_bytes(byte2, 'little')
             self.analog_signals[channel] = round(self.conversion_fctn(self.v_int), 3)
+            # Buffer time:
+            time.sleep(0.1)
         self.disconnect()
         return self.analog_signals
 
@@ -74,4 +77,4 @@ if __name__ == '__main__':
         analog_signals = arduino_adc.measure()
         for ai_channel in range(12):
             print('Channel', ai_channel, '\t', analog_signals[ai_channel], 'V')
-        time.sleep(2)
+        # time.sleep(2)
