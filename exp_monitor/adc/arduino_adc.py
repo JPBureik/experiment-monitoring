@@ -34,7 +34,7 @@ class ArduinoADC(Sensor):
         self.buffer_size = 2**12
         self.volt_limit = 3.25
         self.conversion_fctn = lambda v_int: v_int / self.buffer_size * self.volt_limit
-        super().__init__(self.type, descr, self.unit, self.conversion_fctn)
+        super().__init__(self.type, self.descr, self.unit, self.conversion_fctn)
         self.IP = '10.117.53.45'  # Static IP: IOGS network
         #self.IP = '172.20.217.9' # DHCP: Visitor network - not recommended
         self.port = 6574  # Match to server side port
