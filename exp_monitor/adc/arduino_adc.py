@@ -60,7 +60,7 @@ class ArduinoADC(Sensor):
         return self.analog_signals
 
     def disconnect(self):
-        self.soc.shutdown()
+        self.soc.shutdown(SHUT_RDWR)
         self.soc.close()
 
 
