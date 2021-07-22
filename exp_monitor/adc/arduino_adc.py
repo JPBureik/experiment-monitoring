@@ -38,10 +38,10 @@ class ArduinoADC(Sensor):
         self.IP = '10.117.53.45'  # Static IP: IOGS network
         #self.IP = '172.20.217.9' # DHCP: Visitor network - not recommended
         self.port = 6574  # Match to server side port
-        self.soc = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.analog_signals = {}
 
     def connect(self):
+        self.soc = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.soc.connect((self.IP, self.port))
         self.soc.sendall(b'a')  # Send a non-empty message to initialize TCP/IP com
 
