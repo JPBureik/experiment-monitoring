@@ -72,7 +72,7 @@ if __name__ == '__main__':
 
     import time
     arduino_adc = ArduinoADC()
-    for i in range(10):
+    for i in range(100):
         print(i)
         analog_signals = arduino_adc.measure()
         for ai_channel in range(12):
