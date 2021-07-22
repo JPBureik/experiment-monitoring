@@ -58,3 +58,10 @@ class ArduinoADC(Sensor):
             self.measurement = super().conversion_fctn(self.v_int)
             self.analog_signals[channel] = voltage
         return self.analog_signals[ai_channel]
+
+
+# Execution:
+if __name__ == '__main__':
+
+    arduino_adc = ArduinoADC()
+    print(arduino_adc.measure())
