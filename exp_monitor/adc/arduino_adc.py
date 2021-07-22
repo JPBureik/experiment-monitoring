@@ -49,7 +49,7 @@ class ArduinoADC(Sensor):
         finally:
             self.soc.sendall(b'a')  # Send a non-empty message to initialize TCP/IP com
 
-    def measure(self, ai_channel):
+    def measure(self):
         self.connect()
         # Measurement data: 12-bit int -> receive msg as 2**8 * byte1 + byte2
         for channel in range(12):
@@ -60,7 +60,7 @@ class ArduinoADC(Sensor):
             self.v_int = 2**8*(int.from_bytes(byte1, 'little')) +\
                 int.from_bytes(byte2, 'little')
             self.analog_signals[channel] = self.conversion_fctn(self.v_int)
-        return self.analog_signals[ai_channel]
+        return self.analog_signals
 
 
 # Execution:
@@ -68,4 +68,4 @@ if __name__ == '__main__':
 
     arduino_adc = ArduinoADC()
     for ai_channel in range(12):
-        print('Channel', ai_channel, '\t', arduino_adc.measure(ai_channel), 'V')
+        print('Channel', ai_channel, '\t', arduino_adc.measure()[ai_channel], 'V')
