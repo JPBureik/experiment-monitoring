@@ -80,5 +80,5 @@ if __name__ == '__main__':
             print('Channel', ai_channel, '\t', analog_signals[ai_channel], 'V')
             if analog_signals[ai_channel] > 3.3:
                 ctr += 1
-    print('Total spikes: {} / 100'.format(ctr))
+    print('Total spikes: {} / {}'.format(ctr, 100*12))
         # time.sleep(2)
