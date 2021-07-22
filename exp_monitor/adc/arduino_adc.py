@@ -50,8 +50,8 @@ class ArduinoADC(Sensor):
         # Measurement data: 12-bit int -> receive msg as 2**8 * byte1 + byte2
         for channel in range(12):
             # Receive both bytes successively:
-            byte1 = self.soc.recv(buffer_size)
-            byte2 = self.soc.recv(buffer_size)
+            byte1 = self.soc.recv(self.buffer_size)
+            byte2 = self.soc.recv(self.buffer_size)
             # Restore original 12-bit integer:
             self.v_int = 2**8*(int.from_bytes(byte1, 'little')) +\
                 int.from_bytes(byte2, 'little')
