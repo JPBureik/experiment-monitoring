@@ -20,7 +20,6 @@ identify the signals to be monitored.
 
 # Standard library imports:
 import socket
-import pickle
 
 # Local imports:
 from exp_monitor.classes.sensor import Sensor
@@ -46,7 +45,8 @@ class ArduinoADC(Sensor):
         self.soc.connect((self.IP, self.port))
         self.soc.sendall(b'a')  # Send a non-empty message to initialize TCP/IP com
 
-    def measure(self):
+    def measure(self, ai_channel):
+        self.connect()
         # Measurement data: 12-bit int -> receive msg as 2**8 * byte1 + byte2
         for channel in range(12):
             # Receive both bytes successively:
@@ -57,7 +57,4 @@ class ArduinoADC(Sensor):
                 int.from_bytes(byte2, 'little')
             self.measurement = super().conversion_fctn(self.v_int)
             self.analog_signals[channel] = voltage
-
-
-    def _store_analog_values(self):
-        pickle.dump(self.analog_signals)
+        return self.analog_signals[ai_channel]
