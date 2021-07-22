@@ -16,10 +16,10 @@ from exp_monitor.calibrations.calib import Calibrator
 
 class TPG300(Sensor):
 
-    def __init__(self, descr):
+    def __init__(self, descr, adc_analog_in):
         self.type = 'Vacuum Gauge'
         self.unit = 'mbar'
-        self.arduino_channel = 2
+        self.arduino_channel = adc_analog_in
         self._calib = Calibrator()
         self.conversion_fctn = self._calib.calib_fctn
         super().__init__(self.type, descr, self.unit, self.conversion_fctn)

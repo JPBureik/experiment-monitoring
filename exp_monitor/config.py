@@ -37,4 +37,4 @@ tc_list = [tc1, tc2, tc3, tc4, tc5, tc6]
 primary_vac = TPG261('primary_vac', '/dev/ttyUSB0')
 
 # Setup analog devices via Arduino:
-sc_vac = TPG300('sc_vac')
+sc_vac = TPG300('sc_vac', 2)

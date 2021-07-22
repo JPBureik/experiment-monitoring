@@ -36,7 +36,8 @@ class TPG261(Sensor):
         with serial.Serial(self.port, baudrate=self.baudrate, timeout=self.timeout) as ser:
             # Receive measurement bytes from gauge:
             self.serial_rcv = ser.readline()
-        self.measurement = self.conversion_fctn(self.serial_rcv)
+        # self.measurement = self.conversion_fctn(self.serial_rcv)
+        self.measurement = self.serial_rcv
         if verbose:
             print(self.descr, self.measurement, self.unit)
 
