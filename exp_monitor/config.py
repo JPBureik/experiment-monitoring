@@ -12,6 +12,9 @@ information in all sections for the proposed sensors and lab equipment below,
 or feel free to add any new hardware interface you want to connect.
 """
 
+# Define interval for data acquisition (in seconds):
+acq_interv = 15
+
 # Import all specific sensor classes:
 from exp_monitor.classes.phidget_tc import PhidgetTC
 from exp_monitor.classes.tpg261 import TPG261
