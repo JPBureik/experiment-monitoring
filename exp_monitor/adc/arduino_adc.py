@@ -71,10 +71,14 @@ class ArduinoADC(Sensor):
 if __name__ == '__main__':
 
     import time
+    ctr = 0
     arduino_adc = ArduinoADC()
     for i in range(100):
         print(i)
         analog_signals = arduino_adc.measure()
         for ai_channel in range(12):
             print('Channel', ai_channel, '\t', analog_signals[ai_channel], 'V')
+            if analog_signals[ai_channel] > 3.3:
+                ctr += 1
+    print('Total spikes: {} / 100'.format(ctr))
         # time.sleep(2)
