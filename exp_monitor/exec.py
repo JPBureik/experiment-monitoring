@@ -15,15 +15,11 @@ import time
 # Local imports:
 from exp_monitor.config import *
 
-# Get all user-defined objects:
-user_objects = {}
-for object_name in dir():
-    object = globals()[object_name]
-    if 'exp_monitor.classes.' in str(type(object)):
-        user_objects[object_name] = object
-
 # Execute measure method for every user-defined object:
 while True:
-    for data_source in user_objects.keys():
-        user_objects[data_source].measure(verbose=True)
+    for object_name in dir():
+        object = globals()[object_name]
+        measure = getattr(object, 'measure', None)
+        if callable(measure):
+            object.measure(verbose=True)
     time.sleep(acq_interv)
