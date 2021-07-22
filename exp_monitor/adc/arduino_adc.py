@@ -34,6 +34,7 @@ class ArduinoADC(Sensor):
         self.unit = 'V'
         self.buffer_size = 2**12
         self.volt_limit = 3.25
+        self.numerical_precision = 3
         self.conversion_fctn = lambda v_int: v_int / self.buffer_size * self.volt_limit
         super().__init__(self.type, self.descr, self.unit, self.conversion_fctn)
         self.IP = '10.117.53.45'  # Static IP: IOGS network
@@ -54,9 +55,14 @@ class ArduinoADC(Sensor):
             byte1 = self.soc.recv(self.buffer_size)
             byte2 = self.soc.recv(self.buffer_size)
             # Restore original 12-bit integer:
-            self.v_int = 2**8*(int.from_bytes(byte1, 'little')) +\
+            v_int = 2**8*(int.from_bytes(byte1, 'little')) +\
                 int.from_bytes(byte2, 'little')
-            self.analog_signals[channel] = round(self.conversion_fctn(self.v_int), 3)
+            # Limit to Arduino voltage range to filter badly converted values:
+            if 0 <= v_int <= self.volt_limit:
+                v = round(self.conversion_fctn(v_int), self.numerical_precision)
+            else:
+                v = None
+            self.analog_signals[channel] = v
         self.disconnect()
         # Buffer time:
         time.sleep(0.1)
