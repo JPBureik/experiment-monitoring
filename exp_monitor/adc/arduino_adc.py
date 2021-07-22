@@ -55,7 +55,7 @@ class ArduinoADC(Sensor):
             # Restore original 12-bit integer:
             self.v_int = 2**8*(int.from_bytes(byte1, 'little')) +\
                 int.from_bytes(byte2, 'little')
-            self.measurement = super().conversion_fctn(self.v_int)
+            self.measurement = self.conversion_fctn(self.v_int)
             self.analog_signals[channel] = voltage
         return self.analog_signals[ai_channel]
 
