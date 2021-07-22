@@ -610,7 +610,7 @@
     &emsp; backup_dir=/mnt/<i>oa-data_share</i>/<i>myserver</i>_backup_$(date +'%Y_%m_%d')
     &emsp; mkdir -p $backup_dir/data
     &emsp; influxd backup -database <i>mydatabase</i> $backup_dir/data
-    &emsp; sudo dd if=/dev/mmcblk0 bs=64K conv=noerror,sync status=progress | gzip -c > $backup_dir/mmcblk0.img.gz
+    &emsp; sudo dd if=/dev/mmcblk0 bs=64K conv=noerror,sync | gzip -c > $backup_dir/mmcblk0.img.gz
     &emsp; find /mnt/oa-data/ -maxdepth 1 -type d -mtime +1 -exec rm -rf {} \;
     &emsp; find /home/<i>admin</i>/.backup_log_* -type f -mtime +1 -exec rm {} \;
     chmod u+x backup
