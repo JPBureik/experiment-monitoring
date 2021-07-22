@@ -11,16 +11,29 @@ Implements the TPG 300 Class for experiment monitoring.
 # Local imports:
 from exp_monitor.classes.sensor import Sensor
 from exp_monitor.classes.arduino_adc import ArduinoADC
+from calibrations.calib import Calibrator
 
 class TPG300(Sensor):
 
     def __init__(self, descr):
         self.type = 'Vacuum Gauge'
         self.unit = 'mbar'
-        self.arduino_ai = 1
-        self.conversion_fctn = None
+        self.arduino_channel = 1
+        self._calib = Calibrator()
+        self.numerical_precision = 3
+        self.conversion_fctn = self._calib.calib_fctn
         super().__init__(self.type, descr, self.unit, self.conversion_fctn)
 
     def measure(self, verbose=False):
         arduino_adc = ArduinoADC()
-        voltage = arduino_adc.measure(self.arduino_ai)
+        voltage = arduino_adc.measure()[self.arduino_channel]
+        pressure = round(self.conversion_fctn(voltage), self.numerical_precision)
+        if verbose:
+            print(pressure)
+
+
+# Execution:
+if __name__ == '__main__':
+
+    tpg300 = TPG300
+    tpg300.measure(verbose=True)
