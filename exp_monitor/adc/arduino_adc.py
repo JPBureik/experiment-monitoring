@@ -57,8 +57,6 @@ class ArduinoADC(Sensor):
             self.v_int = 2**8*(int.from_bytes(byte1, 'little')) +\
                 int.from_bytes(byte2, 'little')
             self.analog_signals[channel] = round(self.conversion_fctn(self.v_int), 3)
-            # Buffer time:
-            time.sleep(0.1)
         self.disconnect()
         return self.analog_signals
 
@@ -72,7 +70,7 @@ if __name__ == '__main__':
 
     import time
     arduino_adc = ArduinoADC()
-    for i in range(5):
+    for i in range(10):
         print(i)
         analog_signals = arduino_adc.measure()
         for ai_channel in range(12):
