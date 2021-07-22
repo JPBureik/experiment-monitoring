@@ -42,8 +42,12 @@ class ArduinoADC(Sensor):
         self.analog_signals = {}
 
     def connect(self):
-        self.soc.connect((self.IP, self.port))
-        self.soc.sendall(b'a')  # Send a non-empty message to initialize TCP/IP com
+        try:
+            self.soc.connect((self.IP, self.port))
+        except OSError:
+            pass
+        finally:
+            self.soc.sendall(b'a')  # Send a non-empty message to initialize TCP/IP com
 
     def measure(self, ai_channel):
         self.connect()
