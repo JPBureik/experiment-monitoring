@@ -72,7 +72,7 @@ if __name__ == '__main__':
 
     import time
     ctr = 0
-    test_range = 100
+    test_range = 1000
     arduino_adc = ArduinoADC()
     for i in range(test_range):
         print(i)
