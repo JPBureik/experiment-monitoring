@@ -67,6 +67,6 @@ if __name__ == '__main__':
     for i in range(5):
         print(i)
         analog_signals = arduino_adc.measure()
-        time.sleep(1)
         for ai_channel in range(12):
             print('Channel', ai_channel, '\t', analog_signals[ai_channel], 'V')
+        time.sleep(1)
