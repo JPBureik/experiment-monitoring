@@ -11,19 +11,23 @@ specified function at the rate given by the specified interval.
 
 # Standard library imports:
 import time
-import sys
-
-# Set path:
-sys.path.append(".")
 
 # Local imports:
-from classes.influxdb_write import influxdb_write
+from exp_monitor.config import *
 
 # Specify interval in seconds:
 interval = 15
 
-# Main loop:
+# Get all user-defined objects:
+user_objects = {}
+for name in dir():
+    value = globals()[name]
+    if 'exp_monitor.classes.' in str(type(value)):
+        user_objects[name] = value
+
+# Execute measure method for every user-defined object:
 while True:
 
-    influxdb_write()
+    for data_source in user_objects:
+        data_source.measure(verbose=True)
     time.sleep(interval)
