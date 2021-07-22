@@ -58,6 +58,8 @@ class ArduinoADC(Sensor):
                 int.from_bytes(byte2, 'little')
             self.analog_signals[channel] = round(self.conversion_fctn(self.v_int), 3)
         self.disconnect()
+        # Buffer time:
+        time.sleep(0.1)
         return self.analog_signals
 
     def disconnect(self):
