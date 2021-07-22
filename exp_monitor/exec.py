@@ -19,7 +19,7 @@ from exp_monitor.config import *
 while True:
     for object_name in dir():
         object = globals()[object_name]
-        measure = getattr(object, 'measure', None)
-        if callable(measure):
+        # Identify user-defined objects:
+        if 'exp_monitor.classes.' in str(type(object)):
             object.measure(verbose=True)
     time.sleep(acq_interv)
