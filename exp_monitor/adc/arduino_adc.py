@@ -61,7 +61,7 @@ class ArduinoADC(Sensor):
             v = round(self.conversion_fctn(v_int), self.numerical_precision)
             self.analog_signals[channel] = v if 0 <= v <= self.volt_limit else None
         self.disconnect()
-        # Buffer time:
+        # Buffer time for Arduino:
         time.sleep(0.1)
         return self.analog_signals
 
@@ -73,8 +73,7 @@ class ArduinoADC(Sensor):
 # Execution:
 if __name__ == '__main__':
 
-    for i in range(10):
-        arduino_adc = ArduinoADC()
-        analog_signals = arduino_adc.measure()
-        for ai_channel in range(12):
-            print('Channel', ai_channel, '\t', analog_signals[ai_channel], 'V')
+    arduino_adc = ArduinoADC()
+    analog_signals = arduino_adc.measure()
+    for ai_channel in range(12):
+        print('Channel', ai_channel, '\t', analog_signals[ai_channel], 'V')
