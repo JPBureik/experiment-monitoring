@@ -35,5 +35,5 @@ class TPG300(Sensor):
 # Execution:
 if __name__ == '__main__':
 
-    tpg300 = TPG300
-    tpg300.measure(verbose=True)
+    from exp_monitor.config import sc_vac
+    sc_vac.measure(verbose=True)
