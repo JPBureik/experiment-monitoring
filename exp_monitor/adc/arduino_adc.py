@@ -69,4 +69,4 @@ if __name__ == '__main__':
         analog_signals = arduino_adc.measure()
         for ai_channel in range(12):
             print('Channel', ai_channel, '\t', analog_signals[ai_channel], 'V')
-        time.sleep(1)
+        time.sleep(5)
