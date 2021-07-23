@@ -74,5 +74,5 @@ class Sensor:
         self.json_dict = {}
         self.json_dict['measurement'] = self.descr.lower() + '_temp'
         self.json_dict['unit'] = self.unit
-        self.json_dict['value'] = self.measurement
+        self.json_dict['value'] = str(self.measurement)
         return self.json_dict
