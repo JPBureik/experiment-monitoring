@@ -95,5 +95,4 @@ class Sensor:
         json_dict['time'] = datetime.utcnow().strftime("%m/%d/%Y %H:%M:%S")
         json_dict['fields'] = {}
         json_dict['fields']['value'] = self.measurement
-        # print(json_dict)
-        self.db_client.write_points(json_dict)
+        self.db_client.write_points([json_dict])
