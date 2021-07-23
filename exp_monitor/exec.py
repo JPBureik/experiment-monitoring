@@ -40,6 +40,8 @@ while True:
             if callable(getattr(object, 'measure')):
                 try:
                     object.measure(verbose=True)
+                    json_dict = object.to_json()
+                    print(json_dict)
                 # Log exceptions but continue execution:
                 except Exception as e:
                     with open(log_file, 'w') as logf:
