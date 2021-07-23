@@ -19,11 +19,11 @@ class TPG300(Sensor):
     def __init__(self, descr, adc_analog_in):
         self.type = 'Vacuum Gauge'
         self.unit = 'mbar'
-        self.descr = self.descr = descr.replace(' ', '_').lower() + '_pressure'
+        self.descr = descr.replace(' ', '_').lower() + '_pressure'
         self.arduino_channel = adc_analog_in
         self._calib = Calibrator()
         self.conversion_fctn = self._calib.calib_fctn
-        super().__init__(self.type, descr, self.unit, self.conversion_fctn)
+        super().__init__(self.type, self.descr, self.unit, self.conversion_fctn)
 
     def measure(self, verbose=False):
         arduino_adc = ArduinoADC()

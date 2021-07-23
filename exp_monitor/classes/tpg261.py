@@ -20,11 +20,11 @@ class TPG261(Sensor):
     def __init__(self, descr, port):
         self.type = 'Vacuum Gauge'
         self.unit = 'mbar'
-        self.descr = self.descr = descr.replace(' ', '_').lower() + '_pressure'
+        self.descr = descr.replace(' ', '_').lower() + '_pressure'
         self.baudrate = 9600
         self.timeout = 1
         self.conversion_fctn = lambda p: float(str(p).split(',')[1])
-        super().__init__(self.type, descr, self.unit, self.conversion_fctn)
+        super().__init__(self.type, self.descr, self.unit, self.conversion_fctn)
         self.port = port
 
     def connect(self):
