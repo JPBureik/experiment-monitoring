@@ -515,7 +515,7 @@
     influx -precision rfc3339
     CREATE DATABASE <i>mydatabase</i>
     </pre>
-    Add this name in the config file of the Experiment Monitoring Python package. Remember to `commit` and `push` everytime you make a modification to the data acquisition code on <code><i>myserver</i></code>:
+    Add this name in the config file of the Experiment Monitoring package. Create a new branch for your own application of the Experiment Monitoring Package, e.g. <i>myexperiment</i>. Remember to `commit` and `push` everytime you make a modification to the data acquisition code on <code><i>myserver</i></code>:
     <pre>
     git checkout -b <i>myexperiment</i>
     git branch -D master
