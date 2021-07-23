@@ -39,7 +39,7 @@ while True:
             # Check if measure method exists:
             if callable(getattr(object, 'measure')):
                 try:
-                    object.measure(verbose=True)
+                    object.measure()
                     json_dict = object.to_json()
                     print(json_dict)
                 # Log exceptions but continue execution:
