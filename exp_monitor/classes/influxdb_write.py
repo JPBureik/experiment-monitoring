@@ -18,10 +18,6 @@ def influxdb_write():
     # Standard library imports:
     from influxdb import InfluxDBClient
     from datetime import datetime
-    import sys
-
-    # Set path:
-    sys.path.append(".")
 
     # Local imports:
     from exp_monitor.config import bounds

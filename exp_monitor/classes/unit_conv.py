@@ -17,13 +17,7 @@ def unit_conv(analog_signals):
     """ Convert measurement data in list of floats from Arduino to
     corresponding units."""
 
-    # Standard library imports:
-    import sys
-
-    # Set path:
-    sys.path.append("..")
-
-    from calibrations.calib import Calibrator
+    from exp_monitor.calibrations.calib import Calibrator
     sc_vac_calib = Calibrator()
 
     """ ---------- USER INPUT: Measurements ---------- """
