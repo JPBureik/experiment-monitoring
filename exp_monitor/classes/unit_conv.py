@@ -66,7 +66,7 @@ def unit_conv(analog_signals):
 
 if __name__ == '__main__':
 
-    from eth_com import rcv_meas
+    from exp_monitor.utilities.eth_com import rcv_meas
     analog_signals = rcv_meas()
     conv_measurements = unit_conv(analog_signals)
     print(conv_measurements)
