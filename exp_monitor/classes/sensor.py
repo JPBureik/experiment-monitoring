@@ -95,32 +95,3 @@ class Sensor:
         json_dict['fields']['value'] = self.measurement
         print(json_dict)
         # self.db_client.write_points(json_dict)
-
-
-
-
-
-
-json_body = []
-json_body.append(
-    {
-        "measurement": 'sc_vac',
-        "tags": {
-            "unit": 'mbar',
-        },
-        "time": dt_string,
-        "fields": {
-            "value": 1e-10,
-            "raw": 1.982,
-        }
-    }
-)
-
-
-json_dict = {}
-json_dict['measurement'] = self.descr.lower() + '_temp'
-json_dict['tags'] = {}
-json_dict['tags']['unit'] = self.unit
-json_dict['time'] = datetime.utcnow().strftime("%m/%d/%Y %H:%M:%S")  # Grafana assumes UTC
-json_dict['fields'] = {}
-json_dict['fields']['value'] = self.measurement
