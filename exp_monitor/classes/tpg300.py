@@ -28,7 +28,10 @@ class TPG300(Sensor):
     def measure(self, verbose=False):
         arduino_adc = ArduinoADC()
         voltage = arduino_adc.measure()[self.arduino_channel]
-        self.measurement = self.conversion_fctn(voltage)
+        if voltage:
+            self.measurement = self.conversion_fctn(voltage)
+        else:
+            self.measurement = None
         if verbose:
             print(self.descr, self.measurement, self.unit)
 
