@@ -54,4 +54,5 @@ while True:
                                 str(e)
                                 )
                             )
+    break
     time.sleep(acq_interv)
