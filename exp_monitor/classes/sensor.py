@@ -11,11 +11,12 @@ All interfaces for acquiring data should be subclasses that inherit from this
 class.
 """
 
-class Sensor:
+# Standard library imports:
+from influxdb import InfluxDBClient
+from datetime import datetime
 
-    # Standard library imports:
-    from influxdb import InfluxDBClient
-    from datetime import datetime
+
+class Sensor:
 
     def __init__(self, type, descr, unit, conversion_fctn):
         self.type = type  # str
