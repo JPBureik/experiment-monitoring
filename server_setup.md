@@ -556,7 +556,6 @@
       &emsp; ExecStart=/usr/bin/python3 /mnt/code/experiment-monitoring/exp_monitor/exec.py
       &emsp; Restart=always
       &emsp; RestartSec=15s         
-      &emsp; User=admin   
 
       &emsp; [Install]
       &emsp; WantedBy=multi-user.target
