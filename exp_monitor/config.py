@@ -12,6 +12,9 @@ information in all sections for the proposed sensors and lab equipment below,
 or feel free to add any new hardware interface you want to connect.
 """
 
+# Define InfluxDB Database Name:
+db_name = 'helium2'
+
 # Define interval for data acquisition (in seconds):
 acq_interv = 15
 
@@ -33,7 +36,7 @@ tc4.bounds = {'lower': 5, 'upper': 30}
 tc5 = PhidgetTC('Zeeman1', 5, 0)
 tc5.bounds = {'lower': 15, 'upper': 120}
 tc6 = PhidgetTC('Zeeman2', 5, 1)
-tc6.bounds = {'lower': 15, 'upper': 120}
+tc6.bounds = {'lower': 15, 'upper': 1200}
 tc_list = [tc1, tc2, tc3, tc4, tc5, tc6]
 
 # Setup serial devices:
