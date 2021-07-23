@@ -517,10 +517,10 @@
     </pre>
     Add this name in the config file of the Experiment Monitoring Python package. Remember to `commit` and `push` everytime you make a modification to the data acquisition code on <code><i>myserver</i></code>:
     <pre>
-    nano /mnt/code/experiment-monitoring/exp_monitor/config.py
-      &emsp; db_name = '<i>mydatabase</i>'
     git checkout -b <i>myexperiment</i>
     git branch -D master
+    nano /mnt/code/experiment-monitoring/exp_monitor/config.py
+      &emsp; db_name = '<i>mydatabase</i>'
     git add .
     git commit -m "Specified InfluxDB database name"
     git push quantumgitserver <i>myexperiment</i>
