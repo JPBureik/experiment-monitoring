@@ -32,12 +32,6 @@ class Sensor:
         self._alert_cond = None  # {'value': float, 'duration': float [min]}
         # Database setup:
         self.db_port = 8086
-        # Get database name without executing config script:
-        # self.db_name = [
-        #     line.rstrip().split(' ')[-1].replace("'", "").replace('"', '')
-        #     for line in open('exp_monitor/config.py')
-        #     if line[:7] == 'db_name'
-        #     ][0]
         self.db_name = db_name
         self.db_client = InfluxDBClient(
                             host='localhost',
