@@ -19,10 +19,7 @@ import shutil
 import time
 
 # Local imports with hack for Linux service:
-try:
-    from exp_monitor.config import *
-except ModuleNotFoundError:
-    from config import *
+from exp_monitor.config import *
 
 # Check for log file directory and replace old log file:
 log_dir = Path('/home/' + getpass.getuser() + '/.exp_monitor')
