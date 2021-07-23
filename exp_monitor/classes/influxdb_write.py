@@ -83,7 +83,7 @@ def influxdb_write():
                         },
                         "time": dt_string,
                         "fields": {
-                            "value": str(measurement['value']),
+                            "value": measurement['value'],
                         }
                     }
                 )
