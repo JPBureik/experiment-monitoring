@@ -19,12 +19,12 @@ A central server gathers data from different sources, writes them into a databas
   * Working with existing interfaces:
     - `config.py` is all you need to modify.
   * Adding your own interfaces:
-    - Write a child class to inherit from `sensor.py` to drive your sensor/equipment and interface it with `config.py`.
+    - Write a subclass to inherit from `sensor.py` to drive your sensor/equipment and interface it with `config.py`.
 
 ## Guide to the repository structure:
 
-  * `adc`: Contains script to run on ADC.
-  * `calibrations`: Contains calibration data and scripts for all equipment.
+  * `adc`: Contains script to run on ADC and its setup guide.
+  * `calibrations`: Contains calibration data and scripts for all calibrated equipment.
   * `classes`: Contains driver classes for all interfaces.
   * `tests`: Contains unit tests and tests for the Phidget class.
   * `utilities`: Contains interface-independent functions.

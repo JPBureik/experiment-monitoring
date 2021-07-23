@@ -1,5 +1,18 @@
 # Experiment Monitoring Server Setup
 
+# Table of Contents
+  * [Recommended Hardware](#recommended-hardware)
+  * [Preparing the RaspberryPi](#preparing-the-raspberrypi)
+  * [Configuring the RaspberryPi](#configuring-the-raspberrypi)
+  * [Access from outside the IOGS network](#access-from-outside-the-iogs-network)
+  * [Adding external storage devices](#adding-external-storage-devices)
+  * [Installing InfluxDB and Grafana](#installing-influxdb-and-grafana)
+  * [Setting up the continuous data acquisition](#setting-up-the-continuous-data-acquisition)
+  * [Setting up automatic backups](#setting-up-automatic-backups)
+  * [Setting up the data monitoring](#setting-up-the-data-monitoring)
+  * [Setting up automatic alerts](#setting-up-automatic-alerts)
+  * [Known bugs and problems](#known-bugs-and-problems)
+
 ## Recommended Hardware
 
   * [Raspberry Pi 4B 8GB](https://fr.farnell.com/raspberry-pi/rpi4-modbp-8gb/raspberry-pi-4-model-b-cortex/dp/3369503)
@@ -446,12 +459,14 @@
     </pre>
 -->
 
-## Setting up the continuous data acquisition:
-  * Download the Experiment Monitoring software:
+## Setting up the continuous data acquisition
+  * Download the Experiment Monitoring software and add its location to your `PYTHONPATH`:
     <pre>
     cd /mnt/code
     git clone -o quantumgitserver git@quantumgitserver.local:helium-lattice/experiment-monitoring.git
+    echo export PYTHONPATH=\$PYTHONPATH':/mnt/code/experiment-monitoring' >> ~/.bashrc
     </pre>
+    If on your setup the git repository is located at a different location, be sure to modify the last of the above commands accordingly.
 
   * Install the required packages and Python libraries:
     <pre>
@@ -500,13 +515,15 @@
     influx -precision rfc3339
     CREATE DATABASE <i>mydatabase</i>
     </pre>
-    Add this name in the config file of the Experiment Monitoring Python package. Remember to `commit` and `push` everytime you make a modification to the data acquisition code on <code><i>myserver</i></code>:
+    Add this name in the config file of the Experiment Monitoring package. Create a new branch for your own application of the Experiment Monitoring Package, e.g. <i>myexperiment</i>. Remember to `commit` and `push` everytime you make a modification to the data acquisition code on <code><i>myserver</i></code>:
     <pre>
-    nano /mnt/code/experiment-monitoring/config.py
-      &emsp; database_name = '<i>mydatabase</i>'
+    git checkout -b <i>myexperiment</i>
+    git branch -D master
+    nano /mnt/code/experiment-monitoring/exp_monitor/config.py
+      &emsp; db_name = '<i>mydatabase</i>'
     git add .
-    git commit -m "Specified influxdb database name"
-    git push quantumgitserver master
+    git commit -m "Specified InfluxDB database name"
+    git push quantumgitserver <i>myexperiment</i>
     </pre>
   * Connect all of the devices that you want to monitor.
   * Set up the Experiment Monitoring software for your experiment:
@@ -533,11 +550,12 @@
       &emsp; After=multi-user.target
 
       &emsp; [Service]
+      &emsp; User=<i>admin</i>
       &emsp; Type=simple
+      &emsp; Environment=PYTHONPATH=/mnt/code/experiment-monitoring
       &emsp; ExecStart=/usr/bin/python3 /mnt/code/experiment-monitoring/exp_monitor/exec.py
       &emsp; Restart=always
       &emsp; RestartSec=15s         
-      &emsp; User=admin   
 
       &emsp; [Install]
       &emsp; WantedBy=multi-user.target
@@ -565,7 +583,10 @@
     </pre>
 
 ## Setting up automatic backups
-  * On your <code><i>oa-data_share</i></code> create a directory <code>pc_backups</code> and therein one for <code><i>myserver</i></code>.
+  * On your <code><i>oa-data_share</i></code> create a directory <code>pc_backups</code> and therein one for <code><i>myserver</i></code>. On <code><i>myserver</i></code> create a mount point for <code><i>oa-data_share</i></code>:
+    <pre>
+    mkdir /mnt/oa-data
+    </pre>
 
   * Set up your credentials file on <code><i>myserver</i></code>:
     <pre>
@@ -588,20 +609,23 @@
     cd
     nano backup
     &emsp; #!/bin/sh
+    &emsp; touch /home/<i>admin</i>/.backup_log_$(date +'%Y_%m_%d')
     &emsp; backup_dir=/mnt/<i>oa-data_share</i>/<i>myserver</i>_backup_$(date +'%Y_%m_%d')
     &emsp; mkdir -p $backup_dir/data
     &emsp; influxd backup -database <i>mydatabase</i> $backup_dir/data
-    &emsp; sudo dd if=/dev/mmcblk0 bs=64K conv=noerror,sync status=progress | gzip -c > $backup_dir/mmcblk0.img.gz
-    &emsp; find /mnt/oa-data/ -type d -mtime +2 -exec rm -rf {} \;
+    &emsp; sudo dd if=/dev/mmcblk0 bs=64K conv=noerror,sync | gzip -c > $backup_dir/mmcblk0.img.gz
+    &emsp; find /mnt/oa-data/ -maxdepth 1 -type d -mtime +1 -exec rm -rf {} \;
+    &emsp; find /home/<i>admin</i>/.backup_log_* -type f -mtime +1 -exec rm {} \;
     chmod u+x backup
     </pre>
   * Automate daily backups with `cron`:
     <pre>
-    crontab -e
-    &emsp; 0 4 * * * sudo /home/<i>admin</i>/backup
+    sudo crontab -e
+    &emsp; 0 4 * * * /home/<i>admin</i>/backup >> /home/<i>admin</i>/.backup_log_`/usr/bin/date +\%Y_\%m_\%d` 2>&1
     </pre>
+  * In case of problems with the backup, you can consult the backup log at <code>/home/<i>admin</i>/.backup_log_<i>2021_05_20</i></code>. By default the backups from the last two days are kept and the next oldest one is deleted after creation of a new one. The same applies to the backup logs. You can change this behavior by changing the argument of the `-mtime` flags in the `find` calls of the backup script.
 
-## Setting up the data monitoring:
+## Setting up the data monitoring
   * Access the Grafana interface from a web browser by navigating to:
     <pre>
     <i>myserver</i>.local:3000
@@ -691,13 +715,6 @@
       </pre>
     * The experiment monitoring software suite also contains a Python script (`spike_filter.py`) that allows you to interact with InfluxDB and delete values, e.g. for spikes in acquired data.
 
-
-
-
-
-
-
-
 ## Setting up automatic alerts
   * Edit the Grafana configuration file:
     <pre>
@@ -742,6 +759,10 @@
     </pre>
     Change the threshold value back to the alert threshold, then on the upper right hand side click on `Apply` and save the dashboard by clicking on the save icon on the upper right hand side of the dashboard.<br>
     You can find an overview of all your alert rules by clicking on the `Alerting` bell icon and then choosing `Alert rules`.
+
+## Setting up the InfluxDB retention policy
+  * ...
+
 
 ## Known bugs and problems
   * The Grafana Image Renderer is not available for the ARM processor of the RaspberryPi. Therefore the alert e-mails do not contain a snapshot of the time series that causes the alert.
