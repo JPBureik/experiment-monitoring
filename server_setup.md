@@ -518,10 +518,11 @@
     Add this name in the config file of the Experiment Monitoring Python package. Remember to `commit` and `push` everytime you make a modification to the data acquisition code on <code><i>myserver</i></code>:
     <pre>
     nano /mnt/code/experiment-monitoring/config.py
-      &emsp; database_name = '<i>mydatabase</i>'
+      &emsp; db_name = '<i>mydatabase</i>'
+    git checkout -b <i>myexperiment</i>
     git add .
-    git commit -m "Specified influxdb database name"
-    git push quantumgitserver master
+    git commit -m "Specified InfluxDB database name"
+    git push quantumgitserver <i>myexperiment</i>
     </pre>
   * Connect all of the devices that you want to monitor.
   * Set up the Experiment Monitoring software for your experiment:
