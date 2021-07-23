@@ -520,6 +520,7 @@
     nano /mnt/code/experiment-monitoring/config.py
       &emsp; db_name = '<i>mydatabase</i>'
     git checkout -b <i>myexperiment</i>
+    git branch -D master
     git add .
     git commit -m "Specified InfluxDB database name"
     git push quantumgitserver <i>myexperiment</i>
