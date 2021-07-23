@@ -550,7 +550,9 @@
       &emsp; After=multi-user.target
 
       &emsp; [Service]
+      &emsp; User=<i>admin</i>
       &emsp; Type=simple
+      &emsp; WorkingDirectory=/mnt/code/experiment-monitoring
       &emsp; ExecStart=/usr/bin/python3 /mnt/code/experiment-monitoring/exp_monitor/exec.py
       &emsp; Restart=always
       &emsp; RestartSec=15s         
