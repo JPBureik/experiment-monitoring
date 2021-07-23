@@ -26,8 +26,8 @@ bounds['zeeman1_temp'] = {
 bounds['zeeman2_temp'] = {
     'lower': 15,
     'upper': 120
-    }    
-bounds['sc_vac'] = {
+    }
+bounds['science_chamber_vac'] = {
     'lower': 2.34-12,
     'upper': 3.45e-09
     }
@@ -43,7 +43,7 @@ bounds['water_temp'] = {
     'lower': 5,
     'upper': 30
     }
-bounds['primary_vac'] = {
+bounds['primary_pump_vac'] = {
     'lower': 1e-5,
     'upper': 2e3
     }
