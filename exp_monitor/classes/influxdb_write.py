@@ -90,6 +90,7 @@ def influxdb_write():
                 )
 
     # Write to database:
+    print(json_body)
     client.write_points(json_body)
 
 
