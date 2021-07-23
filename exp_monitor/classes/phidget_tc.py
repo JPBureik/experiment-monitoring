@@ -22,7 +22,8 @@ class PhidgetTC(Sensor):
         self.unit = '°C'
         self.conversion_fctn = None
         self.hub_serial = 561242
-        super().__init__(self.type, descr, self.unit, self.conversion_fctn)
+        self.descr = descr.replace(' ', '_').lower() + '_temperature'
+        super().__init__(self.type, self.descr, self.unit, self.conversion_fctn)
         self.hub_port = hub_port
         self.hub_channel = hub_channel
         self.ts_handle = TemperatureSensor.TemperatureSensor()

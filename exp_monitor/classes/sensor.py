@@ -13,6 +13,13 @@ class.
 
 class Sensor:
 
+    # Standard library imports:
+    from influxdb import InfluxDBClient
+    from datetime import datetime
+
+    # Local imports:
+    from exp_monitor.config import db_name
+
     def __init__(self, type, descr, unit, conversion_fctn):
         self.type = type  # str
         self.descr = descr  # str
@@ -22,6 +29,14 @@ class Sensor:
         self._filter_spikes = None  # float
         self._alert = None  # {'value': float, 'duration': float [min]}
         self._alert_cond = None  # {'value': float, 'duration': float [min]}
+        # Database setup:
+        self.db_port = 8086
+        self.db_name = db_name
+        self.db_client = InfluxDBClient(
+                            host='localhost',
+                            port=Nport,
+                            database=db_name
+                            )
 
     @property
     def bounds(self):
@@ -69,10 +84,43 @@ class Sensor:
         """Perform conversion to proper unit."""
         return self._conversion_fctn(value)
 
-    def to_json(self):
-        """Return dict w/ measurement in JSON format to store in influxDB."""
-        self.json_dict = {}
-        self.json_dict['measurement'] = self.descr.lower() + '_temp'
-        self.json_dict['unit'] = self.unit
-        self.json_dict['value'] = str(self.measurement)
-        return self.json_dict
+    def to_influxdb(self):
+        """Write measurement result to InfluxDB database."""
+        json_dict = {}
+        json_dict['measurement'] = self.descr
+        json_dict['tags'] = {}
+        json_dict['tags']['unit'] = self.unit
+        json_dict['time'] = datetime.utcnow().strftime("%m/%d/%Y %H:%M:%S")  # Grafana assumes UTC
+        json_dict['fields'] = {}
+        json_dict['fields']['value'] = self.measurement
+        print(json_dict)
+        # self.db_client.write_points(json_dict)
+
+
+
+
+
+
+json_body = []
+json_body.append(
+    {
+        "measurement": 'sc_vac',
+        "tags": {
+            "unit": 'mbar',
+        },
+        "time": dt_string,
+        "fields": {
+            "value": 1e-10,
+            "raw": 1.982,
+        }
+    }
+)
+
+
+json_dict = {}
+json_dict['measurement'] = self.descr.lower() + '_temp'
+json_dict['tags'] = {}
+json_dict['tags']['unit'] = self.unit
+json_dict['time'] = datetime.utcnow().strftime("%m/%d/%Y %H:%M:%S")  # Grafana assumes UTC
+json_dict['fields'] = {}
+json_dict['fields']['value'] = self.measurement

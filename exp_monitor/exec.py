@@ -39,9 +39,10 @@ while True:
             # Check if measure method exists:
             if callable(getattr(object, 'measure')):
                 try:
+                    # Make measurement:
                     object.measure()
-                    json_dict = object.to_json()
-                    print(json_dict)
+                    # Write to database:
+                    object.to_influxdb()
                 # Log exceptions but continue execution:
                 except Exception as e:
                     with open(log_file, 'w') as logf:

@@ -39,9 +39,9 @@ tc6 = PhidgetTC('Zeeman2', 5, 1)
 tc6.bounds = {'lower': 15, 'upper': 120}
 
 # Setup serial devices:
-primary_vac = TPG261('primary_vac', '/dev/ttyUSB0')
+primary_vac = TPG261('Primary Pump', '/dev/ttyUSB0')
 primary_vac.bounds = {'lower': 1e-5, 'upper': 2e3}
 
 # Setup analog devices via Arduino:
-sc_vac = TPG300('sc_vac', 2)
+sc_vac = TPG300('Science Chamber', 2)
 sc_vac.bounds = {'lower': 2.34-12, 'upper': 3.45e-09}
