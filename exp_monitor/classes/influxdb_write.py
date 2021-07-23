@@ -77,13 +77,13 @@ def influxdb_write():
                     ):
                 json_body.append(
                     {
-                        "measurement": str(measurement['measurement']),
+                        "measurement": measurement['measurement'],
                         "tags": {
                             "unit": measurement['unit'],
                         },
                         "time": dt_string,
                         "fields": {
-                            "value": measurement['value'],
+                            "value": str(measurement['value']),
                             "raw": measurement['raw'],
                         }
                     }
