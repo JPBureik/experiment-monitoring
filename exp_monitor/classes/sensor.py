@@ -15,6 +15,9 @@ class.
 from influxdb import InfluxDBClient
 from datetime import datetime
 
+# Local imports:
+from exp_monitor.config import db_name
+
 
 class Sensor:
 
@@ -30,11 +33,12 @@ class Sensor:
         # Database setup:
         self.db_port = 8086
         # Get database name without executing config script:
-        self.db_name = [
-            line.rstrip().split(' ')[-1].replace("'", "").replace('"', '')
-            for line in open('exp_monitor/config.py')
-            if line[:7] == 'db_name'
-            ][0]
+        # self.db_name = [
+        #     line.rstrip().split(' ')[-1].replace("'", "").replace('"', '')
+        #     for line in open('exp_monitor/config.py')
+        #     if line[:7] == 'db_name'
+        #     ][0]
+        self.db_name = db_name
         self.db_client = InfluxDBClient(
                             host='localhost',
                             port=self.db_port,
