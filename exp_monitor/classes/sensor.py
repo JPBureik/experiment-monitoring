@@ -37,8 +37,8 @@ class Sensor:
             ][0]
         self.db_client = InfluxDBClient(
                             host='localhost',
-                            port=db_port,
-                            database=db_name
+                            port=self.db_port,
+                            database=self.db_name
                             )
 
     @property
