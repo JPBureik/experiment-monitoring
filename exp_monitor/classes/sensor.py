@@ -94,5 +94,5 @@ class Sensor:
         # Grafana assumes UTC:
         json_dict['time'] = datetime.utcnow().strftime("%m/%d/%Y %H:%M:%S")
         json_dict['fields'] = {}
-        json_dict['fields']['value'] = self.measurement
+        json_dict['fields']['value'] = str(self.measurement)
         self.db_client.write_points([json_dict])
