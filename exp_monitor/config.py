@@ -36,11 +36,12 @@ tc4.bounds = {'lower': 5, 'upper': 30}
 tc5 = PhidgetTC('Zeeman1', 5, 0)
 tc5.bounds = {'lower': 15, 'upper': 120}
 tc6 = PhidgetTC('Zeeman2', 5, 1)
-tc6.bounds = {'lower': 15, 'upper': 1200}
-tc_list = [tc1, tc2, tc3, tc4, tc5, tc6]
+tc6.bounds = {'lower': 15, 'upper': 120}
 
 # Setup serial devices:
 primary_vac = TPG261('primary_vac', '/dev/ttyUSB0')
+primary_vac.bounds = {'lower': 1e-5, 'upper': 2e3}
 
 # Setup analog devices via Arduino:
 sc_vac = TPG300('sc_vac', 2)
+sc_vac.bounds = {'lower': 2.34-12, 'upper': 3.45e-09}
