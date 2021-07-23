@@ -18,20 +18,20 @@ import serial  # pip3 install pyserial
 def tpg261_meas(port):
 
     with serial.Serial(port, baudrate=9600, timeout=1) as ser:
-        
+
         # Receive measurement bytes from gauge:
         serial_rcv = ser.readline()
-    
+
     # Convert to float:
     pressure = float(str(serial_rcv).split(',')[1])
-    
+
     # Create dict for JSON:
     primary_vac = {}
-    primary_vac['measurement'] = 'primary_vac'
+    primary_vac['measurement'] = 'primary_pump_vac'
     primary_vac['unit'] = 'mbar'
     primary_vac['raw'] = pressure
     primary_vac['value'] = pressure
-                
+
     return primary_vac
 
 

@@ -38,7 +38,7 @@ def unit_conv(analog_signals):
     # Science Chamber Vacuum:
     sc_vac = {}
     conv_measurements.append(sc_vac)
-    sc_vac['measurement'] = 'sc_vac'
+    sc_vac['measurement'] = 'science_chamber_vac'
     sc_vac['unit'] = 'mbar'
     sc_vac['arduino_analog_in'] = 2
     # Import from calibration:
