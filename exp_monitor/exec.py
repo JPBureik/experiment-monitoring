@@ -18,8 +18,11 @@ from datetime import date, datetime
 import shutil
 import time
 
-# Local imports:
-from exp_monitor.config import *
+# Local imports with hack for Linux service:
+try:
+    from exp_monitor.config import *
+except ModuleNotFoundError:
+    from config import *
 
 # Check for log file directory and replace old log file:
 log_dir = Path('/home/' + getpass.getuser() + '/.exp_monitor')
@@ -54,5 +57,4 @@ while True:
                                 str(e)
                                 )
                             )
-    break
     time.sleep(acq_interv)
