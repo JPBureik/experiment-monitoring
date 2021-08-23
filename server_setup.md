@@ -526,7 +526,7 @@
     git push quantumgitserver <i>myexperiment</i>
     </pre>
   * Connect all of the devices that you want to monitor.
-  * Set up the Experiment Monitoring software for your experiment:
+  * Set up the Experiment Monitoring software for your experiment:<br>
     First, add the name of your database as an attribute to the `Sensor` class:
     <pre>
     nano /mnt/code/experiment-monitoring/exp_monitor/classes/sensor.py
