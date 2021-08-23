@@ -527,6 +527,13 @@
     </pre>
   * Connect all of the devices that you want to monitor.
   * Set up the Experiment Monitoring software for your experiment:
+    - First, add the name of your database as an attribute to the `Sensor` class:
+    <pre>
+    nano /mnt/code/experiment-monitoring/exp_monitor/classes/sensor.py
+      self.db_name = <i>mydatabase</i>
+    </pre>
+    This has to be done here and not in `config.py` in order to avoid a circular dependency when importing the `Sensor` class.<br>
+    Next, instantiate all sensor objects as subclasses of the `Sensor` class in the main configuration file:
     <pre>
     nano /mnt/code/experiment-monitoring/exp_monitor/config.py
     </pre>
