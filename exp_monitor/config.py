@@ -12,9 +12,6 @@ information in all sections for the proposed sensors and lab equipment below,
 or feel free to add any new hardware interface you want to connect.
 """
 
-# Define InfluxDB Database Name:
-db_name = 'helium2'
-
 # Define interval for data acquisition (in seconds):
 acq_interv = 15
 

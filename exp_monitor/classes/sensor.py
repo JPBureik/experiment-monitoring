@@ -15,9 +15,6 @@ class.
 from influxdb import InfluxDBClient
 from datetime import datetime
 
-# Local imports:
-from exp_monitor.config import db_name
-
 
 class Sensor:
 
@@ -32,7 +29,7 @@ class Sensor:
         self._alert_cond = None  # {'value': float, 'duration': float [min]}
         # Database setup:
         self.db_port = 8086
-        self.db_name = db_name
+        self.db_name = 'helium2'  # str
         self.db_client = InfluxDBClient(
                             host='localhost',
                             port=self.db_port,
