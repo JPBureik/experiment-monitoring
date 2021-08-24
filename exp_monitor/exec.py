@@ -16,6 +16,7 @@ import os
 import glob
 from datetime import date, datetime
 import shutil
+import traceback
 import time
 
 # Local imports with hack for Linux service:
@@ -42,16 +43,18 @@ while True:
                     # Make measurement:
                     object.measure()
                     # Write to database:
-                    object.to_influxdb()
+                    object.to_db()
                 # Log exceptions but continue execution:
                 except Exception as e:
-                    with open(log_file, 'w') as logf:
+                    with open(log_file, 'a') as logf:
                         logf.write(
-                            'Data acquisition failure for {} at {} due to {}\n'
+                            ("Data acquisition failure for {} at {} due to "
+                             "{}: {}.\n")
                             .format(
                                 object_name,
                                 datetime.now().strftime("%d/%m/%Y %H:%M:%S"),
-                                str(e)
+                                type(e).__name__.strip('<>').split("'")[0],
+                                e.args[0]
                                 )
                             )
     time.sleep(acq_interv)
