@@ -46,6 +46,14 @@ class Sensor(Database, ABC):
     def bounds(self, bounds):
         self._bounds = bounds
 
+    @staticmethod
+    def is_inbounds(data_point, lower_bound, upper_bound, inclusive=True):
+        """Checks whether a data point is within specified bounds."""
+        if inclusive:
+            return True if lower_bound <= data_point <= upper_bound else False
+        else:
+            return True if lower_bound < data_point < upper_bound else False
+
     @property
     def alert(self):
         """Set value and duration for automatic alerts."""
