@@ -540,7 +540,7 @@
     Any subclass of the `Sensor` class needs to overwrite all of its `abstractmethods` and specify all of its `__init__` arguments.
   * Manually execute one data acquisition cycle to check for errors:
     <pre>
-    python3 /mnt/code/experiment-monitoring/exp_monitor/classes/influxdb_write.py
+    python3 /mnt/code/experiment-monitoring/exp_monitor/exec.py
     </pre>
   * Verify that the data is being written into your database:
     <pre>
