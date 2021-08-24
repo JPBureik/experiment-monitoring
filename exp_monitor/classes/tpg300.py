@@ -17,23 +17,30 @@ from exp_monitor.calibrations.calib import Calibrator
 class TPG300(Sensor):
 
     def __init__(self, descr, adc_analog_in):
+        # General sensor setup:
         self.type = 'Vacuum Gauge'
+        self.descr = descr.replace(' ', '_').lower() + '_vac'  # Multi-word
         self.unit = 'mbar'
-        self.descr = descr.replace(' ', '_').lower() + '_vac'
-        self.arduino_channel = adc_analog_in
         self._calib = Calibrator()
         self.conversion_fctn = self._calib.calib_fctn
-        super().__init__(self.type, self.descr, self.unit, self.conversion_fctn)
+        self.arduino_adc = ArduinoADC()
+        self.num_prec = None #  self.arduino_adc.num_prec
+        super().__init__(self.type, self.descr, self.unit, self.conversion_fctn,
+                         self.num_prec)
+        # TPG261-specific setup:
+        self.arduino_channel = adc_analog_in
 
-    def measure(self, verbose=False):
-        arduino_adc = ArduinoADC()
-        voltage = arduino_adc.measure()[self.arduino_channel]
-        if voltage:
-            self.measurement = self.conversion_fctn(voltage)
-        else:
-            self.measurement = None
-        if verbose:
-            print(self.descr, self.measurement, self.unit)
+    def connect(self):
+        """Open the connection to the Arduino."""
+        self.arduino_adc.connect()
+
+    def disconnect(self):
+        """Close the connection to the Arduino."""
+        self.arduino_adc.disconnect()
+
+    def rcv_vals(self):
+        """Receive and return measurement values from Arduino."""
+        return self.arduino_adc.measure()[self.arduino_channel]
 
 
 # Execution:

@@ -18,12 +18,14 @@ from exp_monitor.classes.sensor import Sensor
 class PhidgetTC(Sensor):
 
     def __init__(self, descr, hub_port, hub_channel):
+        # General sensor setup:
         self.type = 'Thermocouple'
+        self.descr = descr.replace(' ', '_').lower() + '_temp'  # Multi-word
         self.unit = '°C'
-        self.conversion_fctn = None
-        self.hub_serial = 561242
-        self.descr = descr.replace(' ', '_').lower() + '_temp'
+        self.conversion_fctn = lambda t: t  # No conversion needed
         super().__init__(self.type, self.descr, self.unit, self.conversion_fctn)
+        # Phidget-specific setup:
+        self.hub_serial = 561242
         self.hub_port = hub_port
         self.hub_channel = hub_channel
         self.ts_handle = TemperatureSensor.TemperatureSensor()
@@ -40,19 +42,9 @@ class PhidgetTC(Sensor):
         # Close Phidgets:
         self.ts_handle.close()
 
-    def measure(self, verbose=False):
-        # Open:
-        self.connect()
+    def rcv_vals(self):
         # Receive temperature value:
-        self.measurement = self.ts_handle.getTemperature()
-        # Print measurement:
-        if verbose:
-            print(self.descr, self.measurement, self.unit)
-        # Close:
-        self.disconnect()
-
-    def to_json(self):
-        return super().to_json()
+        return self.ts_handle.getTemperature()
 
 
 # Execution:

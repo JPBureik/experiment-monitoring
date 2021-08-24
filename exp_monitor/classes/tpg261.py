@@ -18,31 +18,32 @@ from exp_monitor.classes.sensor import Sensor
 class TPG261(Sensor):
 
     def __init__(self, descr, port):
+        # General sensor setup:
         self.type = 'Vacuum Gauge'
+        self.descr = descr.replace(' ', '_').lower() + '_vac'  # Multi-word
         self.unit = 'mbar'
-        self.descr = descr.replace(' ', '_').lower() + '_vac'
-        self.baudrate = 9600
-        self.timeout = 1
         self.conversion_fctn = lambda p: float(str(p).split(',')[1])
         super().__init__(self.type, self.descr, self.unit, self.conversion_fctn)
+        # TPG261-specific setup:
+        self.baudrate = 9600
+        self.timeout = 1
         self.port = port
 
     def connect(self):
+        """Not needed, handled by context manager in self.rcv_vals()."""
         pass
 
     def disconnect(self):
+        """Not needed, handled by context manager in self.rcv_vals()."""
         pass
 
-    def measure(self, verbose=False):
-        with serial.Serial(self.port, baudrate=self.baudrate, timeout=self.timeout) as ser:
-            # Receive measurement bytes from gauge:
-            self.serial_rcv = ser.readline()
-        self.measurement = self.conversion_fctn(self.serial_rcv)
-        if verbose:
-            print(self.descr, self.measurement, self.unit)
+    def rcv_vals(self):
+        # Receive pressure value as bytes:
+        with serial.Serial(self.port, baudrate=self.baudrate,
+                           timeout=self.timeout) as ser:
+            serial_rcv = ser.readline()
+        return serial_rcv
 
-    def to_json(self):
-        return super().to_json()
 
 
 # Execution:
