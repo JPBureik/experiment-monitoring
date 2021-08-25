@@ -17,7 +17,7 @@ and deletes them on request.
 import time
 import datetime
 from influxdb import InfluxDBClient
-from tqdm import tqdm
+from tqdm import tqdm  # pip3 install tqdm
 
 
 class SpikeFilter:
