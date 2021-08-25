@@ -23,22 +23,14 @@ from exp_monitor.classes.tpg300 import TPG300
 
 # Setup Phidgets:
 tc1 = PhidgetTC('Source', 4, 0)
-tc1.bounds = {'lower': -200, 'upper': 25}
 tc2 = PhidgetTC('A/C', 4, 1)
-tc2.bounds = {'lower': 15, 'upper': 30}
 tc3 = PhidgetTC('Lab', 4, 2)
-tc3.bounds = {'lower': 15, 'upper': 30}
 tc4 = PhidgetTC('Water', 4, 3)
-tc4.bounds = {'lower': 5, 'upper': 30}
 tc5 = PhidgetTC('Zeeman1', 5, 0)
-tc5.bounds = {'lower': 15, 'upper': 120}
 tc6 = PhidgetTC('Zeeman2', 5, 1)
-tc6.bounds = {'lower': 15, 'upper': 120}
 
 # Setup serial devices:
 primary_vac = TPG261('Primary Pump', '/dev/ttyUSB0')
-primary_vac.bounds = {'lower': 1e-5, 'upper': 2e3}
 
 # Setup analog devices via Arduino:
 sc_vac = TPG300('Science Chamber', 2)
-sc_vac.bounds = {'lower': 2.34-12, 'upper': 3.45e-09}

@@ -30,29 +30,11 @@ class Sensor(Database, ABC):
         self.conversion_fctn = conversion_fctn  # function_object
         self.num_prec = num_prec  # Set numerical precision
         self.save_raw = save_raw
-        self._bounds = None  # {'lower': float, 'upper': float}
         self._filter_spikes = None  # float
         self._alert = None  # {'value': float, 'duration': float [min]}
         self._alert_cond = None  # {'value': float, 'duration': float [min]}
         # Database setup:
         super().__init__()
-
-    @property
-    def bounds(self):
-        """Set bounds to limit the range of incoming measured values."""
-        return self._bounds
-
-    @bounds.setter
-    def bounds(self, bounds):
-        self._bounds = bounds
-
-    @staticmethod
-    def is_inbounds(data_point, lower_bound, upper_bound, inclusive=True):
-        """Checks whether a data point is within specified bounds."""
-        if inclusive:
-            return True if lower_bound <= data_point <= upper_bound else False
-        else:
-            return True if lower_bound < data_point < upper_bound else False
 
     @property
     def alert(self):
