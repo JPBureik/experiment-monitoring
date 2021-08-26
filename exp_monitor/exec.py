@@ -5,56 +5,68 @@ Created on Fri Apr 30 15:02:49 2021
 
 @author: jp
 
-Service script that is run continously by Linux Systemd. It executes the
-specified function at the rate given by the specified interval.
+Main executable script for Experiment Monitoring.
+
+Service script that is run continously by Linux Systemd. Executes the measure
+and to_db methods for all Sensor children defined in config with the frequency
+1/acq_interv.
+By default, the main loop is run continuously. For testing purposes, it can also
+be run a specified amount of times only by passing the corresponding integer as
+argument on the command line, e.g. use "python3 exp_monitor/exec.py 5" to run 5
+executions of the main loop.
 """
 
 # Standard library imports:
-import getpass
-from pathlib import Path
-import os
-import glob
-from datetime import date, datetime
-import shutil
-import traceback
 import time
+import sys
 
-# Local imports with hack for Linux service:
+# Local imports:
 from exp_monitor.config import *
+from exp_monitor.classes.sensor import Sensor
+from exp_monitor.utilities.exception_handler import ExceptionHandler
 
-# Check for log file directory and replace old log file:
-log_dir = Path('/home/' + getpass.getuser() + '/.exp_monitor')
-if not os.path.isdir(log_dir):
-    os.mkdir(log_dir)
-for f in glob.glob(str(log_dir) + '/log_*.txt'):
-    os.remove(f)
-log_file = log_dir / ('log_' + date.today().strftime('%Y_%m_%d') + '.txt')
-log_file.touch()
+def get_subclass_objects(BaseClass):
+    """Get all objects from global scope that extend BaseClass."""
+    return [value for key, value in globals().items()
+            if issubclass(type(value), BaseClass)]
 
-# Continuously execute measure method for every user-defined object in config:
-while True:
-    for object_name in dir():
-        object = globals()[object_name]
-        # Identify user-defined objects:
-        if 'exp_monitor.classes.' in str(type(object)):
-            # Check if measure method exists:
-            if callable(getattr(object, 'measure')):
-                try:
-                    # Make measurement:
-                    object.measure()
-                    # Write to database:
-                    object.to_db()
-                # Log exceptions but continue execution:
-                except Exception as e:
-                    with open(log_file, 'a') as logf:
-                        logf.write(
-                            ("Data acquisition failure for {} at {} due to "
-                             "{}: {}.\n")
-                            .format(
-                                object_name,
-                                datetime.now().strftime("%d/%m/%Y %H:%M:%S"),
-                                type(e).__name__.strip('<>').split("'")[0],
-                                e.args[0]
-                                )
-                            )
+
+def data_acquisition(sensors, exception_handler):
+    """Execute measure method for all sensors."""
+    for sensor in sensors:
+        try:
+            # Make measurement:
+            sensor.measure()
+            # Write to database:
+            sensor.to_db()
+        # Log exceptions but continue execution:
+        except Exception as e:
+            exception_handler.log_exception(sensor, e)
+    # Measurement frequency given by acq_interv:
     time.sleep(acq_interv)
+
+
+def main():
+    """Execute data acquisition cycle continously or a given number of times."""
+    # Set up exception handler:
+    exception_handler = ExceptionHandler()
+    exception_handler.overwrite_log_file = overwrite_log_file
+    exception_handler.log_full_tb = log_full_tb
+    exception_handler.verbose = verbose
+    exception_handler.create_log_file()
+    # Get all user defined sensor objects:
+    sensors = get_subclass_objects(Sensor)
+    # If argument passed on command line: Run user-defined number of times:
+    try:
+        for iteration in range(int(sys.argv[1])):
+            print('Iteration', iteration + 1, '/', int(sys.argv[1]))
+            data_acquisition(sensors, exception_handler)
+    except (ValueError, IndexError):  # Default: Run continously
+        while True:
+            data_acquisition(sensors, exception_handler)
+
+
+# Execution:
+if __name__ == '__main__':
+
+    main()

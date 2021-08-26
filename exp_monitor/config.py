@@ -12,8 +12,16 @@ information in all sections for the proposed sensors and lab equipment below,
 or feel free to add any new hardware interface you want to connect.
 """
 
+
+""" ---------- GENERAL SETUP ---------- """
+
+
 # Define interval for data acquisition (in seconds):
 acq_interv = 15
+
+
+""" ---------- SENSOR SETUP ---------- """
+
 
 # Import all specific sensor classes:
 from exp_monitor.classes.phidget_tc import PhidgetTC
@@ -42,3 +50,14 @@ primary_vac.bounds = {'lower': 1e-5, 'upper': 2e3}
 # Setup analog devices via Arduino:
 sc_vac = TPG300('Science Chamber', 2)
 sc_vac.bounds = {'lower': 2.34-12, 'upper': 3.45e-09}
+
+
+""" ---------- DETAILS ---------- """
+
+
+# Exception logging:
+overwrite_log_file = True  # Replace old log file each time exec is run
+log_full_tb = False  # Log entire traceback for exceptions, not just one line
+
+# Debugging:
+verbose = False  # Prints exception traceback to stdout
