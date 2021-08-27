@@ -129,7 +129,7 @@ class Sensor(ABC):
     def to_db(self):
         """Write measurement result to database."""
         if self.save_raw:
-            self._db.to_db(self.descr, self.unit, self.measurement,
+            self._db.write(self.descr, self.unit, self.measurement,
                            self.save_raw, self.raw)
         else:
-            self._db.to_db(self.descr, self.unit, self.measurement)
+            self._db.write(self.descr, self.unit, self.measurement)
