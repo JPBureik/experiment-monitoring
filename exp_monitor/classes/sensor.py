@@ -20,7 +20,7 @@ import traceback
 from exp_monitor.utilities.database import Database
 
 
-class Sensor(Database, ABC):
+class Sensor(ABC):
 
     def __init__(self, type, descr, unit, conversion_fctn, num_prec=None,
                  save_raw=False):
@@ -35,7 +35,7 @@ class Sensor(Database, ABC):
         self._alert = None  # {'value': float, 'duration': float [min]}
         self._alert_cond = None  # {'value': float, 'duration': float [min]}
         # Database setup:
-        super().__init__()
+        self._db = Database()
 
     @property
     def bounds(self):
@@ -129,7 +129,7 @@ class Sensor(Database, ABC):
     def to_db(self):
         """Write measurement result to database."""
         if self.save_raw:
-            super().to_db(self.descr, self.unit, self.measurement,
-                          self.save_raw, self.raw)
+            self._db.to_db(self.descr, self.unit, self.measurement,
+                           self.save_raw, self.raw)
         else:
-            super().to_db(self.descr, self.unit, self.measurement)
+            self._db.to_db(self.descr, self.unit, self.measurement)
