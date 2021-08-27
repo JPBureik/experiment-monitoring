@@ -14,6 +14,10 @@ By default, the main loop is run continuously. For testing purposes, it can also
 be run a specified amount of times only by passing the corresponding integer as
 argument on the command line, e.g. use "python3 exp_monitor/exec.py 5" to run 5
 executions of the main loop.
+You can also set the "verbose" argument of config.py manually when executing 
+the script from the command line by including the "v" argument, e.g. use
+"python3 exp_monitor/exec.py v 1" to run 1 execution of the main loop and
+print the exception traceback to stdout.
 """
 
 # Standard library imports:
@@ -52,16 +56,22 @@ def main():
     exception_handler = ExceptionHandler()
     exception_handler.overwrite_log_file = overwrite_log_file
     exception_handler.log_full_tb = log_full_tb
-    exception_handler.verbose = verbose
+    exception_handler.verbose = verbose  # Default value from config
+    # Check for verbose argument on command line to override:
+    if 'v' in sys.argv:
+        exception_handler.verbose = True
+        sys.argv.remove('v')
     exception_handler.create_log_file()
     # Get all user defined sensor objects:
     sensors = get_subclass_objects(Sensor)
-    # If argument passed on command line: Run user-defined number of times:
+    # If int argument passed on command line: Run user-defined number of times:
     try:
-        for iteration in range(int(sys.argv[1])):
-            print('Iteration', iteration + 1, '/', int(sys.argv[1]))
+        sys.argv.remove(sys.argv[0])
+        iterations = int(sys.argv[0])
+        for iteration in range(iterations):
+            print('Iteration', iteration + 1, '/', iterations)
             data_acquisition(sensors, exception_handler)
-    except (ValueError, IndexError):  # Default: Run continously
+    except (IndexError, ValueError):  # Default: Run continously
         while True:
             data_acquisition(sensors, exception_handler)
 
