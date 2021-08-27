@@ -60,4 +60,4 @@ overwrite_log_file = True  # Replace old log file each time exec is run
 log_full_tb = False  # Log entire traceback for exceptions, not just one line
 
 # Debugging:
-verbose = False  # Prints exception traceback to stdout
+verbose = True  # Prints exception traceback to stdout
