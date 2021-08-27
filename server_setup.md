@@ -538,10 +538,11 @@
     nano /mnt/code/experiment-monitoring/exp_monitor/config.py
     </pre>
     Any subclass of the `Sensor` class needs to overwrite all of its `abstractmethods` and specify all of its `__init__` arguments.
-  * Manually execute one data acquisition cycle to check for errors:
+  * Manually execute some (e.g. <i>5</i>) data acquisition cycles to check for errors:
     <pre>
-    python3 /mnt/code/experiment-monitoring/exp_monitor/exec.py
+    python3 /mnt/code/experiment-monitoring/exp_monitor/exec.py <i>5</i>
     </pre>
+    Note that the argument after the the script filepath sets the number of executions of the loop.
   * Verify that the data is being written into your database:
     <pre>
     influx -precision rfc3339

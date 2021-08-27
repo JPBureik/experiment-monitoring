@@ -28,8 +28,9 @@ class Sensor(Database, ABC):
         self.unit = unit  # str
         self.conversion_fctn = conversion_fctn  # function_object
         self.num_prec = num_prec  # Set numerical precision
-        self._save_raw = False  # bool
-        self._filter_spikes = None  # float in [0, 1] -> peak-% for filter
+        self.save_raw = save_raw  # bool
+        self._bounds = None  # {'lower': float, 'upper': float}
+        self._filter_spikes = None  # float
         self._alert = None  # {'value': float, 'duration': float [min]}
         self._alert_cond = None  # {'value': float, 'duration': float [min]}
         # Database setup:
@@ -128,18 +129,14 @@ class Sensor(Database, ABC):
 
     def measure(self, verbose=False, show_raw=False):
         """Execute a measurement."""
-        try:
-            self.connect()
-            self.raw_vals = self.rcv_vals()
-            self.measurement = self._convert(self.raw_vals)
-            ## SPIKE FILTER
-            ## CHECK SAVE RAW DATA
-            if verbose:
-                self._show(show_raw)
-            self.disconnect()
-        except Exception as e:
-            print(self.descr, 'measurement error')
-            traceback.print_exc()
+        self.connect()
+        self.raw_vals = self.rcv_vals()
+        self.measurement = self._convert(self.raw_vals)
+        ## SPIKE FILTER
+        ## CHECK SAVE RAW DATA
+        if verbose:
+            self._show(show_raw)
+        self.disconnect()
 
     def to_db(self):
         """Write measurement result to database."""
