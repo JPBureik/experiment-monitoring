@@ -19,15 +19,15 @@ from datetime import datetime
 class Database():
 
     def __init__(self):
-        self.db_port = 8086  # int
-        self.db_name = 'helium2'  # str
-        self.db_client = InfluxDBClient(
+        self.port = 8086  # int
+        self.name = 'helium2'  # str
+        self.client = InfluxDBClient(
                             host='localhost',
-                            port=self.db_port,
-                            database=self.db_name
+                            port=self.port,
+                            database=self.name
                             )
 
-    def to_db(self, descr, unit, measurement, save_raw=False, raw=None):
+    def write(self, descr, unit, measurement, save_raw=False, raw=None):
         """Write measurement result to InfluxDB database."""
         json_dict = {}
         json_dict['measurement'] = descr
@@ -39,4 +39,4 @@ class Database():
         json_dict['fields']['value'] = measurement
         if save_raw:
             json_dict['fields']['raw'] = raw
-        self.db_client.write_points([json_dict])
+        self.client.write_points([json_dict])
