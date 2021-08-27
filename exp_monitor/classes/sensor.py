@@ -17,7 +17,7 @@ from influxdb import InfluxDBClient
 import traceback
 
 # Local imports
-from exp_monitor.classes.database import Database
+from exp_monitor.utilities.database import Database
 
 
 class Sensor(Database, ABC):

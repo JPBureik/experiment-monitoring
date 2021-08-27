@@ -20,7 +20,7 @@ from influxdb import InfluxDBClient
 from tqdm import tqdm  # pip3 install tqdm
 
 
-class SpikeFilter:
+class DbSpikeFilter:
 
     def __init__(self):
         self.database = 'helium2'
@@ -173,4 +173,4 @@ class SpikeFilter:
 
 if __name__ == '__main__':
 
-    spike_filter = SpikeFilter()
+    db_spike_filter = DbSpikeFilter()
