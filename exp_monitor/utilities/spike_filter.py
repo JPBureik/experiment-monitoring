@@ -49,9 +49,11 @@ class SpikeFilter():
             Spike filter disabled""")
             self._disabled = True
 
-    def db_setup():
-        pass
-    
+    def db_setup(series):
+        self._db = Database()
+        data_result = self.client.query(
+            'SELECT * FROM {} GROUP BY * ORDER BY DESC LIMIT 1'.format(
+                self.selected_series)).raw
 
     def filter_spikes(incoming_data, previous_data):
         # Get previous data to compare to incoming:
