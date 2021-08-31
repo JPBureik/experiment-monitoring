@@ -44,7 +44,7 @@ def data_acquisition(sensors, exception_handler):
         try:
             # Make measurement:
             sensor.measure()
-            # Write to database:
+            # Write successful measurement to database:
             sensor.to_db()
         # Log exceptions but continue execution:
         except Exception as e:
