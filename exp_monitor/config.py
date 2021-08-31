@@ -26,8 +26,8 @@ acq_interv = 15
 # Import all specific sensor classes:
 from exp_monitor.classes.phidget_tc import PhidgetTC
 from exp_monitor.classes.tpg261 import TPG261
-from exp_monitor.adc.arduino_adc import ArduinoADC
 from exp_monitor.classes.tpg300 import TPG300
+from exp_monitor.classes.ups.eaton_ups import EatonUPS
 
 # Setup Phidgets:
 tc1 = PhidgetTC('Source', 4, 0)
@@ -51,6 +51,9 @@ primary_vac.bounds = {'lower': 1e-5, 'upper': 2e3}
 sc_vac = TPG300('Science Chamber', 2)
 sc_vac.bounds = {'lower': 2.34-12, 'upper': 3.45e-09}
 
+# Setup batteries:
+batteries = EatonUPS('Batteries', '10.117.51.129')
+batteries.bounds = {'lower': None, 'upper': None}
 
 """ ---------- DETAILS ---------- """
 

@@ -10,7 +10,7 @@ Implements the TPG 300 Class for experiment monitoring.
 
 # Local imports:
 from exp_monitor.classes.sensor import Sensor
-from exp_monitor.adc.arduino_adc import ArduinoADC
+from exp_monitor.classes.adc.arduino_adc import ArduinoADC
 from exp_monitor.calibrations.calib import Calibrator
 
 
