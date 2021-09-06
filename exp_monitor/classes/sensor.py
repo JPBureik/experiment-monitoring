@@ -98,7 +98,7 @@ class Sensor(ABC):
             # Account for specified numerical precision:
             value_np = self._apply_num_prec(value)
             return self.conversion_fctn(value_np)
-        except AttributeError:
+        except TypeError:
             return None
 
     def measure(self, verbose=False, show_raw=False):
