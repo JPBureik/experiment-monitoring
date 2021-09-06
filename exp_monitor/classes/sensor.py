@@ -28,7 +28,7 @@ class Sensor(ABC):
         self.unit = unit  # str
         self.conversion_fctn = conversion_fctn  # function_object
         self.num_prec = num_prec  # Set numerical precision
-        self.save_raw = save_raw  # bool
+        self.save_raw = False  # bool
         self._bounds = None  # {'lower': float, 'upper': float}
         self._filter_spikes = None  # float
         self._alert = None  # {'value': float, 'duration': float [min]}
