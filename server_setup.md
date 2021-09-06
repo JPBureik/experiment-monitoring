@@ -668,7 +668,7 @@
   * If you want direct access to the database, use
     <pre>
     influx -precision rfc3339
-    USE <i>mydatabase>
+    USE <i>mydatabase></i>
     </pre>
     * Get an overview of all your measurement series:
       <pre>

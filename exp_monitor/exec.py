@@ -14,10 +14,13 @@ By default, the main loop is run continuously. For testing purposes, it can also
 be run a specified amount of times only by passing the corresponding integer as
 argument on the command line, e.g. use "python3 exp_monitor/exec.py 5" to run 5
 executions of the main loop.
+To time the execution of the entire script (however many iterations you specify)
+pass the "t" argument on the command line, e.g.:
+"python3 exp_monitor/exec.py t 1"
 You can also set the "verbose" argument of config.py manually when executing 
 the script from the command line by including the "v" argument, e.g. use
-"python3 exp_monitor/exec.py v 1" to run 1 execution of the main loop and
-print the exception traceback to stdout.
+"python3 exp_monitor/exec.py t v 1" to run 1 execution of the main loop and
+print the exception traceback to stdout along with the execution time.
 """
 
 # Standard library imports:
@@ -41,7 +44,7 @@ def data_acquisition(sensors, exception_handler):
         try:
             # Make measurement:
             sensor.measure()
-            # Write to database:
+            # Write measurement to database:
             sensor.to_db()
         # Log exceptions but continue execution:
         except Exception as e:
@@ -52,6 +55,13 @@ def data_acquisition(sensors, exception_handler):
 
 def main():
     """Execute data acquisition cycle continously or a given number of times."""
+    # Check for execution time argument on command line:
+    if 't' in sys.argv:
+        time_exec = True
+        start_time = time.time()
+        sys.argv.remove('t')
+    else:
+        time_exec = False
     # Set up exception handler:
     exception_handler = ExceptionHandler()
     exception_handler.overwrite_log_file = overwrite_log_file
@@ -74,9 +84,12 @@ def main():
     except (IndexError, ValueError):  # Default: Run continously
         while True:
             data_acquisition(sensors, exception_handler)
+    if time_exec:
+        print("--- Execution time: {:.2f} seconds ---".format(
+            time.time() - start_time))
 
 
 # Execution:
 if __name__ == '__main__':
-
+    
     main()
