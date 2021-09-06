@@ -34,19 +34,16 @@ tc1 = PhidgetTC('Source', 4, 0)
 tc2 = PhidgetTC('A/C', 4, 1)
 tc3 = PhidgetTC('Lab', 4, 2)
 tc4 = PhidgetTC('Water', 4, 3)
-tc5 = PhidgetTC('Zeeman1', 5, 0)
-tc6 = PhidgetTC('Zeeman2', 5, 1)
 
 # Setup serial devices:
 primary_vac = TPG261('Primary Pump', '/dev/ttyUSB0')
 
 # Setup analog devices via Arduino:
 sc_vac = TPG300('Science Chamber', 2)
-sc_vac.bounds = {'lower': 2.34-12, 'upper': 3.45e-09}
 
 # Setup batteries:
 batteries = EatonUPS('Batteries', '10.117.51.129')
-batteries.bounds = {'lower': None, 'upper': None}
+
 
 """ ---------- DETAILS ---------- """
 
