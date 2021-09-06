@@ -24,7 +24,7 @@ class TPG300(Sensor):
         self._calib = Calibrator()
         self.conversion_fctn = self._calib.calib_fctn
         self.arduino_adc = ArduinoADC()
-        self.num_prec = 1e-12 #  self.arduino_adc.num_prec
+        self.num_prec = 12 #  self.arduino_adc.num_prec
         super().__init__(self.type, self.descr, self.unit, self.conversion_fctn,
                          self.num_prec)
         # TPG261-specific setup:
