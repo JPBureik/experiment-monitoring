@@ -59,4 +59,4 @@ if __name__ == '__main__':
     # phidget_list = get_subclass_objects(PhidgetTC)
     # for phidget in phidget_list: phidget.measure(verbose=True)
     from exp_monitor.config import *
-    PhidgetTC.execution()
+    PhidgetTC.test_execution()

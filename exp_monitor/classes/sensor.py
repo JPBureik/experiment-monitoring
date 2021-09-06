@@ -18,7 +18,6 @@ import traceback
 
 # Local imports
 from exp_monitor.utilities.database import Database
-from exp_monitor.exec import get_subclass_objects
 
 
 class Sensor(ABC):
@@ -122,6 +121,11 @@ class Sensor(ABC):
             self._db.write(self.descr, self.unit, self.measurement)
 
     @classmethod
-    def execution(cls):
+    def test_execution(cls):
+        """Execute measure method for all sensors of this class defined in
+        config file and print result to stdout. Has to be preceeded by the
+        following import line:
+        'from exp_monitor.config import *'."""
+        from exp_monitor.exec import get_subclass_objects
         sensor_list = get_subclass_objects(cls)
         for sensor in sensor_list: sensor.measure(verbose=True)
