@@ -120,7 +120,8 @@ class Sensor(ABC):
         else:
             self._db.write(self.descr, self.unit, self.measurement)
 
-    def execution(self):
+    @classmethod
+    def execution(cls):
         from exp_monitor.exec import get_subclass_objects
-        sensor_list = get_subclass_objects(type(self))
+        sensor_list = get_subclass_objects(type(cls))
         for sensor in sensor_list: sensor.measure(verbose=True)
