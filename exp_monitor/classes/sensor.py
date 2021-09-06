@@ -95,7 +95,7 @@ class Sensor(ABC):
                 return round(self.conversion_fctn(rcv_vals), self.num_prec)
             else:
                 return self.conversion_fctn(rcv_vals)
-        except AttributeError:
+        except TypeError:
             return None
 
     def measure(self, verbose=False, show_raw=False):
