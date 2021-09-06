@@ -86,15 +86,18 @@ class Sensor(ABC):
         except AttributeError as ae:
             print(self.descr, '_show AttributeError:', ae.args[0])
 
-    def _convert(self, rcv_vals):
+    def _apply_num_prec(self, value):
+        try:
+            return float('{:.{}f}'.format(value, self.num_prec))
+        except ValueError:  # No numerical precision set
+            return value
+
+    def _convert(self, value):
         """Perform conversion of received values to proper unit."""
         try:
             # Account for specified numerical precision:
-            """HOW TO FORMAT FLOAT IN SCIENTIFIC NOTATION NOT AS STRING?"""
-            if self.num_prec:
-                return round(self.conversion_fctn(rcv_vals), self.num_prec)
-            else:
-                return self.conversion_fctn(rcv_vals)
+            value_np = self._apply_num_prec(value)
+            return self.conversion_fctn(value_np)
         except AttributeError:
             return None
 
