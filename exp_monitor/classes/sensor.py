@@ -51,7 +51,8 @@ class Sensor(ABC):
         within one influxDB shard needs to be of the same format."""
         return self._format_str
 
-    @format_str.setter(self, format_str)
+    @format_str.setter
+    def format_str(self, format_str):
         if format_str in self._format_dict.keys():
             self._format_str = format_str
 
