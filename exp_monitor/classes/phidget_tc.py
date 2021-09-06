@@ -54,5 +54,7 @@ class PhidgetTC(Sensor):
 # Execution:
 if __name__ == '__main__':
 
-    from exp_monitor.config import tc1, tc2, tc3, tc4, tc5, tc6
-    for tc in [tc1, tc2, tc3, tc4, tc5, tc6]: tc.measure(verbose=True)
+    from exp_monitor.config import *
+    from exp_monitor.exec import get_subclass_objects
+    phidget_list = get_subclass_objects(PhidgetTC)
+    for phidget in phidget_list: phidget.measure(verbose=True)
