@@ -38,10 +38,10 @@ tc3 = PhidgetTC('Lab', 4, 2)
 tc3.bounds = {'lower': 15, 'upper': 30}
 tc4 = PhidgetTC('Water', 4, 3)
 tc4.bounds = {'lower': 5, 'upper': 30}
-tc5 = PhidgetTC('Zeeman1', 5, 0)
-tc5.bounds = {'lower': 15, 'upper': 120}
-tc6 = PhidgetTC('Zeeman2', 5, 1)
-tc6.bounds = {'lower': 15, 'upper': 120}
+# tc5 = PhidgetTC('Zeeman1', 5, 0)
+# tc5.bounds = {'lower': 15, 'upper': 120}
+# tc6 = PhidgetTC('Zeeman2', 5, 1)
+# tc6.bounds = {'lower': 15, 'upper': 120}
 
 # Setup serial devices:
 primary_vac = TPG261('Primary Pump', '/dev/ttyUSB0')
