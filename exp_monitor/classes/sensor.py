@@ -25,14 +25,14 @@ class Sensor(ABC):
     """ ---------- INIT ---------- """
 
 
-    def __init__(self, type, descr, unit, conversion_fctn, num_prec=None,
-                 save_raw=False):
+    def __init__(self, type, descr, unit, conversion_fctn, save_raw=False,
+                 num_prec=None,):
         self.type = type  # str
         self.descr = descr  # str
         self.unit = unit  # str
         self.conversion_fctn = conversion_fctn  # function_object
-        self.num_prec = num_prec  # Set numerical precision
         self.save_raw = save_raw  # bool
+        self._num_prec = num_prec  # Set numerical precision
         self._format_str = 'f'  # 'f': float, 'i': int, 's': str
         self._format_dict = {'f': float, 'i': round, 's': str}
         self._filter_spikes = None  # float
@@ -45,6 +45,17 @@ class Sensor(ABC):
     """ ---------- PROPERTIES ---------- """
 
 
+    @property
+    def num_prec(self):
+        """Set numerical precision for measurement values.
+        For example, num_prec = 12 saves 1.2381e-10 as 1.24e-10."""
+        return self._num_prec
+
+    @num_prec.setter
+    def num_prec(self, num_prec):
+        if type(num_prec) == int and num_prec > 0:
+            self._num_prec = num_prec
+    
     @property
     def format_str(self):
         """Set format in which to save measurement data. Currently all data
