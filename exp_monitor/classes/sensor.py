@@ -25,8 +25,8 @@ class Sensor(ABC):
     """ ---------- INIT ---------- """
 
 
-    def __init__(self, type, descr, unit, conversion_fctn, save_raw=False,
-                 num_prec=None,):
+    def __init__(self, type, descr, unit, conversion_fctn, num_prec=None,
+                 save_raw=False):
         self.type = type  # str
         self.descr = descr  # str
         self.unit = unit  # str
