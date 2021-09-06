@@ -89,7 +89,7 @@ class Sensor(ABC):
     def _apply_num_prec(self, value):
         try:
             return float('{:.{}f}'.format(value, self.num_prec))
-        except ValueError:  # No numerical precision set
+        except (ValueError, TypeError):  # No numerical precision set
             return value
 
     def _convert(self, value):
