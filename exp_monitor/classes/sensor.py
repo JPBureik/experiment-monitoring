@@ -22,20 +22,49 @@ from exp_monitor.utilities.database import Database
 
 class Sensor(ABC):
 
-    def __init__(self, type, descr, unit, conversion_fctn, num_prec=None,
-                 save_raw=False):
+    """ ---------- INIT ---------- """
+
+
+    def __init__(self, type, descr, unit, conversion_fctn):
         self.type = type  # str
         self.descr = descr  # str
         self.unit = unit  # str
         self.conversion_fctn = conversion_fctn  # function_object
-        self.num_prec = num_prec  # Set numerical precision
-        self.save_raw = save_raw  # bool
-        self._bounds = None  # {'lower': float, 'upper': float}
+        self._num_prec = None  # Set numerical precision
+        self._format_str = 'f'  # 'f': float, 'i': int, 's': str
+        self._format_dict = {'f': float, 'i': round, 's': str}
+        self._save_raw = False  # bool
         self._filter_spikes = None  # float
         self._alert = None  # {'value': float, 'duration': float [min]}
         self._alert_cond = None  # {'value': float, 'duration': float [min]}
         # Database setup:
         self._db = Database()
+
+
+    """ ---------- PROPERTIES ---------- """
+
+
+    @property
+    def num_prec(self):
+        """Set numerical precision for measurement values.
+        For example, num_prec = 12 saves 1.2381e-10 as 1.24e-10."""
+        return self._num_prec
+
+    @num_prec.setter
+    def num_prec(self, num_prec):
+        if type(num_prec) == int and num_prec > 0:
+            self._num_prec = num_prec
+    
+    @property
+    def format_str(self):
+        """Set format in which to save measurement data. Currently all data
+        within one influxDB shard needs to be of the same format."""
+        return self._format_str
+
+    @format_str.setter
+    def format_str(self, format_str):
+        if format_str in self._format_dict.keys():
+            self._format_str = format_str
 
     @property
     def alert(self):
@@ -60,6 +89,10 @@ class Sensor(ABC):
     def filter_spikes(self, filter_spikes):
         self._filter_spikes = filter_spikes
 
+
+    """ ---------- ABSTRACT METHODS ---------- """
+
+
     @abstractmethod
     def connect(self):
         """Open the connection to the sensor."""
@@ -75,6 +108,10 @@ class Sensor(ABC):
         """Receive and return measurement values from sensor."""
         pass  # return received_vals
 
+
+    """ ---------- PRIVATE METHODS ---------- """
+
+
     def _show(self, show_raw=False):
         """Print last measurement with description and units."""
         try:
@@ -87,25 +124,38 @@ class Sensor(ABC):
             print(self.descr, '_show AttributeError:', ae.args[0])
 
     def _apply_num_prec(self, value):
+        """Apply numerical precision to value."""
         try:
-            return float('{:.{}f}'.format(value, self.num_prec))
-        except (ValueError, TypeError):  # No numerical precision set
+            return float('{:.{}f}'.format(float(value), self.num_prec))
+        except ValueError:
+             return value
+
+    def _apply_format(self, value):
+        """Apply format to value."""
+        try:
+            return self._format_dict[self._format_str](value)
+        except ValueError:
             return value
 
     def _convert(self, value):
         """Perform conversion of received values to proper unit."""
         try:
-            # Account for specified numerical precision:
-            value_np = self._apply_num_prec(value)
-            return self.conversion_fctn(value_np)
-        except TypeError:
+            return self.conversion_fctn(value)
+        except (TypeError, ValueError):
             return None
+
+
+    """ ---------- PUBLIC METHODS ---------- """
+
 
     def measure(self, verbose=False, show_raw=False):
         """Execute a measurement."""
         self.connect()
         self.raw_vals = self.rcv_vals()
         self.measurement = self._convert(self.raw_vals)
+        # Account for numerical precision and format:
+        self.measurement = self._apply_num_prec(self.measurement)
+        self.measurement = self._apply_format(self.measurement)
         ## SPIKE FILTER
         ## CHECK SAVE RAW DATA
         if verbose:
@@ -114,7 +164,7 @@ class Sensor(ABC):
 
     def to_db(self):
         """Write measurement result to database."""
-        if self.save_raw:
+        if self._save_raw:
             self._db.write(self.descr, self.unit, self.measurement,
                            self.save_raw, self.raw)
         else:
