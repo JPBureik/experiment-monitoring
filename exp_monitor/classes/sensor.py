@@ -123,6 +123,6 @@ class Sensor(ABC):
     @classmethod
     def execution(cls):
         from exp_monitor.exec import get_subclass_objects
-        sensor_list = get_subclass_objects(type(cls))
+        sensor_list = get_subclass_objects(cls)
         print(sensor_list)
         for sensor in sensor_list: sensor.measure(verbose=True)
