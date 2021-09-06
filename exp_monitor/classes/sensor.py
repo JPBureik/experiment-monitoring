@@ -25,16 +25,15 @@ class Sensor(ABC):
     """ ---------- INIT ---------- """
 
 
-    def __init__(self, type, descr, unit, conversion_fctn, num_prec=None,
-                 save_raw=False):
+    def __init__(self, type, descr, unit, conversion_fctn):
         self.type = type  # str
         self.descr = descr  # str
         self.unit = unit  # str
         self.conversion_fctn = conversion_fctn  # function_object
-        self.save_raw = save_raw  # bool
-        self._num_prec = num_prec  # Set numerical precision
+        self._num_prec = None  # Set numerical precision
         self._format_str = 'f'  # 'f': float, 'i': int, 's': str
         self._format_dict = {'f': float, 'i': round, 's': str}
+        self._save_raw = False  # bool
         self._filter_spikes = None  # float
         self._alert = None  # {'value': float, 'duration': float [min]}
         self._alert_cond = None  # {'value': float, 'duration': float [min]}
