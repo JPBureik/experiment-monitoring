@@ -31,13 +31,9 @@ from exp_monitor.classes.ups.eaton_ups import EatonUPS
 
 # Setup Phidgets:
 tc1 = PhidgetTC('Source', 4, 0)
-tc1.num_prec = 1
 tc2 = PhidgetTC('A/C', 4, 1)
-tc2.num_prec = 1
 tc3 = PhidgetTC('Lab', 4, 2)
-tc3.num_prec = 1
 tc4 = PhidgetTC('Water', 4, 3)
-tc4.num_prec = 1
 
 # Setup serial devices:
 primary_vac = TPG261('Primary Pump', '/dev/ttyUSB0')

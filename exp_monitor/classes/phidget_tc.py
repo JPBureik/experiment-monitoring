@@ -23,7 +23,11 @@ class PhidgetTC(Sensor):
         self.descr = descr.replace(' ', '_').lower() + '_temp'  # Multi-word
         self.unit = '°C'
         self.conversion_fctn = lambda t: t  # No conversion needed
-        super().__init__(self.type, self.descr, self.unit, self.conversion_fctn)
+        self.num_prec = 1  # Set for all Phidgets TCs, override in config
+        super().__init__(
+            self.type, self.descr, self.unit, self.conversion_fctn,
+            self.num_prec
+            )
         # Phidget-specific setup:
         self.hub_serial = 561242
         self.hub_port = hub_port
