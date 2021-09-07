@@ -23,11 +23,10 @@ class TPG300(Sensor):
         self.unit = 'mbar'
         self._calib = Calibrator()
         self.conversion_fctn = self._calib.calib_fctn
-        self.arduino_adc = ArduinoADC()
-        self.num_prec = None #  self.arduino_adc.num_prec
-        super().__init__(self.type, self.descr, self.unit, self.conversion_fctn,
-                         self.num_prec)
+        super().__init__(self.type, self.descr, self.unit, self.conversion_fctn)
+        self.num_prec = 12 #  self.arduino_adc.num_prec
         # TPG261-specific setup:
+        self.arduino_adc = ArduinoADC()
         self.arduino_channel = adc_analog_in
 
     def connect(self):
@@ -46,5 +45,5 @@ class TPG300(Sensor):
 # Execution:
 if __name__ == '__main__':
 
-    from exp_monitor.config import sc_vac
-    sc_vac.measure(verbose=True)
+    from exp_monitor.config import *
+    TPG300.test_execution()

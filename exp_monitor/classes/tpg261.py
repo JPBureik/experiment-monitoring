@@ -49,5 +49,5 @@ class TPG261(Sensor):
 # Execution:
 if __name__ == '__main__':
 
-    from exp_monitor.config import primary_vac
-    primary_vac.measure(verbose=True)
+    from exp_monitor.config import *
+    TPG261.test_execution()

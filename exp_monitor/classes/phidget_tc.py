@@ -24,6 +24,7 @@ class PhidgetTC(Sensor):
         self.unit = '°C'
         self.conversion_fctn = lambda t: t  # No conversion needed
         super().__init__(self.type, self.descr, self.unit, self.conversion_fctn)
+        self.num_prec = 1
         # Phidget-specific setup:
         self.hub_serial = 561242
         self.hub_port = hub_port
@@ -50,5 +51,5 @@ class PhidgetTC(Sensor):
 # Execution:
 if __name__ == '__main__':
 
-    from exp_monitor.config import tc1, tc2, tc3, tc4, tc5, tc6
-    for tc in [tc1, tc2, tc3, tc4, tc5, tc6]: tc.measure(verbose=True)
+    from exp_monitor.config import *
+    PhidgetTC.test_execution()
