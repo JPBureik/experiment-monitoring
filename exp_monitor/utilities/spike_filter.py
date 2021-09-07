@@ -17,9 +17,9 @@ from exp_monitor.utilities.database import Database
 
 class SpikeFilter():
 
-    def __init__(self):
-        self._spike_threshold = None  # float (0,1)
-        self._spike_length = 1  # int
+    def __init__(self, spike_threshold, spike_length=1):
+        self.spike_threshold = spike_threshold  # float (0,1)
+        self.spike_length = spike_length  # int
         self._disabled = False  # Disable spike filter if spike length too long
     
     @property
@@ -44,9 +44,8 @@ class SpikeFilter():
         if type(spike_length) == int and spike_length < 5:
             self._spike_length = spike_length
         elif type(spike_length) == int and spike_length > 4:
-            raise ValueError(""""
-            Large spike lengths can silence legitimate alert conditions.
-            Spike filter disabled""")
+            raise ValueError(""""Large spike lengths can silence legitimate alert conditions.
+            Spike filter disabled.""")
             self._disabled = True
 
     def db_setup(series):
@@ -54,7 +53,7 @@ class SpikeFilter():
         query_result = self._db.client.query(
             'SELECT * FROM {} GROUP BY * ORDER BY DESC LIMIT {}'.format(
                 series, self._spike_length + 2)).raw
-        data_pts = query_result['series'][0]['values']
+        data_dict = {i[0]: i[1] for i in query_result['series'][0]['values']}
 
 
 
