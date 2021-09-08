@@ -5,172 +5,58 @@ Created on Wed Apr 07 10:00:50 2021
 
 @author: jp
 
-Interactive script to filter past spikes in time-stamped dataseries for
-experiment monitoring with influxdb.
+Module to filter spikes in incoming data.
 
-Checks the influxdb database for spikes in past data based on a user-defined
-spike factor, display time stamps, unix time stamps and values for found spikes
-and deletes them on request.
+Checks the new incoming value versus the last value(s) and determines if the
+last value was a spike.
 """
 
-# Standard library imports
-import time
-import datetime
-from influxdb import InfluxDBClient
-from tqdm import tqdm
+# Local imports
+from exp_monitor.utilities.database import Database
 
 
-class SpikeFilter:
+class SpikeFilter():
 
-    def __init__(self):
-        self.database = 'helium2'
-        self.client = InfluxDBClient(host='localhost', port=8086,
-                                     database=self.database)
-        self.series_list = []
-        self.data = {}
-        self.timestamps = {}
-        self.spike_indices = {}
-        self.spike_timestamps = {}
-        self.spike_utimestamps = {}
-        self.total_spikes = {}
-        self.display_series()
-        self.select_series()
-        self.set_spike_factor()
-        self.find_spikes()
-        if self.total_spikes[self.selected_series]:
-            self.delete_spikes()
+    def __init__(self, spike_threshold, spike_length=1):
+        self.spike_threshold = spike_threshold  # float (0,1)
+        self.spike_length = spike_length  # int
+        self._disabled = False  # Disable spike filter if spike length too long
+    
+    @property
+    def spike_threshold(self):
+        """The percentage value that a data point has to deviate from the
+         others by in order to be qualified as a spike."""
+        return self._spike_threshold
 
-    @staticmethod
-    def conv_to_u_time(date_time):
-        date_time = date_time + datetime.timedelta(hours=2)
-        u_time = time.mktime(date_time.timetuple())
-        u_time_str = str(u_time)[:-2] + 9 * '0'
-        return u_time_str
+    @spike_threshold.setter
+    def spike_threshold(self, spike_threshold):
+        if type(spike_threshold) == float and 0. < spike_threshold < 1.:
+            self._spike_threshold = spike_threshold
 
-    def set_spike_factor(self):
-        spike_factor_in = input('Set spike factor for series {}:\n'.format(
-            self.selected_series
-            ))
-        try:
-            self.spike_factor = float(spike_factor_in)
-            print('Searching for spikes ...')
-        except ValueError:
-            print('Try again!')
-            self.set_spike_factor()
+    @property
+    def spike_length(self):
+        """Length of spike. Generally 1 or 2 will suffice. Risk of silencing
+        legitimate alert conditions if increased beyond 4."""
+        return self._spike_length
 
-    def is_spike(self, data_point, previous, following):
-        if (data_point > previous * self.spike_factor and
-                data_point > following * self.spike_factor):
-            return True
-        elif (data_point < previous / self.spike_factor and
-                data_point < following / self.spike_factor):
-            return True
-        else:
-            return False
+    @spike_length.setter
+    def spike_length(self, spike_length):
+        if type(spike_length) == int and spike_length < 5:
+            self._spike_length = spike_length
+        elif type(spike_length) == int and spike_length > 4:
+            raise ValueError(""""Large spike lengths can silence legitimate alert conditions.
+            Spike filter disabled.""")
+            self._disabled = True
 
-    def display_series(self):
-        series_result = self.client.query('SHOW series').raw
-        self.series_list = [series_result['series'][0]['values'][i][0].
-                            split(',')[0] for i in
-                            range(len(series_result['series'][0]['values']))]
-        print('Measurement series in {}: '.format(self.database))
-        for series in self.series_list:
-            print('\t', series)
-
-    def select_series(self):
-        user_input = input('Select series to apply spike filter:\n')
-        if user_input in self.series_list:
-            self.selected_series = user_input
-        else:
-            print('Try again!')
-            self.select_series()
-
-    def find_spikes(self):
-        # Get data:
-        data_result = self.client.query(
-            'SELECT * FROM "{}"'.format(self.selected_series)
-            ).raw
-        self.data[self.selected_series] = [
-            data_result['series'][0]['values'][i][-1] for i in
-            range(len(data_result['series'][0]['values']))
-            ]
-        # Get timestaps:
-        self.timestamps[self.selected_series] = [
-            data_result['series'][0]['values'][i][0] for i in
-            range(len(data_result['series'][0]['values']))
-            ]
-        # Find spike indices:
-        self.spike_indices[self.selected_series] = []
-        for i in tqdm(range(1, len(self.data[self.selected_series])-1)):
-            # Ignore current acquisition (= None):
-            if all(self.data[self.selected_series][i-1:i+2]):
-                if self.is_spike(
-                        self.data[self.selected_series][i],
-                        self.data[self.selected_series][i-1],
-                        self.data[self.selected_series][i+1]
-                        ):
-                    self.spike_indices[self.selected_series].append(i)
-        # Get timestamps at spike indices:
-        self.spike_timestamps[self.selected_series] = []
-        for i in range(len(self.spike_indices[self.selected_series])):
-            self.spike_timestamps[self.selected_series].append(
-                self.timestamps[self.selected_series]
-                [self.spike_indices[self.selected_series][i]]
-                )
-        # Convert spike timestamp to unix time:
-        self.spike_utimestamps[self.selected_series] = []
-        for i in range(len(self.spike_timestamps[self.selected_series])):
-            spike_timestamp = self.spike_timestamps[
-                self.selected_series][i].strip('Z').replace('T', ' ')
-            spike_datetimestamp = datetime.datetime.strptime(
-                spike_timestamp, '%Y-%m-%d %H:%M:%S') +\
-                datetime.timedelta(hours=2)  # Before summer time +1; after +2h
-            spike_utimestamp = time.mktime(spike_datetimestamp.timetuple())
-            spike_utimestamp_str = str(spike_utimestamp)[:-2] + 9 * '0'
-            self.spike_utimestamps[self.selected_series].append(
-                spike_utimestamp_str
-                )
-        # Get total number of spikes:
-        self.total_spikes[self.selected_series] = len(self.spike_utimestamps[
-            self.selected_series])
-        # Print results:
-        print('Total spikes detected in {} with spike factor {}: {}'.format(
-            self.selected_series,
-            self.spike_factor,
-            self.total_spikes[self.selected_series]
-            ))
-        # If results, show detailed list:
-        if self.total_spikes[self.selected_series]:
-            show_timestamps = input('Show database entries for spikes? (y/n)' +
-                                    '\n')
-            if show_timestamps == 'y':
-                for i in range(
-                        len(self.spike_utimestamps[self.selected_series])
-                              ):
-                    print('Time Stamp: {} -- Unix Time Stamp: {} -- Value: {}'
-                          .format(
-                            self.spike_timestamps[self.selected_series][i],
-                            self.spike_utimestamps[self.selected_series][i],
-                            self.data[self.selected_series][
-                                self.spike_indices[self.selected_series][i]
-                                ]
-                            )
-                          )
-
-    def delete_spikes(self):
-        user_delete = input('Delete detected spikes? (y/n)\n')
-        if user_delete == 'y':
-            for spike in self.spike_utimestamps[self.selected_series]:
-                self.client.query('DELETE FROM "{}" WHERE time = {}'.format(
-                    self.selected_series, spike
-                    ))
-            print('Spikes deleted!')
-        elif user_delete != 'y':
-            print('No modification made.')
+    def db_setup(series):
+        self._db = Database()
+        query_result = self._db.client.query(
+            'SELECT * FROM {} GROUP BY * ORDER BY DESC LIMIT {}'.format(
+                series, self._spike_length + 2)).raw
+        data_dict = {i[0]: i[1] for i in query_result['series'][0]['values']}
 
 
-""" MAIN """
 
-if __name__ == '__main__':
-
-    spike_filter = SpikeFilter()
+    def filter_spikes(incoming_data, previous_data):
+        # Get previous data to compare to incoming:
+            pass

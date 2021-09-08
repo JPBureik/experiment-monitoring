@@ -67,6 +67,15 @@ class Sensor(ABC):
             self._format_str = format_str
 
     @property
+    def save_raw(self):
+        return self._save_raw
+
+    @save_raw.setter
+    def save_raw(self, save_raw):
+        if type(save_raw) == bool:
+            self._save_raw = save_raw
+
+    @property
     def alert(self):
         """Set value and duration for automatic alerts."""
         return self._alert
@@ -77,17 +86,38 @@ class Sensor(ABC):
 
     @property
     def filter_spikes(self):
+        return self._filter_spikes
+
+    @filter_spikes.setter
+    def filter_spikes(self, filter_spikes):
+        if type(filter_spikes) == float and 0 < filter_spikes < 1:
+            self._filter_spikes = filter_spikes
+
+    def spike_filter(self):
         """Define method for spike filtering."""
+        # Helper function to determine spikes:
+        def is_spike(self, data_point, previous, following):
+            if (data_point > previous * self.spike_factor and
+                    data_point > following * self.spike_factor):
+                return True
+            elif (data_point < previous / self.spike_factor and
+                    data_point < following / self.spike_factor):
+                return True
+            else:
+                return False
+        # Check measurement:
+        try:
+            self.measurement
+
+        except AttributeError:  # No spike filtering set
+            pass
+
+
         # 1) Get new measurement value
         # 2) Check that spike limits are defined, if not: default
         # 3) Compare to last measurement value
         # 4) Determine if spike
         # 5) If so, drop; if not, save
-        pass
-
-    @filter_spikes.setter
-    def filter_spikes(self, filter_spikes):
-        self._filter_spikes = filter_spikes
 
 
     """ ---------- ABSTRACT METHODS ---------- """
