@@ -34,9 +34,6 @@ class Sensor(ABC):
         self._format_str = 'f'  # 'f': float, 'i': int, 's': str
         self._format_dict = {'f': float, 'i': round, 's': str}
         self._save_raw = False  # bool
-        self._filter_spikes = None  # float
-        self._alert = None  # {'value': float, 'duration': float [min]}
-        self._alert_cond = None  # {'value': float, 'duration': float [min]}
         # Database setup:
         self._db = Database()
 
@@ -65,29 +62,6 @@ class Sensor(ABC):
     def format_str(self, format_str):
         if format_str in self._format_dict.keys():
             self._format_str = format_str
-
-    @property
-    def alert(self):
-        """Set value and duration for automatic alerts."""
-        return self._alert
-
-    @alert.setter
-    def alert(self, alert):
-        self._alert = alert
-
-    @property
-    def filter_spikes(self):
-        """Define method for spike filtering."""
-        # 1) Get new measurement value
-        # 2) Check that spike limits are defined, if not: default
-        # 3) Compare to last measurement value
-        # 4) Determine if spike
-        # 5) If so, drop; if not, save
-        pass
-
-    @filter_spikes.setter
-    def filter_spikes(self, filter_spikes):
-        self._filter_spikes = filter_spikes
 
 
     """ ---------- ABSTRACT METHODS ---------- """
