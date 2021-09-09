@@ -25,15 +25,15 @@ class Sensor(ABC):
     """ ---------- INIT ---------- """
 
 
-    def __init__(self, type, descr, unit, conversion_fctn, num_prec=None):
+    def __init__(self, type, descr, unit, conversion_fctn, num_prec=None,
+                 save_raw=False, format_str='f'):
         self.type = type  # str
         self.descr = descr  # str
         self.unit = unit  # str
         self.conversion_fctn = conversion_fctn  # function_object
-        self._num_prec = num_prec  # Set numerical precision
-        self._format_str = 'f'  # 'f': float, 'i': int, 's': str
-        self._format_dict = {'f': float, 'i': round, 's': str}
-        self._save_raw = False  # bool
+        self.num_prec = num_prec  # Set numerical precision
+        self.save_raw = save_raw  # bool
+        self.format_str = format_str  # 'f': float, 'i': int, 's': str
         # Database setup:
         self._db = Database()
 
@@ -51,7 +51,9 @@ class Sensor(ABC):
     def num_prec(self, num_prec):
         if type(num_prec) == int and num_prec > 0:
             self._num_prec = num_prec
-    
+        else:
+            self._num_prec = None
+
     @property
     def format_str(self):
         """Set format in which to save measurement data. Currently all data
@@ -60,8 +62,24 @@ class Sensor(ABC):
 
     @format_str.setter
     def format_str(self, format_str):
+        self._format_dict = {'f': float, 'i': round, 's': str}
         if format_str in self._format_dict.keys():
             self._format_str = format_str
+        else:
+            self._format_str = 'f'
+
+    @property
+    def save_raw(self):
+        """Save raw measurement data as received from sensor (before conversion
+        and formatting) to database."""
+        return self._save_raw
+
+    @save_raw.setter
+    def save_raw(self, save_raw):
+        if type(save_raw) == bool:
+            self._save_raw = save_raw
+        else:
+            self._save_raw = False
 
 
     """ ---------- ABSTRACT METHODS ---------- """
@@ -100,8 +118,8 @@ class Sensor(ABC):
     def _apply_num_prec(self, value):
         """Apply numerical precision to value."""
         try:
-            return float('{:.{}f}'.format(float(value), self.num_prec))
-        except ValueError:
+            return float('{:.{}f}'.format(float(value), self._num_prec))
+        except (ValueError, TypeError):
              return value
 
     def _apply_format(self, value):
