@@ -472,7 +472,7 @@
     <pre>
     sudo apt install python3-pip
     sudo apt-get install libatlas-base-dev libopenjp2-7 libtiff5 python-dev
-    pip3 install influxdb matplotlib numpy Phidget22 pyserial scipy
+    pip3 install influxdb matplotlib numpy pandas Phidget22 pyserial scipy
     </pre>
   * Install Phidgets drivers:
     <pre>

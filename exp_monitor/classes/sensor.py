@@ -18,31 +18,29 @@ import traceback
 
 # Local imports
 from exp_monitor.utilities.database import Database
+from exp_monitor.utilities.spike_filter import SpikeFilter
+from exp_monitor.utilities.utility import get_subclass_objects
 
 
 class Sensor(ABC):
 
     """ ---------- INIT ---------- """
 
-
-    def __init__(self, type, descr, unit, conversion_fctn, num_prec=None):
+    def __init__(self, type, descr, unit, conversion_fctn, num_prec=None,
+                 save_raw=False, format_str='f'):
         self.type = type  # str
         self.descr = descr  # str
         self.unit = unit  # str
         self.conversion_fctn = conversion_fctn  # function_object
-        self._num_prec = num_prec  # Set numerical precision
-        self._format_str = 'f'  # 'f': float, 'i': int, 's': str
-        self._format_dict = {'f': float, 'i': round, 's': str}
-        self._save_raw = False  # bool
-        self._filter_spikes = None  # float
-        self._alert = None  # {'value': float, 'duration': float [min]}
-        self._alert_cond = None  # {'value': float, 'duration': float [min]}
+        self.num_prec = num_prec  # Set numerical precision
+        self.save_raw = save_raw  # bool
+        self.format_str = format_str  # 'f': float, 'i': int, 's': str
+        # Spike filter setup:
+        self.spike_filter = SpikeFilter(self, spike_threshold_perc=None)
         # Database setup:
         self._db = Database()
 
-
     """ ---------- PROPERTIES ---------- """
-
 
     @property
     def num_prec(self):
@@ -54,7 +52,9 @@ class Sensor(ABC):
     def num_prec(self, num_prec):
         if type(num_prec) == int and num_prec > 0:
             self._num_prec = num_prec
-    
+        else:
+            self._num_prec = None
+
     @property
     def format_str(self):
         """Set format in which to save measurement data. Currently all data
@@ -63,8 +63,11 @@ class Sensor(ABC):
 
     @format_str.setter
     def format_str(self, format_str):
+        self._format_dict = {'f': float, 'i': round, 's': str}
         if format_str in self._format_dict.keys():
             self._format_str = format_str
+        else:
+            self._format_str = 'f'
 
     @property
     def save_raw(self):
@@ -74,54 +77,10 @@ class Sensor(ABC):
     def save_raw(self, save_raw):
         if type(save_raw) == bool:
             self._save_raw = save_raw
-
-    @property
-    def alert(self):
-        """Set value and duration for automatic alerts."""
-        return self._alert
-
-    @alert.setter
-    def alert(self, alert):
-        self._alert = alert
-
-    @property
-    def filter_spikes(self):
-        return self._filter_spikes
-
-    @filter_spikes.setter
-    def filter_spikes(self, filter_spikes):
-        if type(filter_spikes) == float and 0 < filter_spikes < 1:
-            self._filter_spikes = filter_spikes
-
-    def spike_filter(self):
-        """Define method for spike filtering."""
-        # Helper function to determine spikes:
-        def is_spike(self, data_point, previous, following):
-            if (data_point > previous * self.spike_factor and
-                    data_point > following * self.spike_factor):
-                return True
-            elif (data_point < previous / self.spike_factor and
-                    data_point < following / self.spike_factor):
-                return True
-            else:
-                return False
-        # Check measurement:
-        try:
-            self.measurement
-
-        except AttributeError:  # No spike filtering set
-            pass
-
-
-        # 1) Get new measurement value
-        # 2) Check that spike limits are defined, if not: default
-        # 3) Compare to last measurement value
-        # 4) Determine if spike
-        # 5) If so, drop; if not, save
-
+        else:
+            self._save_raw = False
 
     """ ---------- ABSTRACT METHODS ---------- """
-
 
     @abstractmethod
     def connect(self):
@@ -138,9 +97,7 @@ class Sensor(ABC):
         """Receive and return measurement values from sensor."""
         pass  # return received_vals
 
-
     """ ---------- PRIVATE METHODS ---------- """
-
 
     def _show(self, show_raw=False):
         """Print last measurement with description and units."""
@@ -156,9 +113,9 @@ class Sensor(ABC):
     def _apply_num_prec(self, value):
         """Apply numerical precision to value."""
         try:
-            return float('{:.{}f}'.format(float(value), self.num_prec))
-        except ValueError:
-             return value
+            return float('{:.{}f}'.format(float(value), self._num_prec))
+        except (ValueError, TypeError):
+            return value
 
     def _apply_format(self, value):
         """Apply format to value."""
@@ -174,9 +131,7 @@ class Sensor(ABC):
         except (TypeError, ValueError):
             return None
 
-
     """ ---------- PUBLIC METHODS ---------- """
-
 
     def measure(self, verbose=False, show_raw=False):
         """Execute a measurement."""
@@ -186,8 +141,6 @@ class Sensor(ABC):
         # Account for numerical precision and format:
         self.measurement = self._apply_num_prec(self.measurement)
         self.measurement = self._apply_format(self.measurement)
-        ## SPIKE FILTER
-        ## CHECK SAVE RAW DATA
         if verbose:
             self._show(show_raw)
         self.disconnect()
@@ -200,14 +153,17 @@ class Sensor(ABC):
         else:
             self._db.write(self.descr, self.unit, self.measurement)
 
+    def filter_spikes(self):
+        if self.spike_filter.enabled:
+            if self.spike_filter.was_spike():
+                self.spike_filter.del_spike()
+
     @classmethod
     def test_execution(cls):
         """Execute measure method for all sensors of this class defined in
         config file and print result to stdout. Has to be preceeded by the
         following import line:
         'from exp_monitor.config import *'."""
-        # Import from exec module impossible at module level (cir. dependency):
-        from exp_monitor.exec import get_subclass_objects
         sensor_list = get_subclass_objects(cls)
         for sensor in sensor_list:
             sensor.measure(verbose=True)

@@ -31,12 +31,7 @@ import sys
 from exp_monitor.config import *
 from exp_monitor.classes.sensor import Sensor
 from exp_monitor.utilities.exception_handler import ExceptionHandler
-
-def get_subclass_objects(BaseClass):
-    """Get all objects from global scope that extend BaseClass."""
-    return [value for key, value in globals().items()
-            if issubclass(type(value), BaseClass)]
-
+from exp_monitor.utilities.utility import get_subclass_objects
 
 def data_acquisition(sensors, exception_handler):
     """Execute measure method for all sensors."""
@@ -46,6 +41,8 @@ def data_acquisition(sensors, exception_handler):
             sensor.measure()
             # Write measurement to database:
             sensor.to_db()
+            # Run spike filter if set:
+            sensor.filter_spikes()
         # Log exceptions but continue execution:
         except Exception as e:
             exception_handler.log_exception(sensor, e)
