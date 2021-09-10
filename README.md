@@ -2,6 +2,8 @@
 
 A software package for automated monitoring of lab equipment, including time series visualization and automatic e-mail alerts.
 
+![Experiment Monitoring](snapshot.png)
+
 ## Architecture
 
 A central server gathers data from different sources, writes them into a database, hosts a graphic interface for visualization and sends automatic alert e-mails based on user-defined criteria.
@@ -31,7 +33,7 @@ A central server gathers data from different sources, writes them into a databas
     * `adc`: Contains Arduino sketch, its Python Class and its setup guide.
     * `ups`: Implements EatonUPS Class for batteries and their setup guide.
   * `tests`: Contains tests for the Phidget class.
-  * `utilities`: Contains interface-independent classes to be used by all sensors. 
+  * `utilities`: Contains interface-independent classes to be used by all sensors.
     * `spike_filter.py`: Spike filter for instances of Sensor subclasses. Enable in `config.py` by setting `sensor.spike_filter.spike_threshold_perc` for any given sensor.
   * `config.py`: Main configuration file.
   * `exec.py`: Main execution file for Linux service and command line execution.
