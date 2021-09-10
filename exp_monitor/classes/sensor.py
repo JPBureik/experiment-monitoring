@@ -18,6 +18,7 @@ import traceback
 
 # Local imports
 from exp_monitor.utilities.database import Database
+from exp_monitor.utilities.utility import get_subclass_objects
 
 
 class Sensor(ABC):
@@ -168,8 +169,6 @@ class Sensor(ABC):
         config file and print result to stdout. Has to be preceeded by the
         following import line:
         'from exp_monitor.config import *'."""
-        # Import from exec module impossible at module level (cir. dependency):
-        from exp_monitor.exec import get_subclass_objects
         sensor_list = get_subclass_objects(cls)
         for sensor in sensor_list:
             sensor.measure(verbose=True)
