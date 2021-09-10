@@ -31,7 +31,11 @@ import sys
 from exp_monitor.config import *
 from exp_monitor.classes.sensor import Sensor
 from exp_monitor.utilities.exception_handler import ExceptionHandler
-from exp_monitor.utilities.utility import get_subclass_objects
+
+def get_subclass_objects(BaseClass):
+    """Get all objects from global scope that extend BaseClass."""
+    return [value for key, value in globals().items()
+            if issubclass(type(value), BaseClass)]
 
 
 def data_acquisition(sensors, exception_handler):
