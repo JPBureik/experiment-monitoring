@@ -41,6 +41,8 @@ def data_acquisition(sensors, exception_handler):
             sensor.measure()
             # Write measurement to database:
             sensor.to_db()
+            # Run spike filter if set:
+            sensor.filter_spikes()
         # Log exceptions but continue execution:
         except Exception as e:
             exception_handler.log_exception(sensor, e)
