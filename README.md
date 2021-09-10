@@ -32,5 +32,6 @@ A central server gathers data from different sources, writes them into a databas
     * `ups`: Implements EatonUPS Class for batteries and their setup guide.
   * `tests`: Contains tests for the Phidget class.
   * `utilities`: Contains interface-independent classes to be used by all sensors. 
+    * `spike_filter.py`: Spike filter for instances of Sensor subclasses. Enable in `config.py` by setting `sensor.spike_filter.spike_threshold_perc` for any given sensor.
   * `config.py`: Main configuration file.
   * `exec.py`: Main execution file for Linux service and command line execution.

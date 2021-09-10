@@ -37,9 +37,11 @@ tc4 = PhidgetTC('Water', 4, 3)
 
 # Setup serial devices:
 primary_vac = TPG261('Primary Pump', '/dev/ttyUSB0')
+primary_vac.spike_filter.spike_threshold_perc = 1e4
 
 # Setup analog devices via Arduino:
 sc_vac = TPG300('Science Chamber', 2)
+sc_vac.spike_filter.spike_threshold_perc = 1e3
 
 # Setup batteries:
 batteries = EatonUPS('Batteries', '10.117.51.129')

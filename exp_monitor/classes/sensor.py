@@ -18,6 +18,7 @@ import traceback
 
 # Local imports
 from exp_monitor.utilities.database import Database
+from exp_monitor.utilities.spike_filter import SpikeFilter
 from exp_monitor.utilities.utility import get_subclass_objects
 
 
@@ -35,6 +36,8 @@ class Sensor(ABC):
         self.num_prec = num_prec  # Set numerical precision
         self.save_raw = save_raw  # bool
         self.format_str = format_str  # 'f': float, 'i': int, 's': str
+        # Spike filter setup:
+        self.spike_filter = SpikeFilter(self, spike_threshold_perc=None)
         # Database setup:
         self._db = Database()
 
@@ -149,8 +152,6 @@ class Sensor(ABC):
         # Account for numerical precision and format:
         self.measurement = self._apply_num_prec(self.measurement)
         self.measurement = self._apply_format(self.measurement)
-        ## SPIKE FILTER
-        ## CHECK SAVE RAW DATA
         if verbose:
             self._show(show_raw)
         self.disconnect()
@@ -162,6 +163,11 @@ class Sensor(ABC):
                            self.save_raw, self.raw)
         else:
             self._db.write(self.descr, self.unit, self.measurement)
+
+    def filter_spikes(self):
+        if self.spike_filter.enabled:
+            if self.spike_filter.was_spike():
+                self.spike_filter.del_spike()
 
     @classmethod
     def test_execution(cls):
