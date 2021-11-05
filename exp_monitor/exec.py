@@ -32,26 +32,31 @@ from exp_monitor.config import *
 from exp_monitor.classes.sensor import Sensor
 from exp_monitor.utilities.exception_handler import ExceptionHandler
 from exp_monitor.utilities.utility import get_subclass_objects
+from exp_monitor.utilities.database import InfluxDBDatabase
 
-def data_acquisition(sensors, exception_handler):
+
+def data_acquisition(sensors, exception_handler, database=None):
     """Execute measure method for all sensors."""
+    
+    if database is None:
+        database = InfluxDBDatabase(influxdb_hostname, influxdb_port, influxdb_db_name)
+
     for sensor in sensors:
         try:
             # Make measurement:
             sensor.measure()
             # Write measurement to database:
-            sensor.to_db()
+            sensor.write_to_db(database)
             # Run spike filter if set:
             sensor.filter_spikes()
         # Log exceptions but continue execution:
         except Exception as e:
             exception_handler.log_exception(sensor, e)
-    # Measurement frequency given by acq_interv:
-    time.sleep(acq_interv)
 
 
 def main():
     """Execute data acquisition cycle continously or a given number of times."""
+
     # Check for execution time argument on command line:
     if 't' in sys.argv:
         time_exec = True
@@ -69,8 +74,10 @@ def main():
         exception_handler.verbose = True
         sys.argv.remove('v')
     exception_handler.create_log_file()
+
     # Get all user defined sensor objects:
     sensors = get_subclass_objects(Sensor)
+
     # If int argument passed on command line: Run user-defined number of times:
     try:
         sys.argv.remove(sys.argv[0])
@@ -78,9 +85,16 @@ def main():
         for iteration in range(iterations):
             print('Iteration', iteration + 1, '/', iterations)
             data_acquisition(sensors, exception_handler)
-    except (IndexError, ValueError):  # Default: Run continously
+            # Measurement frequency given by acq_interv:
+            time.sleep(acq_interv)
+
+    # Default: Run continously:
+    except (IndexError, ValueError):
         while True:
             data_acquisition(sensors, exception_handler)
+            # Measurement frequency given by acq_interv:
+            time.sleep(acq_interv)
+
     if time_exec:
         print("--- Execution time: {:.2f} seconds ---".format(
             time.time() - start_time))
@@ -88,5 +102,4 @@ def main():
 
 # Execution:
 if __name__ == '__main__':
-    
     main()

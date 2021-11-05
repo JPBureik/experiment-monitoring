@@ -19,13 +19,17 @@ from datetime import datetime
 class Database():
 
     def __init__(self):
-        self.port = 8086  # int
-        self.name = 'helium2'  # str
-        self.client = InfluxDBClient(
-                            host='localhost',
-                            port=self.port,
-                            database=self.name
-                            )
+        pass
+
+    def write(self, descr, unit, measurement, save_raw=False, raw=None):
+        pass
+
+
+class InfluxDBDatabase(Database):
+
+    def __init__(self, hostname, port, db_name, **kwargs):
+        super().__init__(**kwargs)
+        self.client = InfluxDBClient(host=hostname, port=port, database=db_name)
 
     def write(self, descr, unit, measurement, save_raw=False, raw=None):
         """Write measurement result to InfluxDB database."""

@@ -70,7 +70,7 @@ class EatonUPS(Sensor):
                 print(item)
         self.disconnect()
 
-    def to_db(self):
+    def write_to_db(self):
         """Operator overloading for Sensor ABC to handle dict as meas obj."""
         for item in self.meas_dict.items():
             self._db.write(

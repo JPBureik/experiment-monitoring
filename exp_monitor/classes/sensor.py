@@ -37,8 +37,7 @@ class Sensor(ABC):
         self.format_str = format_str  # 'f': float, 'i': int, 's': str
         # Spike filter setup:
         self.spike_filter = SpikeFilter(self, spike_threshold_perc=None)
-        # Database setup:
-        self._db = Database()
+
 
     """ ---------- PROPERTIES ---------- """
 
@@ -145,13 +144,15 @@ class Sensor(ABC):
             self._show(show_raw)
         self.disconnect()
 
-    def to_db(self):
+    def write_to_db(self, database):
         """Write measurement result to database."""
+        if not isinstance(database, Database):
+            raise TypeError("write_to_db : database is not a Database !")
         if self._save_raw:
-            self._db.write(self.descr, self.unit, self.measurement,
+            database.write(self.descr, self.unit, self.measurement,
                            self.save_raw, self.raw)
         else:
-            self._db.write(self.descr, self.unit, self.measurement)
+            database.write(self.descr, self.unit, self.measurement)
 
     def filter_spikes(self):
         if self.spike_filter.enabled:

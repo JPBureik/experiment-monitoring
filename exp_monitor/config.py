@@ -30,22 +30,29 @@ from exp_monitor.classes.tpg300 import TPG300
 from exp_monitor.classes.ups.eaton_ups import EatonUPS
 
 # Setup Phidgets:
-tc1 = PhidgetTC('Source', 4, 0)
-tc2 = PhidgetTC('A/C', 4, 1)
-tc3 = PhidgetTC('Lab', 4, 2)
-tc4 = PhidgetTC('Water', 4, 3)
+tc1 = PhidgetTC('Source', hub_port=4, hub_channel=0)
+tc2 = PhidgetTC('A/C', hub_port=4, hub_channel=1)
+tc3 = PhidgetTC('Lab', hub_port=4, hub_channel=2)
+tc4 = PhidgetTC('Water', hub_port=4, hub_channel=3)
 
 # Setup serial devices:
-primary_vac = TPG261('Primary Pump', '/dev/ttyUSB0')
+primary_vac = TPG261('Primary Pump', port='/dev/ttyUSB0')
 primary_vac.spike_filter.spike_threshold_perc = 1e4
 
 # Setup analog devices via Arduino:
-sc_vac = TPG300('Science Chamber', 2)
+sc_vac = TPG300('Science Chamber', adc_analog_in=2)
 sc_vac.spike_filter.spike_threshold_perc = 1e3
 sc_vac.spike_filter.spike_length = 2
 
 # Setup batteries:
-batteries = EatonUPS('Batteries', '10.117.51.129')
+batteries = EatonUPS('Batteries', ip='10.117.51.129')
+
+
+""" ---------- INFLUXDB PARAMETERS ---------- """
+
+influxdb_hostname = 'localhost'
+influxdb_port = 8086
+influxdb_db_name = 'helium2'
 
 
 """ ---------- DETAILS ---------- """
