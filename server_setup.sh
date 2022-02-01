@@ -6,70 +6,70 @@
 echo "Setting up server ..."
 
 
-# --------------------
-# 1) Server setup
-# --------------------
+# # --------------------
+# # 1) Server setup
+# # --------------------
 
 
-# Set system time for InfluxDB time stamps:
-timedatectl set-timezone Europe/Paris
+# # Set system time for InfluxDB time stamps:
+# timedatectl set-timezone Europe/Paris
 
-# Make sure everything is up-to-date:
-apt update && sudo apt -y upgrade
+# # Make sure everything is up-to-date:
+# apt update && sudo apt -y upgrade
 
-# To enable X11 forwarding, install the X_Windows package:
-apt install xorg
+# # To enable X11 forwarding, install the X_Windows package:
+# apt install xorg
 
-# Set the DISPLAY parameter manually:
-export DISPLAY=localhost:10.0
-
-
-# --------------------
-# 2) Installing InfluxDB and Grafana
-# --------------------
+# # Set the DISPLAY parameter manually:
+# export DISPLAY=localhost:10.0
 
 
-# Install InfluxDB:
-curl -sL https://repos.influxdata.com/influxdb.key | apt-key add -
-echo "deb https://repos.influxdata.com/ubuntu bionic stable" | tee /etc/apt/sources.list.d/influxdb.list
-apt update
-apt install influxdb
-
-# Replace the InfluxDB configuration file:
-rm /etc/influxdb/influxdb.conf
-cp ./server_setup/files/influxdb.conf /etc/influxdb/
-
-# Start the InfluxDB Daemon:
-systemctl start influxdb
-
-# Install Grafana:
-wget -q -O - https://packages.grafana.com/gpg.key | apt-key add -
-echo "deb https://packages.grafana.com/oss/deb stable main" | tee -a /etc/apt/sources.list.d/grafana.list
-apt-get update
-apt-get install -y grafana
-
-# Replace the Grafana configuration file:
-rm /etc/grafana/grafana.ini
-cp ./server_setup/files/grafana.ini /etc/grafana/
-
-# Enable and start the Grafana server:
-/bin/systemctl enable grafana-server
-/bin/systemctl start grafana-server
-
-# Start Grafana automatically after reboot:
-echo "sudo service grafana-server restart" >> /etc/rc.local
+# # --------------------
+# # 2) Installing InfluxDB and Grafana
+# # --------------------
 
 
-# --------------------
-# 3) Installing Python and dependencies
-# --------------------
+# # Install InfluxDB:
+# curl -sL https://repos.influxdata.com/influxdb.key | apt-key add -
+# echo "deb https://repos.influxdata.com/ubuntu bionic stable" | tee /etc/apt/sources.list.d/influxdb.list
+# apt update
+# apt install influxdb
+
+# # Replace the InfluxDB configuration file:
+# rm /etc/influxdb/influxdb.conf
+# cp ./server_setup/files/influxdb.conf /etc/influxdb/
+
+# # Start the InfluxDB Daemon:
+# systemctl start influxdb
+
+# # Install Grafana:
+# wget -q -O - https://packages.grafana.com/gpg.key | apt-key add -
+# echo "deb https://packages.grafana.com/oss/deb stable main" | tee -a /etc/apt/sources.list.d/grafana.list
+# apt-get update
+# apt-get install -y grafana
+
+# # Replace the Grafana configuration file:
+# rm /etc/grafana/grafana.ini
+# cp ./server_setup/files/grafana.ini /etc/grafana/
+
+# # Enable and start the Grafana server:
+# /bin/systemctl enable grafana-server
+# /bin/systemctl start grafana-server
+
+# # Start Grafana automatically after reboot:
+# echo "sudo service grafana-server restart" >> /etc/rc.local
 
 
-# Install Python 3:
-apt install python3-pip
+# # --------------------
+# # 3) Installing Python and dependencies
+# # --------------------
 
-# Install dependencies:
-apt-get install libatlas-base-dev libopenjp2-7 libtiff5 python-dev
+
+# # Install Python 3:
+# apt install python3-pip
+
+# # Install dependencies:
+# apt-get install libatlas-base-dev libopenjp2-7 libtiff5 python-dev
 
 
 # --------------------
