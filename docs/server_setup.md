@@ -197,61 +197,40 @@
     cd /mnt/code/experiment-monitoring
     sudo ./server_setup.sh
     </pre>
+    The server will reboot after completing the setup.
+  * Connect the Phidgets and test their drivers:
+    <pre>
+    /mnt/code/experiment-monitoring/tests/test_phidgets.sh
+    </pre>
+    This should list all of your connected Phidgets.
 
 ## Setting up the continuous data acquisition
-
-  
-    Extend the USB access rules:
-    <pre>
-    sudo usermod -a -G dialout $USER
-    sudo cp plat/linux/udev/99-libphidget22.rules /etc/udev/rules.d
-    sudo udevadm control --reload
-    sudo reboot
-    </pre>
-    Verify the Phidgets are seen by your USB interface:
-    <pre>
-    ssh -X <i>admin</i>@<i>myserver</i>.local
-    dmesg | tail
-    </pre>
-  * Test the Phidgets drivers with Python:
-    <pre>
-    cd /tmp
-    wget https://www.phidgets.com/downloads/phidget22/examples/python/Manager/Phidget22_HelloWorld_Python_Ex.zip
-    unzip Phidget22_HelloWorld_Python_Ex.zip
-    python3 HelloWorld.py
-    </pre>
-    This last command should list all of your connected Phidgets.
   * Set up the InfluxDB database (e.g. <i>mydatabase</i>):
     <pre>
     influx -precision rfc3339
     CREATE DATABASE <i>mydatabase</i>
     </pre>
-    Add this name in the config file of the Experiment Monitoring package. Create a new branch for your own application of the Experiment Monitoring Package, e.g. <i>myexperiment</i>. Remember to `commit` and `push` everytime you make a modification to the data acquisition code on <code><i>myserver</i></code>:
+    Add this name in the config file of the Experiment Monitoring package. (You may want to set up a second remote in Git to track the changes that you make for your specific setup.)
     <pre>
-    git checkout -b <i>myexperiment</i>
-    git branch -D master
-    nano /mnt/code/experiment-monitoring/exp_monitor/config.py
+    nano /mnt/code/experiment-monitoring/expmonitor/config.py
       &emsp; db_name = '<i>mydatabase</i>'
-    git add .
-    git commit -m "Specified InfluxDB database name"
-    git push quantumgitserver <i>myexperiment</i>
     </pre>
   * Connect all of the devices that you want to monitor.
   * Set up the Experiment Monitoring software for your experiment:<br>
     First, add the name of your database as an attribute to the `Sensor` class:
     <pre>
-    nano /mnt/code/experiment-monitoring/exp_monitor/classes/sensor.py
+    nano /mnt/code/experiment-monitoring/expmonitor/classes/sensor.py
       self.db_name = '<i>mydatabase</i>'
     </pre>
     This has to be done here and not in `config.py` in order to avoid a circular dependency when importing the `Sensor` class.<br>
     Next, instantiate all sensor objects as subclasses of the `Sensor` class in the main configuration file:
     <pre>
-    nano /mnt/code/experiment-monitoring/exp_monitor/config.py
+    nano /mnt/code/experiment-monitoring/expmonitor/config.py
     </pre>
     Any subclass of the `Sensor` class needs to overwrite all of its `abstractmethods` and specify all of its `__init__` arguments.
   * Manually execute some (e.g. <i>5</i>) data acquisition cycles to check for errors:
     <pre>
-    python3 /mnt/code/experiment-monitoring/exp_monitor/exec.py <i>5</i>
+    python3 /mnt/code/experiment-monitoring/expmonitor/exec.py <i>5</i>
     </pre>
     Note that the argument after the the script filepath sets the number of executions of the loop.
   * Verify that the data is being written into your database:
@@ -263,31 +242,12 @@
     </pre>
   * If the data acquisition script executes without any errors, setup its automatic continuous execution via a Linux service:
     <pre>
-    cd /lib/systemd/system
-    sudo nano exp_monitor.service
-      &emsp; [Unit]
-      &emsp; Description=Experiment Monitoring Software
-      &emsp; After=multi-user.target
-
-      &emsp; [Service]
-      &emsp; User=<i>admin</i>
-      &emsp; Type=simple
-      &emsp; Environment=PYTHONPATH=/mnt/code/experiment-monitoring
-      &emsp; ExecStart=/usr/bin/python3 /mnt/code/experiment-monitoring/exp_monitor/exec.py
-      &emsp; Restart=always
-      &emsp; RestartSec=15s         
-
-      &emsp; [Install]
-      &emsp; WantedBy=multi-user.target
-    sudo chmod 644 /lib/systemd/system/exp_monitor.service
-    sudo chmod +x /mnt/code/experiment-monitoring/exp_monitor/exec.py
-    sudo systemctl daemon-reload
-    sudo systemctl enable exp_monitor.service
-    sudo systemctl start exp_monitor.service
+    sudo systemctl enable expmonitor.service
+    sudo systemctl start expmonitor.service
     </pre>
     Now you can start/stop/restart the execution of the Experiment Monitoring software using:
     <pre>
-    sudo systemctl start/stop/restart exp_monitor.service
+    sudo systemctl start/stop/restart expmonitor.service
     </pre>
     You can relaunch the daemon using:
     <pre>
@@ -295,14 +255,15 @@
     </pre>
     You can check the status of the execution using:
     <pre>
-    sudo systemctl status exp_monitor.service
+    sudo systemctl status expmonitor.service
     </pre>
     You can check the execution log using:
     <pre>
-    sudo journalctl -f -u exp_monitor.service
+    sudo journalctl -f -u expmonitor.service
     </pre>
 
 ## Setting up automatic backups
+  It is recommended that you set up automatic backups for <i>myserver</i>. If you're a member of the Quantum Gases group at IOGS, you can use your share on our NAS `OA-DATA`.
   * On your <code><i>oa-data_share</i></code> create a directory <code>pc_backups</code> and therein one for <code><i>myserver</i></code>. On <code><i>myserver</i></code> create a mount point for <code><i>oa-data_share</i></code>:
     <pre>
     mkdir /mnt/oa-data

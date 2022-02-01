@@ -104,5 +104,16 @@ cp plat/linux/udev/99-libphidget22.rules /etc/udev/rules.d
 udevadm control --reload
 
 
+# --------------------
+# 6) Setup Linux service:
+# --------------------
+
+
+cp /mnt/code/experiment-monitoring/server_setup/files/expmonitor.service /lib/systemd/system
+sudo chmod 644 /lib/systemd/system/expmonitor.service
+sudo chmod +x /mnt/code/experiment-monitoring/expmonitor/exec.py
+sudo systemctl daemon-reload
+
+
 echo "Done."
 # sudo reboot
