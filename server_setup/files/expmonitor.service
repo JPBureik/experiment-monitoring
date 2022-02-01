@@ -1,0 +1,16 @@
+[Unit]
+Description=Experiment Monitoring Software
+After=multi-user.target
+
+
+[Service]
+User=admin
+Type=simple
+Environment=PYTHONPATH=/mnt/code/experiment-monitoring
+ExecStart=/usr/bin/python3 /mnt/code/experiment-monitoring/exp_monitor/exec.py
+Restart=always
+RestartSec=15s   
+
+
+[Install]
+WantedBy=multi-user.target
