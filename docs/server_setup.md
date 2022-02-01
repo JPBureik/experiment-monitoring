@@ -200,26 +200,7 @@
 
 ## Setting up the continuous data acquisition
 
-  * Install the required packages and Python libraries:
-    <pre>
-    pip3 install influxdb matplotlib numpy pandas Phidget22 pyserial scipy
-    </pre>
-  * Install Phidgets drivers:
-    <pre>
-    cd /tmp
-    wget https://www.phidgets.com/downloads/phidget22/libraries/linux/libphidget22.tar.gz
-    tar zxvf libphidget22.tar.gz
-    cd libphidget22-* <i>(auto-complete with Tab)</i>
-    ./configure
-    make
-    sudo make install
-    </pre>
-    Add  `/usr/local/lib` to the system-wide library path:
-    <pre>
-    sudo su -
-    echo /usr/local/lib >> /etc/ld.so.conf && sudo ldconfig
-    exit
-    </pre>
+  
     Extend the USB access rules:
     <pre>
     sudo usermod -a -G dialout $USER
