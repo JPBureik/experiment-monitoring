@@ -12,7 +12,7 @@ Implements the Eaton UPS Class for experiment monitoring.
 from easysnmp import Session, snmp_get  # pip3 install easysnmp
 
 # Local imports:
-from exp_monitor.classes.sensor import Sensor
+from expmonitor.classes.sensor import Sensor
 
 
 class EatonUPS(Sensor):

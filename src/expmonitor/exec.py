@@ -28,10 +28,10 @@ import time
 import sys
 
 # Local imports:
-from exp_monitor.config import *
-from exp_monitor.classes.sensor import Sensor
-from exp_monitor.utilities.exception_handler import ExceptionHandler
-from exp_monitor.utilities.utility import get_subclass_objects
+from expmonitor.config import *
+from expmonitor.classes.sensor import Sensor
+from expmonitor.utilities.exception_handler import ExceptionHandler
+from expmonitor.utilities.utility import get_subclass_objects
 
 def data_acquisition(sensors, exception_handler):
     """Execute measure method for all sensors."""

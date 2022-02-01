@@ -17,9 +17,9 @@ from influxdb import InfluxDBClient
 import traceback
 
 # Local imports
-from exp_monitor.utilities.database import Database
-from exp_monitor.utilities.spike_filter import SpikeFilter
-from exp_monitor.utilities.utility import get_subclass_objects
+from expmonitor.utilities.database import Database
+from expmonitor.utilities.spike_filter import SpikeFilter
+from expmonitor.utilities.utility import get_subclass_objects
 
 
 class Sensor(ABC):

@@ -12,7 +12,7 @@ Implements the TPG 261 Class for experiment monitoring.
 import serial  # pip3 install pyserial
 
 # Local imports:
-from exp_monitor.classes.sensor import Sensor
+from expmonitor.classes.sensor import Sensor
 
 
 class TPG261(Sensor):

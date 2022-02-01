@@ -18,7 +18,7 @@ import datetime
 import time
 
 # Local imports
-from exp_monitor.utilities.database import Database
+from expmonitor.utilities.database import Database
 
 
 class SpikeFilter():

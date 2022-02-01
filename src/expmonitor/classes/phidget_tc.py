@@ -12,7 +12,7 @@ Implements the Phidget TC Class for experiment monitoring.
 from Phidget22.Devices import TemperatureSensor
 
 # Local imports:
-from exp_monitor.classes.sensor import Sensor
+from expmonitor.classes.sensor import Sensor
 
 
 class PhidgetTC(Sensor):
