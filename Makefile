@@ -2,4 +2,4 @@
 #	 ./setup.sh
 
 venv/bin/activate:
-	/home/admin/.local/bin/virtualenv venv
+	/usr/bin/python3 -m virtualenv venv
