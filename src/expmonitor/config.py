@@ -24,10 +24,10 @@ acq_interv = 0
 
 
 # Import all specific sensor classes:
-from exp_monitor.classes.phidget_tc import PhidgetTC
-from exp_monitor.classes.tpg261 import TPG261
-from exp_monitor.classes.tpg300 import TPG300
-from exp_monitor.classes.ups.eaton_ups import EatonUPS
+from expmonitor.classes.phidget_tc import PhidgetTC
+from expmonitor.classes.tpg261 import TPG261
+from expmonitor.classes.tpg300 import TPG300
+from expmonitor.classes.ups.eaton_ups import EatonUPS
 
 # Setup Phidgets:
 tc1 = PhidgetTC('Source', 4, 0)

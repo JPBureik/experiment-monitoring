@@ -1,5 +1,5 @@
 # Byte-compiled / optimized / DLL files
-__pycache__
+__pycache__/
 *.py[cod]
 
 # C extensions
@@ -26,10 +26,16 @@ pip-delete-this-directory.txt
 
 # Unit test / coverage reports
 .tox/
+tox.ini
 .coverage
+.coverage.*
 .cache
 nosetests.xml
 coverage.xml
+
+# Type checker:
+.mypy_cache/
+.typings/
 
 # Translations
 *.mo
@@ -49,5 +55,9 @@ coverage.xml
 # Sphinx documentation
 docs/_build/
 
-# IPython Checkpoints:
-.ipynb_checkpoints/
+# IPyNbCheckpoints:
+tests/.ipynb_checkpoints/
+
+# Virtualenv:
+.venv/
+
