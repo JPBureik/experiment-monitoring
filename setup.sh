@@ -1,3 +1,4 @@
 echo "Installing ..."
-timedatectl set-timezone Europe/Paris
+virtualenv expmonitor
+source expmonitor/bin/activate
 echo "Done."
