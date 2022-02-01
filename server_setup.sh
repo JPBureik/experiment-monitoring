@@ -76,13 +76,33 @@ echo "Setting up server ..."
 # 4) Installing the Experiment Monitoring package
 # --------------------
 
-
-# Create and activate virtual environment:
-/usr/bin/python3 -m pip install virtualenv
-/usr/bin/python3 -m virtualenv venv
-source ./venv/bin/activate
-
 # Install package:
+cd /mnt/code/experiment-monitoring
 /usr/bin/python3 -m pip install -e .
 
+
+# --------------------
+# 5) Installing drivers for Phidgets
+# --------------------
+
+
+# # Install Phidgets drivers:
+# cd /tmp
+# wget https://www.phidgets.com/downloads/phidget22/libraries/linux/libphidget22.tar.gz
+# tar zxvf libphidget22.tar.gz
+# cd libphidget22-* <i>(auto-complete with Tab)</i>
+# ./configure
+# make
+# make install
+
+# # Add /usr/local/lib to the system-wide library path:
+# echo /usr/local/lib >> /etc/ld.so.conf && sudo ldconfig
+
+# # Extend the USB access rules:
+# usermod -a -G dialout $USER
+# cp plat/linux/udev/99-libphidget22.rules /etc/udev/rules.d
+# udevadm control --reload
+
+
 echo "Done."
+# sudo reboot
