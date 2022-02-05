@@ -3,14 +3,26 @@
 # Shell script to set up the RaspberryPi server for experiment monitoring.
 
 
+echo "
+Specify a name for the InfluxDB database:
+"
+read database_name
+
+
 echo "Setting up server ..."
 
 
-# --------------------
-# 1) Server setup
-# --------------------
+echo "
+--------------------
+1/6 Server setup
+--------------------
+"
 
 
+# Set the locales corresponding to your region and languages:
+rm /etc/locale.gen
+cp /mnt/code/experiment-monitoring/server_setup/files/locale.gen /etc/locale.gen
+locale-gen
 # Set system time for InfluxDB time stamps:
 timedatectl set-timezone Europe/Paris
 
@@ -24,9 +36,11 @@ apt install xorg
 export DISPLAY=localhost:10.0
 
 
-# --------------------
-# 2) Installing InfluxDB and Grafana
-# --------------------
+echo "
+--------------------
+2/6 Installing InfluxDB and Grafana
+--------------------
+"
 
 
 # Install InfluxDB:
@@ -60,9 +74,11 @@ cp ./server_setup/files/grafana.ini /etc/grafana/
 echo "sudo service grafana-server restart" >> /etc/rc.local
 
 
-# --------------------
-# 3) Installing Python and dependencies
-# --------------------
+echo "
+--------------------
+3/6 Installing Python and dependencies
+--------------------
+"
 
 
 # Install Python 3:
@@ -72,25 +88,31 @@ apt install python3-pip
 apt-get install libatlas-base-dev libopenjp2-7 libtiff5 python-dev
 
 
-# --------------------
-# 4) Installing the Experiment Monitoring package
-# --------------------
+echo "
+--------------------
+4/6 Installing the Experiment Monitoring package
+--------------------
+"
+
 
 # Install package:
 cd /mnt/code/experiment-monitoring
 /usr/bin/python3 -m pip install -e .
 
 
-# --------------------
-# 5) Installing drivers for Phidgets
-# --------------------
+echo "
+--------------------
+5/6 Installing drivers for Phidgets
+--------------------
+"
 
 
 # Install Phidgets drivers:
 cd /tmp
 wget https://www.phidgets.com/downloads/phidget22/libraries/linux/libphidget22.tar.gz
 tar zxvf libphidget22.tar.gz
-cd libphidget22-* <i>(auto-complete with Tab)</i>
+rm *.gz
+cd "$(ls|grep "libphidget22")"
 ./configure
 make
 make install
@@ -104,9 +126,23 @@ cp plat/linux/udev/99-libphidget22.rules /etc/udev/rules.d
 udevadm control --reload
 
 
-# --------------------
-# 6) Setup Linux service:
-# --------------------
+echo "
+--------------------
+6/7 Setting up the InfluxDB databse:
+--------------------
+"
+
+
+# Add the database name to the Experiment Monitoring configuration:
+sed -i -e 's/"""mydatabase"""/"'$database_name'"/g' /mnt/code/experiment-monitoring/src/expmonitor/utilities/database.py
+
+
+
+echo "
+--------------------
+7/7 Setting up Linux service:
+--------------------
+"
 
 
 cp /mnt/code/experiment-monitoring/server_setup/files/expmonitor.service /lib/systemd/system

@@ -116,26 +116,6 @@
     <pre>
     ssh <i>admin</i>@<i>myserver</i>.local
     </pre>
-  * Set the locales corresponding to your region and languages of choice:
-    - Login as root:
-      <pre>
-      sudo su
-      </pre>
-    - Uncomment the languages of your choice in <code>/etc/locale.gen</code>, e.g. English and French:
-      <pre>
-      nano /etc/locale.gen
-        &emsp; en_GB ISO-8859-1
-        &emsp; en_GB.UTF-8 UTF-8
-        &emsp; en_US ISO-8859-1
-        &emsp; en_US.UTF-8 UTF-8
-        &emsp; fr_FR ISO-8859-1
-        &emsp; fr_FR.UTF-8 UTF-8
-      </pre>
-    - Generate the new locales and logout of root:
-      <pre>
-      locale-gen
-      exit
-      </pre>
   * Install and configure Git:
     <pre>
     sudo apt-get install git
