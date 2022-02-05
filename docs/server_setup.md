@@ -56,10 +56,6 @@
     <pre>
     ping raspberrypi.local
     </pre>
-  * On your machine add the ECDSA host key for RaspberryPi's <i>IP</i>:
-    <pre>
-    ssh-keygen -f “/home/<i>user</i>/.ssh/known_hosts” -R “<i>IP</i>”p
-    </pre>
   * SSH into the RaspberryPi with default password `raspberry`:
     <pre>
     ssh pi@<i>IP</i>
@@ -118,7 +114,7 @@
     </pre>
   * Install and configure Git:
     <pre>
-    sudo apt-get install git
+    sudo apt-get install git -y
     git config --global user.email "<i>you</i>@<i>example.com</i>"
     git config --global user.name "<i>Your Name</i>"
     </pre>
@@ -137,8 +133,7 @@
     </pre>
   * Create mount points called <code>code</code> and <code>data</code> to attach the filesystems to:
     <pre>
-    sudo mkdir -p /mnt/code
-    sudo mkdir -p /mnt/data
+    sudo mkdir /mnt/code /mnt/data
     </pre>
   * Mount the filesystems:
     <pre>
@@ -156,9 +151,8 @@
     </pre>
   * Give write permissions:
     <pre>
-    cd /mnt
-    sudo chmod +w code
-    sudo chmod +w data
+    sudo chmod +w /mnt/code
+    sudo chmod +w /mnt/data
     </pre>
   * Reboot and verify filesystems are mounted:
     <pre>
@@ -172,10 +166,11 @@
     cd /mnt/code
     git clone -o github https://github.com/JPBureik/experiment-monitoring.git
     </pre>
-  * Run the server setup script and enter a name for the InfluxDB database when prompted (e.g. <i>mydatabase</i>):
+  * Switch to root to run the server setup script and enter a name for the InfluxDB database when prompted (e.g. <i>mydatabase</i>):
     <pre>
     cd /mnt/code/experiment-monitoring
-    sudo ./server_setup.sh
+    sudo su -
+    ./server_setup.sh
     </pre>
     The server will reboot after completing the setup.
   * Connect the Phidgets and test their drivers:
@@ -186,14 +181,19 @@
 
 ## Setting up the continuous data acquisition
   * Connect all of the devices that you want to monitor.
+  * To use the Experiment Monitoring package, activate the virtual environment where it is installed:
+    <pre>
+    cd /mnt/code/experiment-monitoring
+    source venv/bin/activate
+    </pre>
   * To set up the Experiment Monitoring software for your experiment, instantiate all sensor objects as subclasses of the `Sensor` class in the main configuration file:
     <pre>
-    nano /mnt/code/experiment-monitoring/expmonitor/config.py
+    nano /mnt/code/experiment-monitoring/src/expmonitor/config.py
     </pre>
     Any subclass of the `Sensor` class needs to overwrite all of its `abstractmethods` and specify all of its `__init__` arguments. See the `README` for a list of existing driver classes.
   * Manually execute some (e.g. <i>5</i>) data acquisition cycles to check for errors:
     <pre>
-    python3 /mnt/code/experiment-monitoring/expmonitor/exec.py <i>5</i>
+    python3 /mnt/code/experiment-monitoring/src/expmonitor/exec.py <i>5</i>
     </pre>
     Note that the argument after the the script filepath sets the number of executions of the loop.
   * Verify that the data is being written into your database:
@@ -227,7 +227,7 @@
     </pre>
 
 ## Setting up automatic backups
-  It is recommended that you set up automatic backups for <i>myserver</i>. If you're a member of the Quantum Gases group at IOGS, you can use your share on our NAS `OA-DATA`.
+  It is recommended that you set up automatic backups for <i>myserver</i>. If you're a member of the Quantum Gases group at IOGS, you can use your share on our NAS `OA-DATA`. Otherwise, replace <code><i>oa-data-share</i></code> with your own backup target.
   * On your <code><i>oa-data_share</i></code> create a directory <code>pc_backups</code> and therein one for <code><i>myserver</i></code>. On <code><i>myserver</i></code> create a mount point for <code><i>oa-data_share</i></code>:
     <pre>
     mkdir /mnt/oa-data
@@ -285,7 +285,7 @@
     <pre>
     HTTP
     &emsp; URL: http://localhost:8086/
-    InfluxDB Detaisl
+    InfluxDB Details
     &emsp; Database: <i>mydatabase</i>
     </pre>
     Click `Save & Test`.
@@ -404,10 +404,6 @@
     </pre>
     Change the threshold value back to the alert threshold, then on the upper right hand side click on `Apply` and save the dashboard by clicking on the save icon on the upper right hand side of the dashboard.<br>
     You can find an overview of all your alert rules by clicking on the `Alerting` bell icon and then choosing `Alert rules`.
-
-## Setting up the InfluxDB retention policy
-  * ...
-
 
 ## Known bugs and problems
   * The Grafana Image Renderer is not available for the ARM processor of the RaspberryPi. Therefore the alert e-mails do not contain a snapshot of the time series that causes the alert.

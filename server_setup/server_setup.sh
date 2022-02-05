@@ -36,7 +36,7 @@ timedatectl set-timezone Europe/Paris
 apt update && sudo apt -y upgrade
 
 # To enable X11 forwarding, install the X_Windows package:
-apt install xorg
+apt install xorg -y
 
 # Set the DISPLAY parameter manually:
 export DISPLAY=localhost:10.0
@@ -53,11 +53,11 @@ echo "
 curl -sL https://repos.influxdata.com/influxdb.key | apt-key add -
 echo "deb https://repos.influxdata.com/ubuntu bionic stable" | tee /etc/apt/sources.list.d/influxdb.list
 apt update
-apt install influxdb
+apt install -y influxdb
 
 # Change the default save location for InfluxDB data:
 mkdir /mnt/data/influxdb
-sudo chown -R influxdb:influxdb /mnt/data/influxdb
+chown -R influxdb:influxdb /mnt/data/influxdb
 sed -z -i -e 's/\[meta]\n  # Where the metadata\/raft database is stored\n  dir = \"\/var\/lib\/influxdb\/meta\"/\[meta]\n  # Where the metadata\/raft database is stored\n  dir = \"\/mnt\/data\/influxdb\/meta\"/g' /etc/influxdb/influxdb.conf
 sed -z -i -e 's/\[data]\n  # The directory where the TSM storage engine stores TSM files.\n  dir = \"\/var\/lib\/influxdb\/data\"\n\n  # The directory where the TSM storage engine stores WAL files.\n  wal-dir = \"\/var\/lib\/influxdb\/wal\"/\[data]\n  # The directory where the TSM storage engine stores TSM files.\n  dir = \"\/mnt\/data\/influxdb\/data\"\n\n  # The directory where the TSM storage engine stores WAL files.\n  wal-dir = \"\/mnt\/data\/influxdb\/wal\"/g' /etc/influxdb/influxdb.conf
 
@@ -71,7 +71,7 @@ apt-get update
 apt-get install -y grafana
 
 # Disable alpha for panels in the Grafana settings file:
-sed -z -i -e 's/\[panels]\n# If set to true Grafana will allow script tags in text panels. Not recommended as it enable XSS vulnerabilities.\n;disable_sanitize_html = false\n;enable_alpha = false/\[panels]\n# If set to true Grafana will allow script tags in text panels. Not recommended as it enable XSS vulnerabilities.\n;disable_sanitize_html = false\nenable_alpha = false/g' /etc/grafana/grafana.ini
+sed -z -i -e 's/\[panels]\n# If set to true Grafana will allow script tags in text panels. Not recommended as it enable XSS vulnerabilities.\n;disable_sanitize_html = false/\[panels]\n# If set to true Grafana will allow script tags in text panels. Not recommended as it enable XSS vulnerabilities.\n;disable_sanitize_html = false\nenable_alpha = false/g' /etc/grafana/grafana.ini
 
 # Enable and start the Grafana server:
 /bin/systemctl enable grafana-server
@@ -88,11 +88,11 @@ echo "
 "
 
 
-# Install Python 3:
-apt install python3-pip
+# Install pip for Python 3:
+apt install python3-pip -y
 
 # Install dependencies:
-apt-get install libatlas-base-dev libopenjp2-7 libtiff5 python-dev
+apt-get install libatlas-base-dev libopenjp2-7 libtiff5 libusb-1.0-0 libusb-1.0-0-dev python-dev gcc libsnmp-dev snmp-mibs-downloader -y
 
 
 echo "
@@ -103,8 +103,13 @@ echo "
 
 
 # Install package:
-cd /mnt/code/experiment-monitoring
-/usr/bin/python3 -m pip install -e .
+# cd /mnt/code
+# chown -R $UID:users *
+# cd /usr/local/lib/python3.*
+# chown -R $UID:users *
+
+pip3 install --target=/usr/local/lib/python3.7/dist-packages/ /mnt/code/experiment-monitoring
+
 
 
 echo "
@@ -152,19 +157,14 @@ echo "
 "
 
 
-cp /mnt/code/experiment-monitoring/server_setup/files/expmonitor.service /lib/systemd/system
-sudo chmod 644 /lib/systemd/system/expmonitor.service
-sudo chmod +x /mnt/code/experiment-monitoring/expmonitor/exec.py
-sudo systemctl daemon-reload
+cp /mnt/code/experiment-monitoring/server_setup/expmonitor.service /lib/systemd/system
+chmod 644 /lib/systemd/system/expmonitor.service
+chmod +x /mnt/code/experiment-monitoring/src/expmonitor/exec.py
+systemctl daemon-reload
 
 
 echo "Done."
 echo "Rebooting now... "
-sudo reboot
-
-
-[meta]\n  # Where the metadata/raft database is stored
-  dir = "/mnt/data/influxdb/meta"
-
-
-
+# Cleanup:
+apt autoremove -y
+reboot
