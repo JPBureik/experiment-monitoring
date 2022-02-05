@@ -20,8 +20,14 @@ echo "
 
 
 # Set the locales corresponding to your region and languages:
-rm /etc/locale.gen
-cp /mnt/code/experiment-monitoring/server_setup/files/locale.gen /etc/locale.gen
+sed -z -i -e 's/# de_DE ISO-8859-1/de_DE ISO-8859-1/g' /etc/locale.gen
+sed -z -i -e 's/# de_DE.UTF-8 UTF-8/de_DE.UTF-8 UTF-8/g' /etc/locale.gen
+sed -z -i -e 's/# en_GB ISO-8859-1/en_GB ISO-8859-1/g' /etc/locale.gen
+sed -z -i -e 's/# en_GB.UTF-8 UTF-8/en_GB.UTF-8 UTF-8/g' /etc/locale.gen
+sed -z -i -e 's/# en_US ISO-8859-1/en_US ISO-8859-1/g' /etc/locale.gen
+sed -z -i -e 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/g' /etc/locale.gen
+sed -z -i -e 's/# fr_FR ISO-8859-1/fr_FR ISO-8859-1/g' /etc/locale.gen
+sed -z -i -e 's/# fr_FR.UTF-8 UTF-8/fr_FR.UTF-8 UTF-8/g' /etc/locale.gen
 locale-gen
 # Set system time for InfluxDB time stamps:
 timedatectl set-timezone Europe/Paris
