@@ -64,9 +64,8 @@ echo "deb https://packages.grafana.com/oss/deb stable main" | tee -a /etc/apt/so
 apt-get update
 apt-get install -y grafana
 
-# Replace the Grafana configuration file:
-rm /etc/grafana/grafana.ini
-cp ./server_setup/files/grafana.ini /etc/grafana/
+# Disable alpha for panels in the Grafana settings file:
+sed -z -i -e 's/\[panels]\n# If set to true Grafana will allow script tags in text panels. Not recommended as it enable XSS vulnerabilities.\n;disable_sanitize_html = false\n;enable_alpha = false/\[panels]\n# If set to true Grafana will allow script tags in text panels. Not recommended as it enable XSS vulnerabilities.\n;disable_sanitize_html = false\nenable_alpha = false/g' /etc/grafana/grafana.ini
 
 # Enable and start the Grafana server:
 /bin/systemctl enable grafana-server
