@@ -157,8 +157,8 @@
   * Give write permissions:
     <pre>
     cd /mnt
-    sudo chmod a+w code
-    sudo chmod a+w data
+    sudo chmod +w code
+    sudo chmod +w data
     </pre>
   * Reboot and verify filesystems are mounted:
     <pre>
@@ -172,7 +172,7 @@
     cd /mnt/code
     git clone -o github https://github.com/JPBureik/experiment-monitoring.git
     </pre>
-  * Run the server setup script:
+  * Run the server setup script and enter a name for the InfluxDB database when prompted (e.g. <i>mydatabase</i>):
     <pre>
     cd /mnt/code/experiment-monitoring
     sudo ./server_setup.sh
@@ -185,29 +185,12 @@
     This should list all of your connected Phidgets.
 
 ## Setting up the continuous data acquisition
-  * Set up the InfluxDB database (e.g. <i>mydatabase</i>):
-    <pre>
-    influx -precision rfc3339
-    CREATE DATABASE <i>mydatabase</i>
-    </pre>
-    Add this name in the config file of the Experiment Monitoring package. (You may want to set up a second remote in Git to track the changes that you make for your specific setup.)
-    <pre>
-    nano /mnt/code/experiment-monitoring/expmonitor/config.py
-      &emsp; db_name = '<i>mydatabase</i>'
-    </pre>
   * Connect all of the devices that you want to monitor.
-  * Set up the Experiment Monitoring software for your experiment:<br>
-    First, add the name of your database as an attribute to the `Sensor` class:
-    <pre>
-    nano /mnt/code/experiment-monitoring/expmonitor/classes/sensor.py
-      self.db_name = '<i>mydatabase</i>'
-    </pre>
-    This has to be done here and not in `config.py` in order to avoid a circular dependency when importing the `Sensor` class.<br>
-    Next, instantiate all sensor objects as subclasses of the `Sensor` class in the main configuration file:
+  * To set up the Experiment Monitoring software for your experiment, instantiate all sensor objects as subclasses of the `Sensor` class in the main configuration file:
     <pre>
     nano /mnt/code/experiment-monitoring/expmonitor/config.py
     </pre>
-    Any subclass of the `Sensor` class needs to overwrite all of its `abstractmethods` and specify all of its `__init__` arguments.
+    Any subclass of the `Sensor` class needs to overwrite all of its `abstractmethods` and specify all of its `__init__` arguments. See the `README` for a list of existing driver classes.
   * Manually execute some (e.g. <i>5</i>) data acquisition cycles to check for errors:
     <pre>
     python3 /mnt/code/experiment-monitoring/expmonitor/exec.py <i>5</i>
@@ -217,6 +200,7 @@
     <pre>
     influx -precision rfc3339
     USE <i>mydatabase</i>
+    SHOW SERIES
     SELECT * FROM <i>myseries</i>
     EXIT
     </pre>

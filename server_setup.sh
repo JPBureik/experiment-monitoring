@@ -49,9 +49,11 @@ echo "deb https://repos.influxdata.com/ubuntu bionic stable" | tee /etc/apt/sour
 apt update
 apt install influxdb
 
-# Replace the InfluxDB configuration file:
-rm /etc/influxdb/influxdb.conf
-cp ./server_setup/files/influxdb.conf /etc/influxdb/
+# Change the default save location for InfluxDB data:
+mkdir /mnt/data/influxdb
+sudo chown -R influxdb:influxdb /mnt/data/influxdb
+sed -z -i -e 's/\[meta]\n  # Where the metadata\/raft database is stored\n  dir = \"\/var\/lib\/influxdb\/meta\"/\[meta]\n  # Where the metadata\/raft database is stored\n  dir = \"\/mnt\/data\/influxdb\/meta\"/g' /etc/influxdb/influxdb.conf
+sed -z -i -e 's/\[data]\n  # The directory where the TSM storage engine stores TSM files.\n  dir = \"\/var\/lib\/influxdb\/data\"\n\n  # The directory where the TSM storage engine stores WAL files.\n  wal-dir = \"\/var\/lib\/influxdb\/wal\"/\[data]\n  # The directory where the TSM storage engine stores TSM files.\n  dir = \"\/mnt\/data\/influxdb\/data\"\n\n  # The directory where the TSM storage engine stores WAL files.\n  wal-dir = \"\/mnt\/data\/influxdb\/wal\"/g' /etc/influxdb/influxdb.conf
 
 # Start the InfluxDB Daemon:
 systemctl start influxdb
@@ -132,15 +134,15 @@ echo "
 --------------------
 "
 
-
+# Create the InfluxDB database using the specified database name:
+influx -execute 'CREATE DATABASE '$database_name''
 # Add the database name to the Experiment Monitoring configuration:
 sed -i -e 's/"""mydatabase"""/"'$database_name'"/g' /mnt/code/experiment-monitoring/src/expmonitor/utilities/database.py
 
 
-
 echo "
 --------------------
-7/7 Setting up Linux service:
+7/7 Setting up the Linux service:
 --------------------
 "
 
@@ -152,4 +154,12 @@ sudo systemctl daemon-reload
 
 
 echo "Done."
-# sudo reboot
+echo "Rebooting now... "
+sudo reboot
+
+
+[meta]\n  # Where the metadata/raft database is stored
+  dir = "/mnt/data/influxdb/meta"
+
+
+
