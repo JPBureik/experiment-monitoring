@@ -225,7 +225,7 @@
   It is recommended that you set up automatic backups for <i>myserver</i>. If you're a member of the Quantum Gases group at IOGS, you can use your share on our NAS `OA-DATA`. Otherwise, replace <code><i>oa-data-share</i></code> with your own backup target.
   * On your <code><i>oa-data_share</i></code> create a directory <code>pc_backups</code> and therein one for <code><i>myserver</i></code>. On <code><i>myserver</i></code> create a mount point for <code><i>oa-data_share</i></code>:
     <pre>
-    mkdir /mnt/oa-data
+    sudo mkdir /mnt/oa-data
     </pre>
 
   * Set up your credentials file on <code><i>myserver</i></code>:
@@ -235,7 +235,7 @@
     &emsp; password=<i>oa-data_pwd</i>
     sudo chmod 600 /root/.smbcredentials_oa-data
     </pre>
-  * Add <code><i>oa-data_share</i></code> to your <code>fstab</code>:
+  * Add <code><i>oa-data_share</i></code> to your <code>fstab</code> (replace spaces with `\040`):
     <pre>
     sudo nano /etc/fstab
     &emsp; //oa-data.domain.iogs/<i>oa-data_share</i>/pc_backups/<i>myserver</i> /mnt/oa-data cifs vers=3.0,workgroup=domain.iogs,_netdev,credentials=/root/.smbcredentials_oa-data
