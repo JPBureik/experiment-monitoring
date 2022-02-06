@@ -114,15 +114,11 @@ echo "
 "
 
 
-# Install package:
-# cd /mnt/code
-# chown -R $UID:users *
-# cd /usr/local/lib/python3.*
-# chown -R $UID:users *
+# Get username:
+user=$(who | cut -d ' ' -f 1 | sort -u)
+# Add location of Experiment Monitoring Package to PYTHONPATH:
+echo -e '\n#Add location of Experiment Monitoring package to PYTHONPATH:\nexport PYTHONPATH="${PYTHONPATH}:/mnt/code/experiment-monitoring/src/"' >> /home/$user/.bashrc
 
-pip3 install --target=/usr/local/lib/python3.7/dist-packages/ /mnt/code/experiment-monitoring
-
-# PYTEST
 
 
 echo "
