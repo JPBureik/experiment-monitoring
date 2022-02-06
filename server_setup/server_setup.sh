@@ -14,7 +14,7 @@ echo "Setting up server ..."
 
 echo "
 --------------------
-1/6 Server setup
+1/7 Server setup
 --------------------
 "
 
@@ -44,7 +44,7 @@ export DISPLAY=localhost:10.0
 
 echo "
 --------------------
-2/6 Installing InfluxDB and Grafana
+2/7 Installing InfluxDB and Grafana
 --------------------
 "
 
@@ -83,7 +83,7 @@ echo "sudo service grafana-server restart" >> /etc/rc.local
 
 echo "
 --------------------
-3/6 Installing Python and dependencies
+3/7 Installing Python and dependencies
 --------------------
 "
 
@@ -97,7 +97,19 @@ apt-get install libatlas-base-dev libopenjp2-7 libtiff5 libusb-1.0-0 libusb-1.0-
 
 echo "
 --------------------
-4/6 Installing the Experiment Monitoring package
+4/7 Setting up the InfluxDB databse:
+--------------------
+"
+
+# Create the InfluxDB database using the specified database name:
+influx -execute 'CREATE DATABASE '$database_name''
+# Add the database name to the Experiment Monitoring configuration:
+sed -i -e 's/"""mydatabase"""/"'$database_name'"/g' /mnt/code/experiment-monitoring/src/expmonitor/utilities/database.py
+
+
+echo "
+--------------------
+5/7 Installing the Experiment Monitoring package
 --------------------
 "
 
@@ -115,7 +127,7 @@ pip3 install --target=/usr/local/lib/python3.7/dist-packages/ /mnt/code/experime
 
 echo "
 --------------------
-5/6 Installing drivers for Phidgets
+6/7 Installing drivers for Phidgets
 --------------------
 "
 
@@ -137,18 +149,6 @@ echo /usr/local/lib >> /etc/ld.so.conf && sudo ldconfig
 usermod -a -G dialout $USER
 cp plat/linux/udev/99-libphidget22.rules /etc/udev/rules.d
 udevadm control --reload
-
-
-echo "
---------------------
-6/7 Setting up the InfluxDB databse:
---------------------
-"
-
-# Create the InfluxDB database using the specified database name:
-influx -execute 'CREATE DATABASE '$database_name''
-# Add the database name to the Experiment Monitoring configuration:
-sed -i -e 's/"""mydatabase"""/"'$database_name'"/g' /mnt/code/experiment-monitoring/src/expmonitor/utilities/database.py
 
 
 echo "

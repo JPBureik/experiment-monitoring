@@ -188,9 +188,9 @@
     Any subclass of the `Sensor` class needs to overwrite all of its `abstractmethods` and specify all of its `__init__` arguments. See the `README` for a list of existing driver classes.
   * Manually execute some (e.g. <i>5</i>) data acquisition cycles to check for errors:
     <pre>
-    python3 /mnt/code/experiment-monitoring/src/expmonitor/exec.py <i>5</i>
+    python3 /mnt/code/experiment-monitoring/src/expmonitor/exec.py t v <i>5</i>
     </pre>
-    Note that the argument after the the script filepath sets the number of executions of the loop.
+    Note that the argument after the the script filepath sets the number of executions of the loop. The `t` and `v` flags enable timing and exception traceback to `stdout`.
   * Verify that the data is being written into your database:
     <pre>
     influx -precision rfc3339
