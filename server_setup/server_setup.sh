@@ -110,6 +110,7 @@ echo "
 
 pip3 install --target=/usr/local/lib/python3.7/dist-packages/ /mnt/code/experiment-monitoring
 
+# PYTEST
 
 
 echo "

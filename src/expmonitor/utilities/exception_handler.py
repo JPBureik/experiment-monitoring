@@ -23,7 +23,7 @@ import traceback
 class ExceptionHandler():
 
     def __init__(self):
-        self.log_dir = Path('/home/' + getpass.getuser() + '/.exp_monitor')
+        self.log_dir = Path('/home/' + getpass.getuser() + '/.expmonitor')
         self._overwrite_log_file = True
         self._log_full_tb = False
         self._verbose = False

@@ -168,24 +168,19 @@
     </pre>
   * Switch to root to run the server setup script and enter a name for the InfluxDB database when prompted (e.g. <i>mydatabase</i>):
     <pre>
-    cd /mnt/code/experiment-monitoring
     sudo su -
-    ./server_setup.sh
+    /mnt/code/experiment-monitoring/server_setup/server_setup.sh
     </pre>
     The server will reboot after completing the setup.
   * Connect the Phidgets and test their drivers:
     <pre>
+    ssh <i>admin</i>@<i>myserver</i>.local
     /mnt/code/experiment-monitoring/tests/test_phidgets.sh
     </pre>
     This should list all of your connected Phidgets.
 
 ## Setting up the continuous data acquisition
   * Connect all of the devices that you want to monitor.
-  * To use the Experiment Monitoring package, activate the virtual environment where it is installed:
-    <pre>
-    cd /mnt/code/experiment-monitoring
-    source venv/bin/activate
-    </pre>
   * To set up the Experiment Monitoring software for your experiment, instantiate all sensor objects as subclasses of the `Sensor` class in the main configuration file:
     <pre>
     nano /mnt/code/experiment-monitoring/src/expmonitor/config.py
