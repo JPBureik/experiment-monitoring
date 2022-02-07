@@ -149,7 +149,7 @@
     sudo echo '/dev/sda /mnt/code ext4 defaults,noatime 0 1' | sudo tee -a /etc/fstab
     sudo echo '/dev/sdb /mnt/data ext4 defaults,noatime 0 1' | sudo tee -a /etc/fstab
     </pre>
-  * Give write permissions:
+  * Give write and read permissions:
     <pre>
     sudo chmod 777 -R /mnt/code
     sudo chmod 777 -R /mnt/data
