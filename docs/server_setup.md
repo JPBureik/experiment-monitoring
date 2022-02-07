@@ -46,7 +46,7 @@
 
   * In order to have internet access, declare the MAC address of the RaspberryPi at the [Service Info](https://ticket.institutoptique.fr/front/helpdesk.public.php?create_ticket=1), specifying explicitly that the new machine is a headless RaspberryPi.
 
-  * [Download](https://www.raspberrypi.org/downloads/raspbian/) and install Raspberry Pi OS Lite on the SD card.
+  * [Download](https://www.raspberrypi.com/software/operating-systems/) and install `Raspberry Pi OS Lite` on the SD card.
 
   * Add an SSH file to the boot SD card:
     <pre>
