@@ -151,8 +151,8 @@
     </pre>
   * Give write permissions:
     <pre>
-    sudo chmod +w /mnt/code
-    sudo chmod +w /mnt/data
+    sudo chmod 777 -R /mnt/code
+    sudo chmod 777 -R /mnt/data
     </pre>
   * Reboot and verify filesystems are mounted:
     <pre>
