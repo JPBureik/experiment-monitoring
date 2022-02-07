@@ -2,7 +2,7 @@
 
 A software package for automated monitoring of lab equipment, including time series visualization and automatic e-mail alerts.
 
-![Experiment Monitoring](snapshot.png)
+![Experiment Monitoring](docs/snapshot.png)
 
 ## Architecture
 
