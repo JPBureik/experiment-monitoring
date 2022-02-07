@@ -83,7 +83,7 @@ echo "sudo service grafana-server restart" >> /etc/rc.local
 
 echo "
 --------------------
-3/7 Installing Python and dependencies
+3/7 Installing Python dependencies
 --------------------
 "
 
