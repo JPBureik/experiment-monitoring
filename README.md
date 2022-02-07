@@ -18,22 +18,26 @@ A central server gathers data from different sources, writes them into a databas
 
 ## Setup
 
-  * Hardware requirements & server setup: See `server_setup.md`.
-  * ADC setup: See `adc_setup.md`. Only needed if you want to monitor analog signals.
+  * Before starting the Experiment Monitoring, you need to set up your server. For hardware requirements & the step-by-step server setup procedure, see `docs/server_setup.md`.
+  * ADC setup: See `src/expmonitor/classes/adc/adc_setup.md`. Only needed if you want to monitor analog signals.
   * Working with existing interfaces:
-    - `config.py` is all you need to modify.
+    - `src/expmonitor/config.py` is all you need to modify.
   * Adding your own interfaces:
-    - Write a subclass that extends the abstract `Sensor` class defined in `sensor.py` to drive your sensor/equipment and instantiate it in `config.py`.
+    - Write a subclass that extends the abstract `Sensor` class defined in `src/expmonitor/classes/sensor.py` to drive your sensor/equipment and instantiate it in `src/expmonitor/config.py`.
 
 ## Guide to the repository structure:
 
-  * `calibrations`: Contains calibration data and scripts for all calibrated equipment.
-  * `classes`: Contains driver classes for all interfaces. Put your new driver classes in here.
-    * `sensor.py`: Abstract base class for individual sensor classes.
-    * `adc`: Contains Arduino sketch, its Python Class and its setup guide.
-    * `ups`: Implements EatonUPS Class for batteries and their setup guide.
+  * `src/expmonitor/calibrations`: Contains calibration data and scripts for all calibrated equipment.
+  * `src/expmonitor/classes`: Contains driver classes for all interfaces. Put your new driver classes in here.
+    * `src/expmonitor/classes/sensor.py`: Abstract base class for individual sensor classes.
+    * `src/expmonitor/classes/adc`: Contains Arduino sketch, its Python Class and its setup guide.
+    * `src/expmonitor/classes/ups`: Implements EatonUPS Class for batteries and their setup guide.
   * `tests`: Contains tests for the Phidget class.
-  * `utilities`: Contains interface-independent classes to be used by all sensors.
-    * `spike_filter.py`: Spike filter for instances of Sensor subclasses. Enable in `config.py` by setting `sensor.spike_filter.spike_threshold_perc` for any given sensor.
-  * `config.py`: Main configuration file.
-  * `exec.py`: Main execution file for Linux service and command line execution.
+  * `src/expmonitor/utilities`: Contains interface-independent classes to be used by all sensors.
+    * `src/expmonitor/utilities/spike_filter.py`: Spike filter for instances of Sensor subclasses. Enable in `src/expmonitor/config.py` by setting `sensor.spike_filter.spike_threshold_perc` for any given sensor.
+  * `src/expmonitor/config.py`: Main configuration file.
+  * `src/expmonitor/exec.py`: Main execution file for Linux service and command line execution. Use it to test single or multiple (e.g. <i>5</i>) iterations of the data acquisition cycle:
+    <pre>
+    python3 /mnt/code/experiment-monitoring/src/expmonitor/exec.py t v <i>5</i>
+    </pre>
+    Note that the argument after the the script filepath sets the number of executions of the loop. The t and v flags enable timing and exception traceback to stdout.
