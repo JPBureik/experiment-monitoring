@@ -18,7 +18,7 @@ A central server gathers data from different sources, writes them into a databas
 
 ## Setup
 
-  * Before starting the Experiment Monitoring, you need to set up your server. For hardware requirements & the step-by-step server setup procedure, see `server_setup/server_setup.md`.
+  * Before starting the Experiment Monitoring, you need to set up your server. For hardware requirements & the step-by-step server setup procedure, see `docs/server_setup.md`.
   * ADC setup: See `src/expmonitor/classes/adc/adc_setup.md`. Only needed if you want to monitor analog signals.
   * Working with existing interfaces:
     - `src/expmonitor/config.py` is all you need to modify.
