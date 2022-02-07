@@ -181,7 +181,7 @@
 
 ## Setting up the continuous data acquisition
   * Connect all of the devices that you want to monitor.
-  * To set up the Experiment Monitoring software for your experiment, instantiate all sensor objects as subclasses of the `Sensor` class in the main configuration file:
+  * To set up the Experiment Monitoring software for your experiment, instantiate all sensor objects as subclasses of the `Sensor` class in the main configuration file, which has some sensors initialized by default to serve as an example (delete these once you add your own sensors to avoid erros):
     <pre>
     nano /mnt/code/experiment-monitoring/src/expmonitor/config.py
     </pre>
@@ -358,7 +358,7 @@
 ## Setting up automatic alerts
   * Edit the Grafana configuration file:
     <pre>
-    nano /etc/grafana/grafana.ini
+    sudo nano /etc/grafana/grafana.ini
     &emsp; [smtp]
     &emsp; enabled = true
     &emsp; host = smtps.universite-paris-saclay.fr:465
