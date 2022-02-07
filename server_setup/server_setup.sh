@@ -118,6 +118,8 @@ echo "
 user=$(who | cut -d ' ' -f 1 | sort -u)
 # Add location of Experiment Monitoring Package to PYTHONPATH:
 echo -e '\n#Add location of Experiment Monitoring package to PYTHONPATH:\nexport PYTHONPATH="${PYTHONPATH}:/mnt/code/experiment-monitoring/src/"' >> /home/$user/.bashrc
+# Install requirements:
+pip3 install -r /mnt/code/experiment-monitoring/docs/requirements.txt
 
 
 
