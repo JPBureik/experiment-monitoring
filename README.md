@@ -1,3 +1,5 @@
+![Tests](https://github.com/JPBureik/experiment-monitoring/actions/workflows/tests.yml/badge.svg)
+
 # Experiment Monitoring Software
 
 A software package for automated monitoring of lab equipment, including time series visualization and automatic e-mail alerts.
