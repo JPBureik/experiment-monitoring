@@ -61,3 +61,5 @@ tests/.ipynb_checkpoints/
 # Virtualenv:
 .venv/
 
+# Test setup:
+pyproject.toml
