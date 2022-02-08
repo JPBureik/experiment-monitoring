@@ -20,7 +20,7 @@ class Database():
 
     def __init__(self):
         self.port = 8086  # int
-        self.name = """mydatabase"""  # str
+        self.name = "helium2"  # str
         self.client = InfluxDBClient(
                             host='localhost',
                             port=self.port,
