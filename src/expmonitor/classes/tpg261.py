@@ -49,5 +49,5 @@ class TPG261(Sensor):
 # Execution:
 if __name__ == '__main__':
 
-    from exp_monitor.config import *
+    from expmonitor.config import *
     TPG261.test_execution()
