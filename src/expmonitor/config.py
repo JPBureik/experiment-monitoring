@@ -34,6 +34,9 @@ tc1 = PhidgetTC('Source', 4, 0)
 tc2 = PhidgetTC('A/C', 4, 1)
 tc3 = PhidgetTC('Lab', 4, 2)
 tc4 = PhidgetTC('Water', 4, 3)
+tc5 = PhidgetTC('Science Chamber', 5, 0)
+tc6 = PhidgetTC('Fiber Rail', 5, 1)
+tc5.num_prec = 2
 
 # Setup serial devices:
 primary_vac = TPG261('Primary Pump', '/dev/ttyUSB0')
