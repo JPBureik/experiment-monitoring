@@ -26,7 +26,6 @@ pip-delete-this-directory.txt
 
 # Unit test / coverage reports
 .tox/
-tox.ini
 .coverage
 .coverage.*
 .cache
@@ -60,4 +59,3 @@ tests/.ipynb_checkpoints/
 
 # Virtualenv:
 .venv/
-
