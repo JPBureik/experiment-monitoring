@@ -8,7 +8,6 @@ Created on Thu Jul 28 15:15:51 2022
 
 # Standard library imports:
 
-
 # Local imports:
 from expmonitor.classes.sensor import Sensor
 from expmonitor.utilities.img_proc import img_proc
@@ -23,8 +22,7 @@ class Webcam(Sensor):
         self.unit = unit
         self.conversion_fctn = lambda t: t  # No conversion needed
         super().__init__(
-            self.type, self.descr, self.unit, self.conversion_fctn,
-            num_prec=num_prec
+            self.type, self.descr, self.unit, self.conversion_fctn, num_prec=num_prec
         )
         self.savepath = savepath
 
@@ -39,7 +37,7 @@ class Webcam(Sensor):
 
 
 # Execution:
-if __name__ == '__main__':
-
+if __name__ == "__main__":
     from expmonitor.config import *  # noqa: F401, F403
+
     Webcam.test_execution()

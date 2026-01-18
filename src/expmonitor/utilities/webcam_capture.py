@@ -43,10 +43,7 @@ def setup(savepath, remote_path):
 
     creds = Credentials.get_ssh_credentials()
     ssh = create_ssh_client(
-        creds['host'],
-        creds['port'],
-        creds['user'],
-        creds['password']
+        creds["host"], creds["port"], creds["user"], creds["password"]
     )
     scp = SCPClient(ssh.get_transport())
 
@@ -58,23 +55,22 @@ def iteration(savepath, cam, scp, remote_path):
     result, image = cam.read()
 
     if result:
-        print('Picture taken.')
+        print("Picture taken.")
         save_result = cv2.imwrite(savepath, image)
         if save_result:
-            print('Picture saved.')
+            print("Picture saved.")
         scp.put(savepath, remote_path)
-        print('Picture sent.')
+        print("Picture sent.")
         os.remove(savepath)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     # Example configuration - adjust paths as needed
-    local_savepath = r'C:\Users\Lattice\Pictures\expmonitor\zeeman2\z2.png'
-    remote_savepath = '/mnt/data/webcam/zeeman2'
+    local_savepath = r"C:\Users\Lattice\Pictures\expmonitor\zeeman2\z2.png"
+    remote_savepath = "/mnt/data/webcam/zeeman2"
 
     try:
-        savepath, cam, scp, remote_path = setup(
-            local_savepath, remote_savepath)
+        savepath, cam, scp, remote_path = setup(local_savepath, remote_savepath)
     except CredentialsError as e:
         print(f"Credentials error: {e}")
         print("\nTo create a template config file, run:")

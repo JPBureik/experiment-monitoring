@@ -21,11 +21,18 @@ from expmonitor.utilities.utility import get_subclass_objects
 
 
 class Sensor(ABC):
+    """---------- INIT ----------"""
 
-    """ ---------- INIT ---------- """
-
-    def __init__(self, type, descr, unit, conversion_fctn, num_prec=None,
-                 save_raw=False, format_str='f'):
+    def __init__(
+        self,
+        type,
+        descr,
+        unit,
+        conversion_fctn,
+        num_prec=None,
+        save_raw=False,
+        format_str="f",
+    ):
         self.type = type  # str
         self.descr = descr  # str
         self.unit = unit  # str
@@ -61,11 +68,11 @@ class Sensor(ABC):
 
     @format_str.setter
     def format_str(self, format_str):
-        self._format_dict = {'f': float, 'i': round, 's': str}
+        self._format_dict = {"f": float, "i": round, "s": str}
         if format_str in self._format_dict.keys():
             self._format_str = format_str
         else:
-            self._format_str = 'f'
+            self._format_str = "f"
 
     @property
     def save_raw(self):
@@ -101,17 +108,18 @@ class Sensor(ABC):
         """Print last measurement with description and units."""
         try:
             if show_raw:
-                print(self.descr, self.measurement, self.unit, ';\t raw:',
-                      self.raw_vals)
+                print(
+                    self.descr, self.measurement, self.unit, ";\t raw:", self.raw_vals
+                )
             else:
                 print(self.descr, self.measurement, self.unit)
         except AttributeError as ae:
-            print(self.descr, '_show AttributeError:', ae.args[0])
+            print(self.descr, "_show AttributeError:", ae.args[0])
 
     def _apply_num_prec(self, value):
         """Apply numerical precision to value."""
         try:
-            return float('{:.{}f}'.format(float(value), self._num_prec))
+            return float("{:.{}f}".format(float(value), self._num_prec))
         except (ValueError, TypeError):
             return value
 
@@ -146,8 +154,9 @@ class Sensor(ABC):
     def to_db(self):
         """Write measurement result to database."""
         if self._save_raw:
-            self._db.write(self.descr, self.unit, self.measurement,
-                           self.save_raw, self.raw)
+            self._db.write(
+                self.descr, self.unit, self.measurement, self.save_raw, self.raw
+            )
         else:
             self._db.write(self.descr, self.unit, self.measurement)
 

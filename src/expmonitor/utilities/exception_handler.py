@@ -20,10 +20,9 @@ from datetime import date, datetime
 import traceback
 
 
-class ExceptionHandler():
-
+class ExceptionHandler:
     def __init__(self):
-        self.log_dir = Path('/home/' + getpass.getuser() + '/.expmonitor')
+        self.log_dir = Path("/home/" + getpass.getuser() + "/.expmonitor")
         self._overwrite_log_file = True
         self._log_full_tb = False
         self._verbose = False
@@ -63,28 +62,30 @@ class ExceptionHandler():
         if not os.path.isdir(self.log_dir):
             os.mkdir(self.log_dir)
         if self._overwrite_log_file:
-            for f in glob.glob(str(self.log_dir) + '/log_*.txt'):
+            for f in glob.glob(str(self.log_dir) + "/log_*.txt"):
                 os.remove(f)
             self.log_file = self.log_dir / (
-                'log_' + date.today().strftime('%Y_%m_%d') + '.txt')
+                "log_" + date.today().strftime("%Y_%m_%d") + ".txt"
+            )
         else:
             self.log_file = self.log_dir / (
-                'log_' + datetime.now().strftime('%Y_%m_%d_%H_%M_%S') + '.txt')
+                "log_" + datetime.now().strftime("%Y_%m_%d_%H_%M_%S") + ".txt"
+            )
         self.log_file.touch()
 
     def log_exception(self, sensor, e):
         """Append exception description to log file."""
-        log_str = (
-            "Data acquisition failure for {} at {} due to {}: {}.\n".format(
-                sensor.descr,
-                datetime.now().strftime("%d/%m/%Y %H:%M:%S"),
-                type(e).__name__.strip('<>').split("'")[0],
-                e.args[0]))
-        with open(self.log_file, 'a') as logf:
+        log_str = "Data acquisition failure for {} at {} due to {}: {}.\n".format(
+            sensor.descr,
+            datetime.now().strftime("%d/%m/%Y %H:%M:%S"),
+            type(e).__name__.strip("<>").split("'")[0],
+            e.args[0],
+        )
+        with open(self.log_file, "a") as logf:
             logf.write(log_str)
             if self._log_full_tb:
                 logf.write(traceback.format_exc())
-                logf.write('---\n')
+                logf.write("---\n")
         if self._verbose:
             print(log_str.rstrip())
             traceback.print_exc()

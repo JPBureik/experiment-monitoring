@@ -14,7 +14,6 @@ import os
 
 
 def img_proc(savepath):
-
     # Opens a image in RGB mode
     im = Image.open(savepath)
     os.remove(savepath)
@@ -33,7 +32,7 @@ def img_proc(savepath):
     # (It will not change original image)
     im1 = im.crop((left, top, right, bottom))
 
-    cropped_savepath = savepath.split('.png')[0] + '_cropped.png'
+    cropped_savepath = savepath.split(".png")[0] + "_cropped.png"
 
     im1.save(cropped_savepath)
 
@@ -57,7 +56,7 @@ def img_proc(savepath):
     # Converting image from LAB Color model to BGR color spcae
     enhanced_img = cv2.cvtColor(limg, cv2.COLOR_LAB2BGR)
 
-    contrast_savepath = savepath.split('.png')[0] + '_cropped.png'
+    contrast_savepath = savepath.split(".png")[0] + "_cropped.png"
 
     cv2.imwrite(contrast_savepath, enhanced_img)
 
@@ -66,32 +65,29 @@ def img_proc(savepath):
     os.remove(contrast_savepath)
 
     # Read value
-    raw_res = pytesseract.image_to_string(imc, lang='eng', config='--psm 6')
+    raw_res = pytesseract.image_to_string(imc, lang="eng", config="--psm 6")
 
-    raw_res = raw_res.split('\n')[0]
+    raw_res = raw_res.split("\n")[0]
 
     # Catch '0' being interpreted as '8':
-    if raw_res[-1] in ('6', '8'):
-        raw_res = raw_res[:-1] + '0'
+    if raw_res[-1] in ("6", "8"):
+        raw_res = raw_res[:-1] + "0"
 
-    if '€' in raw_res:
+    if "€" in raw_res:
+        raw_res = raw_res.replace("€", "e")
 
-        raw_res = raw_res.replace('€', 'e')
+    elif "&" in raw_res:
+        raw_res = raw_res.replace("&", "e")
 
-    elif '&' in raw_res:
-
-        raw_res = raw_res.replace('&', 'e')
-
-    if '-e' in raw_res:
-
-        raw_res = raw_res.replace('—-', 'e-')
+    if "-e" in raw_res:
+        raw_res = raw_res.replace("—-", "e-")
 
     val = None
     try:
         val = float(raw_res)
     except ValueError:
-        if '—-' in raw_res:
-            raw_res = raw_res.replace('—-', 'e-')
+        if "—-" in raw_res:
+            raw_res = raw_res.replace("—-", "e-")
             try:
                 val = float(raw_res)
             except ValueError:

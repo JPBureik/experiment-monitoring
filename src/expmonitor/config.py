@@ -12,7 +12,6 @@ information in all sections for the proposed sensors and lab equipment below,
 or feel free to add any new hardware interface you want to connect.
 """
 
-
 """ ---------- GENERAL SETUP ---------- """
 
 
@@ -31,33 +30,33 @@ from expmonitor.classes.ups.eaton_ups import EatonUPS  # noqa: E402
 from expmonitor.classes.webcam import Webcam  # noqa: E402
 
 # Setup Phidgets:
-tc1 = PhidgetTC('Source', 4, 0)
-tc2 = PhidgetTC('A/C', 4, 1)
-tc3 = PhidgetTC('Lab', 4, 2)
-tc4 = PhidgetTC('Water', 4, 3)
-tc5 = PhidgetTC('Science Chamber', 5, 0)
-tc6 = PhidgetTC('Fiber Rail', 5, 1)
+tc1 = PhidgetTC("Source", 4, 0)
+tc2 = PhidgetTC("A/C", 4, 1)
+tc3 = PhidgetTC("Lab", 4, 2)
+tc4 = PhidgetTC("Water", 4, 3)
+tc5 = PhidgetTC("Science Chamber", 5, 0)
+tc6 = PhidgetTC("Fiber Rail", 5, 1)
 tc5.num_prec = 2
 
 # Setup serial devices:
-primary_vac = TPG261('Primary Pump', '/dev/ttyUSB0')
+primary_vac = TPG261("Primary Pump", "/dev/ttyUSB0")
 primary_vac.spike_filter.spike_threshold_perc = 1e3
 
 # Setup analog devices via Arduino:
-sc_vac = TPG300('Science Chamber', 2)
+sc_vac = TPG300("Science Chamber", 2)
 sc_vac.spike_filter.spike_threshold_perc = 1e3
 sc_vac.spike_filter.spike_length = 2
 
 # Setup batteries:
-batteries = EatonUPS('Batteries', '10.117.51.129')
+batteries = EatonUPS("Batteries", "10.117.51.129")
 
 # Setup webcam:
 zeeman2_vac = Webcam(
-    descr='zeeman2_vac',
-    sensor_type='Vacuum Gauge',
-    unit='mbar',
-    savepath='/mnt/data/webcam/zeeman2/z2.png',
-    num_prec=12
+    descr="zeeman2_vac",
+    sensor_type="Vacuum Gauge",
+    unit="mbar",
+    savepath="/mnt/data/webcam/zeeman2/z2.png",
+    num_prec=12,
 )
 zeeman2_vac.spike_filter.spike_threshold_perc = 1e3
 zeeman2_vac.spike_filter.allow_zeros = False

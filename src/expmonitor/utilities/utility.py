@@ -22,5 +22,8 @@ def get_subclass_objects(BaseClass):
     # Get globals of outermost caller frame:
     om_caller_globals = inspect.getouterframes(f)[-1].frame.f_globals
     # Get subclass objects of BaseClass:
-    return [value for key, value in om_caller_globals.items()
-            if issubclass(type(value), BaseClass)]
+    return [
+        value
+        for key, value in om_caller_globals.items()
+        if issubclass(type(value), BaseClass)
+    ]

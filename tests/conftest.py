@@ -34,5 +34,6 @@ def lab_temp_phidget(request):
     if os.environ.get("CI") == "true":
         pytest.skip("Requires physical Phidget hardware")
     from expmonitor.classes.phidget_tc import PhidgetTC
-    tc3 = PhidgetTC('Lab', 4, 2)
+
+    tc3 = PhidgetTC("Lab", 4, 2)
     return tc3

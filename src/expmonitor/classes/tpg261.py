@@ -16,15 +16,13 @@ from expmonitor.classes.sensor import Sensor
 
 
 class TPG261(Sensor):
-
     def __init__(self, descr, port):
         # General sensor setup:
-        self.type = 'Vacuum Gauge'
-        self.descr = descr.replace(' ', '_').lower() + '_vac'  # Multi-word
-        self.unit = 'mbar'
-        self.conversion_fctn = lambda p: float(str(p).split(',')[1])
-        super().__init__(
-            self.type, self.descr, self.unit, self.conversion_fctn)
+        self.type = "Vacuum Gauge"
+        self.descr = descr.replace(" ", "_").lower() + "_vac"  # Multi-word
+        self.unit = "mbar"
+        self.conversion_fctn = lambda p: float(str(p).split(",")[1])
+        super().__init__(self.type, self.descr, self.unit, self.conversion_fctn)
         # TPG261-specific setup:
         self.baudrate = 9600
         self.timeout = 1
@@ -40,14 +38,15 @@ class TPG261(Sensor):
 
     def rcv_vals(self):
         # Receive pressure value as bytes:
-        with serial.Serial(self.port, baudrate=self.baudrate,
-                           timeout=self.timeout) as ser:
+        with serial.Serial(
+            self.port, baudrate=self.baudrate, timeout=self.timeout
+        ) as ser:
             serial_rcv = ser.readline()
         return serial_rcv
 
 
 # Execution:
-if __name__ == '__main__':
-
+if __name__ == "__main__":
     from expmonitor.config import *  # noqa: F401, F403
+
     TPG261.test_execution()
