@@ -25,3 +25,9 @@ jobs:
           pip install tox tox-gh-actions
       - name: Test with tox
         run: tox
+      - name: Upload coverage to Codecov
+        if: matrix.python-version == '3.12'
+        uses: codecov/codecov-action@v4
+        with:
+          fail_ci_if_error: false
+          token: ${{ secrets.CODECOV_TOKEN }}
