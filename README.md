@@ -2,10 +2,10 @@
 
 [![Tests](https://github.com/JPBureik/experiment-monitoring/actions/workflows/tests.yml/badge.svg)](https://github.com/JPBureik/experiment-monitoring/actions/workflows/tests.yml)
 [![codecov](https://codecov.io/gh/JPBureik/experiment-monitoring/branch/master/graph/badge.svg)](https://codecov.io/gh/JPBureik/experiment-monitoring)
-[![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
-[![Checked with mypy](https://www.mypy-lang.org/static/mypy_badge.svg)](https://mypy-lang.org/)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
+[![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
+[![Checked with mypy](https://www.mypy-lang.org/static/mypy_badge.svg)](https://mypy-lang.org/)
 
 Automated monitoring of lab equipment with time series visualization and e-mail alerts.
 
