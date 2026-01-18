@@ -33,24 +33,24 @@
  
 #include <SPI.h>
 #include <Ethernet.h>
-#include <math.h>
 
 int i;
 int val = 0;
-int msg[2];
+byte msg[2];
 int analogPin[12] = {A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11};
 
 // Network configuration:
 byte mac[] = {0xA8, 0x61, 0x0A, 0xAE, 0x7D, 0x12};
-//the IP address for the shield:
+// The IP address for the shield:
 byte ip[] = {10, 117, 53, 45};
-// the router's gateway address:
+// The router's gateway address:
 byte gateway[] = {172, 20, 255, 253};
-// the subnet:
-byte subnet[] = {255, 255, 0, 0 };
+// The subnet:
+byte subnet[] = {255, 255, 0, 0};
 
-// Set matching port on client side:
-EthernetServer server = EthernetServer(6574);
+// TCP port (set matching port on client side):
+const int SERVER_PORT = 6574;
+EthernetServer server = EthernetServer(SERVER_PORT);
 
 void setup()
 {
@@ -83,10 +83,10 @@ void loop()
   EthernetClient client = server.available();
   if (client) {
     Serial.println("Connected client.");
-    //Serial.println(client.read()); // arbitrary client msg for init
+    // Read initial byte from client to synchronize communication handshake:
+    client.read();
 
     for (i=0; i<12; i++) {
-    //for (i=0; i<1; i++) {
       // Analog voltage measurement:
 
       /* Measure twice and discard first value in order to correct for
@@ -97,8 +97,8 @@ void loop()
       val = analogRead(analogPin[i]); // accurate
   
       // Measurement data: 12-bit int -> send msg as 2^8 * msg[0] + msg[1]
-      msg[0] = int(val / pow(2,8));
-      msg[1] = val - msg[0] * pow(2,8);
+      msg[0] = val >> 8;
+      msg[1] = val & 0xFF;
       Serial.println(val);
       Serial.println(msg[0]);
       Serial.println(msg[1]);
