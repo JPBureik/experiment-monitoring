@@ -12,15 +12,6 @@ mypy_path = "src"
 ignore_missing_imports = true
 show_error_codes = true
 warn_unused_configs = true
-check_untyped_defs = false
-
-# Strict settings for typed modules
-[[tool.mypy.overrides]]
-module = [
-    "expmonitor.classes.sensor",
-    "expmonitor.utilities.credentials",
-    "expmonitor.utilities.database",
-]
 disallow_untyped_defs = true
 check_untyped_defs = true
 warn_return_any = true

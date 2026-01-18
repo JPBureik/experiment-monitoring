@@ -18,13 +18,26 @@ Inputs are used. The unused analog pins will float, so be sure to correctly
 identify the signals to be monitored.
 """
 
-# Standard library imports:
+from __future__ import annotations
+
 import socket
 import time
+from typing import Callable
 
 
 class ArduinoADC:
-    def __init__(self):
+    """Arduino ADC reader via TCP/IP connection."""
+
+    buffer_size: int
+    volt_limit: float
+    num_prec: int
+    conversion_fctn: Callable[[int], float]
+    IP: str
+    port: int
+    soc: socket.socket
+    analog_signals: dict[int, float | None]
+
+    def __init__(self) -> None:
         self.buffer_size = 2**12
         self.volt_limit = 3.25
         self.num_prec = 3
@@ -35,12 +48,12 @@ class ArduinoADC:
         # self.IP = '172.20.217.9'  # DHCP: Visitor network - not recommended
         self.port = 6574  # Match to server side port
 
-    def connect(self):
+    def connect(self) -> None:
         self.soc = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.soc.connect((self.IP, self.port))
         self.soc.sendall(b"a")  # Send a non-empty message to initialize TCP/IP
 
-    def measure(self):
+    def measure(self) -> dict[int, float | None]:
         # Measurement data: 12-bit int -> receive msg as 2**8 * byte1 + byte2
         self.analog_signals = {}
         for channel in range(12):
@@ -58,7 +71,7 @@ class ArduinoADC:
         time.sleep(0.1)
         return self.analog_signals
 
-    def disconnect(self):
+    def disconnect(self) -> None:
         self.soc.shutdown(socket.SHUT_RDWR)
         self.soc.close()
 

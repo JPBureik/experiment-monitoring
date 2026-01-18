@@ -4,16 +4,20 @@
 Created on Thu Jul 28 15:50:01 2022
 
 @author: jp
+
+Image processing module for OCR-based value extraction from webcam captures.
 """
 
-# Crop
-import cv2
-from PIL import Image
-import pytesseract
+from __future__ import annotations
+
 import os
 
+import cv2
+import pytesseract
+from PIL import Image
 
-def img_proc(savepath):
+
+def img_proc(savepath: str) -> float | None:
     # Opens a image in RGB mode
     im = Image.open(savepath)
     os.remove(savepath)
@@ -40,6 +44,9 @@ def img_proc(savepath):
 
     os.remove(cropped_savepath)
 
+    if im2 is None:
+        return None
+
     # Increase contrast:
     # converting to LAB color space
     lab = cv2.cvtColor(im2, cv2.COLOR_BGR2LAB)
@@ -51,7 +58,7 @@ def img_proc(savepath):
     cl = clahe.apply(l_channel)
 
     # merge the CLAHE enhanced L-channel with the a and b channel
-    limg = cv2.merge((cl, a, b))
+    limg = cv2.merge((cl, a, b))  # type: ignore[arg-type]
 
     # Converting image from LAB Color model to BGR color spcae
     enhanced_img = cv2.cvtColor(limg, cv2.COLOR_LAB2BGR)

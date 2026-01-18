@@ -8,15 +8,22 @@ Created on Thu Jul 15 11:00:08 2021
 Implements the Phidget TC Class for experiment monitoring.
 """
 
-# Standard library imports:
-from Phidget22.Devices import TemperatureSensor
+from __future__ import annotations
 
-# Local imports:
+from Phidget22.Devices import TemperatureSensor  # type: ignore[import-untyped]
+
 from expmonitor.classes.sensor import Sensor
 
 
 class PhidgetTC(Sensor):
-    def __init__(self, descr, hub_port, hub_channel):
+    """Phidget thermocouple sensor implementation."""
+
+    hub_serial: int
+    hub_port: int
+    hub_channel: int
+    ts_handle: TemperatureSensor.TemperatureSensor
+
+    def __init__(self, descr: str, hub_port: int, hub_channel: int) -> None:
         # General sensor setup:
         self.type = "Thermocouple"
         self.descr = descr.replace(" ", "_").lower() + "_temp"  # Multi-word
@@ -35,17 +42,18 @@ class PhidgetTC(Sensor):
         self.ts_handle.setDeviceSerialNumber(self.hub_serial)
         self.ts_handle.setChannel(self.hub_channel)
 
-    def connect(self):
+    def connect(self) -> None:
         # Open Phidgets and wait for attachment:
         self.ts_handle.openWaitForAttachment(1000)
 
-    def disconnect(self):
+    def disconnect(self) -> None:
         # Close Phidgets:
         self.ts_handle.close()
 
-    def rcv_vals(self):
+    def rcv_vals(self) -> float:
         # Receive temperature value:
-        return self.ts_handle.getTemperature()
+        temp: float = self.ts_handle.getTemperature()
+        return temp
 
 
 # Execution:

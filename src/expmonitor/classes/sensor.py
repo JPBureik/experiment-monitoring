@@ -28,15 +28,18 @@ class Sensor(ABC):
 
     type: str
     descr: str
-    unit: str
+    unit: str | None
     measurement: Any
     raw_vals: Any
+    _db: Database
+    spike_filter: SpikeFilter
+    conversion_fctn: Callable[[Any], Any]
 
     def __init__(
         self,
         type: str,
         descr: str,
-        unit: str,
+        unit: str | None,
         conversion_fctn: Callable[[Any], Any],
         num_prec: int | None = None,
         save_raw: bool = False,

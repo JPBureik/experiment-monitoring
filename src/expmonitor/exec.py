@@ -23,18 +23,20 @@ the script from the command line by including the "v" argument, e.g. use
 print the exception traceback to stdout along with the execution time.
 """
 
-# Standard library imports:
-import time
-import sys
+from __future__ import annotations
 
-# Local imports:
-from expmonitor.config import *  # noqa: F401, F403
+import sys
+import time
+
 from expmonitor.classes.sensor import Sensor
+from expmonitor.config import *  # noqa: F401, F403
 from expmonitor.utilities.exception_handler import ExceptionHandler
 from expmonitor.utilities.utility import get_subclass_objects
 
 
-def data_acquisition(sensors, exception_handler):
+def data_acquisition(
+    sensors: list[Sensor], exception_handler: ExceptionHandler
+) -> None:
     """Execute measure method for all sensors."""
     for sensor in sensors:
         try:
@@ -51,7 +53,7 @@ def data_acquisition(sensors, exception_handler):
     time.sleep(acq_interv)  # noqa: F405
 
 
-def main():
+def main() -> None:
     """Execute data acquisition cycle continously or given number of times."""
     # Check for execution time argument on command line:
     if "t" in sys.argv:

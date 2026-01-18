@@ -4,19 +4,39 @@
 Created on Mon Apr 26 08:36:14 2021
 
 @author: jp
+
+Calibration module for pressure gauge voltage-to-pressure conversion.
 """
-# %%
+
+from __future__ import annotations
+
+import datetime
+import os
+import pickle
+from typing import Any
 
 import numpy as np
-from scipy.optimize import curve_fit
 from matplotlib import pyplot as plt
-import datetime
-import pickle
-import os
+from scipy.optimize import curve_fit
 
 
 class Calibrator:
-    def __init__(self):
+    """Calibrator for TPG 300 pressure gauge voltage-to-pressure conversion."""
+
+    object_descr: str
+    measurement_descr: str
+    v_float: float
+    calib_meas: list[tuple[datetime.datetime, tuple[float, float]]]
+    data_x: list[float]
+    data_y: list[float]
+    data_pfeiffer: list[float]
+    data_fitted: list[float]
+    popt: Any
+    pcov: Any
+    perr: Any
+    accepted_range: list[float]
+
+    def __init__(self) -> None:
         self.object_descr = "Pfeiffer TPG 300"
         self.measurement_descr = "sc_vac"
 
@@ -76,13 +96,16 @@ class Calibrator:
         else:
             self.calib_meas = pickle.load(open("calib.p", "rb"))
 
-    # Interface for use in experiment monitoring:
-    def calib_fctn(self, v):
+    def calib_fctn(self, v: float) -> float:
+        """Interface for use in experiment monitoring."""
         if not hasattr(self, "popt"):
             self.calibrate(show=False)
-        return self.popt[0] * 10 ** (self.popt[1] * v - self.popt[2]) + self.popt[3]
+        result: float = (
+            self.popt[0] * 10 ** (self.popt[1] * v - self.popt[2]) + self.popt[3]
+        )
+        return result
 
-    def calibrate(self, show=True):
+    def calibrate(self, show: bool = True) -> None:
         self.data_x = [self.calib_meas[i][1][1] for i in range(len(self.calib_meas))]
         self.data_y = [self.calib_meas[i][1][0] for i in range(len(self.calib_meas))]
 
@@ -91,13 +114,13 @@ class Calibrator:
         self.data_y.sort()
 
         # Compare with Pfeiffer calibration:
-        def pfeiffer(v):
+        def pfeiffer(v: float) -> float:
             return 10 ** (v - 10.5)
 
         self.data_pfeiffer = [pfeiffer(self.data_x[i]) for i in range(len(self.data_x))]
 
         # Define fitting function:
-        def fit_fctn(v, a, b, c, d):
+        def fit_fctn(v: float, a: float, b: float, c: float, d: float) -> float:
             return a * 10 ** (b * v - c) + d
 
         # Guess initial parameters for the fit:
@@ -138,8 +161,8 @@ class Calibrator:
         if not hasattr(self, "accepted_range"):
             self.accepted_range = [self.calib_fctn(i) for i in [0, 3.3]]
 
-    # Add datapoints to calibration:
-    def append_calib(self):
+    def append_calib(self) -> None:
+        """Add datapoints to calibration."""
         print(
             "\nAdd data points for the %s to improve its calibration.\n"
             % self.object_descr

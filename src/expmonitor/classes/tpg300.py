@@ -8,14 +8,21 @@ Created on Wed Jul 21 10:50:14 2021
 Implements the TPG 300 Class for experiment monitoring.
 """
 
-# Local imports:
-from expmonitor.classes.sensor import Sensor
-from expmonitor.classes.adc.arduino_adc import ArduinoADC
+from __future__ import annotations
+
 from expmonitor.calibrations.calib import Calibrator
+from expmonitor.classes.adc.arduino_adc import ArduinoADC
+from expmonitor.classes.sensor import Sensor
 
 
 class TPG300(Sensor):
-    def __init__(self, descr, adc_analog_in):
+    """Pfeiffer TPG 300 vacuum gauge sensor with Arduino ADC readout."""
+
+    _calib: Calibrator
+    arduino_adc: ArduinoADC
+    arduino_channel: int
+
+    def __init__(self, descr: str, adc_analog_in: int) -> None:
         # General sensor setup:
         self.type = "Vacuum Gauge"
         self.descr = descr.replace(" ", "_").lower() + "_vac"  # Multi-word
@@ -29,15 +36,15 @@ class TPG300(Sensor):
         self.arduino_adc = ArduinoADC()
         self.arduino_channel = adc_analog_in
 
-    def connect(self):
+    def connect(self) -> None:
         """Open the connection to the Arduino."""
         self.arduino_adc.connect()
 
-    def disconnect(self):
+    def disconnect(self) -> None:
         """Close the connection to the Arduino."""
         self.arduino_adc.disconnect()
 
-    def rcv_vals(self):
+    def rcv_vals(self) -> float | None:
         """Receive and return measurement values from Arduino."""
         return self.arduino_adc.measure()[self.arduino_channel]
 

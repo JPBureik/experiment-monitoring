@@ -10,16 +10,22 @@ Webcam capture utility for experiment monitoring.
 Captures images from a webcam and transfers them to a remote server via SCP.
 """
 
-import cv2
-import paramiko  # type: ignore[import-untyped]
-from scp import SCPClient
+from __future__ import annotations
+
 import os
 import time
+from typing import Any
+
+import cv2
+import paramiko  # type: ignore[import-untyped]
+from scp import SCPClient  # type: ignore[import-untyped]
 
 from expmonitor.utilities.credentials import Credentials, CredentialsError
 
 
-def create_ssh_client(host, port, user, password):
+def create_ssh_client(
+    host: str, port: int, user: str, password: str
+) -> paramiko.SSHClient:
     """Create and return an SSH client connection."""
     client = paramiko.SSHClient()
     client.load_system_host_keys()
@@ -28,7 +34,7 @@ def create_ssh_client(host, port, user, password):
     return client
 
 
-def setup(savepath, remote_path):
+def setup(savepath: str, remote_path: str) -> tuple[str, Any, SCPClient, str]:
     """
     Initialize webcam and SSH connection.
 
@@ -39,7 +45,7 @@ def setup(savepath, remote_path):
     Returns:
         Tuple of (savepath, cam, scp).
     """
-    cam = cv2.VideoCapture(0)
+    cam = cv2.VideoCapture(0)  # type: ignore[call-arg]
 
     creds = Credentials.get_ssh_credentials()
     ssh = create_ssh_client(
@@ -50,7 +56,7 @@ def setup(savepath, remote_path):
     return savepath, cam, scp, remote_path
 
 
-def iteration(savepath, cam, scp, remote_path):
+def iteration(savepath: str, cam: Any, scp: SCPClient, remote_path: str) -> None:
     """Capture a single image and transfer it."""
     result, image = cam.read()
 

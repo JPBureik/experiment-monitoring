@@ -11,53 +11,66 @@ Centralizes exception handling by regrouping all output to the specified log
 file.
 """
 
-# Standard library imports:
+from __future__ import annotations
+
 import getpass
-from pathlib import Path
-import os
 import glob
-from datetime import date, datetime
+import os
 import traceback
+from datetime import date, datetime
+from pathlib import Path
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from expmonitor.classes.sensor import Sensor
 
 
 class ExceptionHandler:
-    def __init__(self):
+    """Centralized exception logging for experiment monitoring."""
+
+    log_dir: Path
+    log_file: Path
+    _overwrite_log_file: bool
+    _log_full_tb: bool
+    _verbose: bool
+
+    def __init__(self) -> None:
         self.log_dir = Path("/home/" + getpass.getuser() + "/.expmonitor")
         self._overwrite_log_file = True
         self._log_full_tb = False
         self._verbose = False
 
     @property
-    def overwrite_log_file(self):
+    def overwrite_log_file(self) -> bool:
         """Boolean to overwrite old log files or not"""
         return self._overwrite_log_file
 
     @overwrite_log_file.setter
-    def overwrite_log_file(self, overwrite_log_file):
+    def overwrite_log_file(self, overwrite_log_file: bool) -> None:
         if isinstance(overwrite_log_file, bool):
             self._overwrite_log_file = overwrite_log_file
 
     @property
-    def log_full_tb(self):
+    def log_full_tb(self) -> bool:
         """Write entire traceback to log file instead of just one line."""
         return self._log_full_tb
 
     @log_full_tb.setter
-    def log_full_tb(self, log_full_tb):
+    def log_full_tb(self, log_full_tb: bool) -> None:
         if isinstance(log_full_tb, bool):
             self._log_full_tb = log_full_tb
 
     @property
-    def verbose(self):
+    def verbose(self) -> bool:
         """Print full exception traceback to stdout."""
         return self._verbose
 
     @verbose.setter
-    def verbose(self, verbose):
+    def verbose(self, verbose: bool) -> None:
         if isinstance(verbose, bool):
             self._verbose = verbose
 
-    def create_log_file(self):
+    def create_log_file(self) -> None:
         """Check for log file directory and overwrite old log file."""
         if not os.path.isdir(self.log_dir):
             os.mkdir(self.log_dir)
@@ -73,7 +86,7 @@ class ExceptionHandler:
             )
         self.log_file.touch()
 
-    def log_exception(self, sensor, e):
+    def log_exception(self, sensor: Sensor, e: Exception) -> None:
         """Append exception description to log file."""
         log_str = "Data acquisition failure for {} at {} due to {}: {}.\n".format(
             sensor.descr,

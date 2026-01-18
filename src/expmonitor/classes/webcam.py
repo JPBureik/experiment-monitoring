@@ -4,11 +4,12 @@
 Created on Thu Jul 28 15:15:51 2022
 
 @author: jp
+
+Webcam-based sensor for reading values from displays via OCR.
 """
 
-# Standard library imports:
+from __future__ import annotations
 
-# Local imports:
 from expmonitor.classes.sensor import Sensor
 from expmonitor.utilities.img_proc import img_proc
 
@@ -16,7 +17,16 @@ from expmonitor.utilities.img_proc import img_proc
 class Webcam(Sensor):
     """Generic sensor class for reading values from displays via webcam OCR."""
 
-    def __init__(self, descr, sensor_type, unit, savepath, num_prec=None):
+    savepath: str
+
+    def __init__(
+        self,
+        descr: str,
+        sensor_type: str,
+        unit: str,
+        savepath: str,
+        num_prec: int | None = None,
+    ) -> None:
         self.type = sensor_type
         self.descr = descr
         self.unit = unit
@@ -26,13 +36,13 @@ class Webcam(Sensor):
         )
         self.savepath = savepath
 
-    def connect(self):
+    def connect(self) -> None:
         pass  # Image is captured externally
 
-    def disconnect(self):
+    def disconnect(self) -> None:
         pass  # No persistent connection
 
-    def rcv_vals(self):
+    def rcv_vals(self) -> float | None:
         return img_proc(self.savepath)
 
 

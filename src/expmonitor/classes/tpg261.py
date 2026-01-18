@@ -8,15 +8,21 @@ Created on Fri May 28 21:09:53 2021
 Implements the TPG 261 Class for experiment monitoring.
 """
 
-# Standard library imports:
-import serial  # pip3 install pyserial
+from __future__ import annotations
 
-# Local imports:
+import serial  # type: ignore[import-untyped]
+
 from expmonitor.classes.sensor import Sensor
 
 
 class TPG261(Sensor):
-    def __init__(self, descr, port):
+    """Pfeiffer TPG 261 vacuum gauge sensor implementation."""
+
+    baudrate: int
+    timeout: int
+    port: str
+
+    def __init__(self, descr: str, port: str) -> None:
         # General sensor setup:
         self.type = "Vacuum Gauge"
         self.descr = descr.replace(" ", "_").lower() + "_vac"  # Multi-word
@@ -28,20 +34,20 @@ class TPG261(Sensor):
         self.timeout = 1
         self.port = port
 
-    def connect(self):
+    def connect(self) -> None:
         """Not needed, handled by context manager in self.rcv_vals()."""
         pass
 
-    def disconnect(self):
+    def disconnect(self) -> None:
         """Not needed, handled by context manager in self.rcv_vals()."""
         pass
 
-    def rcv_vals(self):
+    def rcv_vals(self) -> bytes:
         # Receive pressure value as bytes:
         with serial.Serial(
             self.port, baudrate=self.baudrate, timeout=self.timeout
         ) as ser:
-            serial_rcv = ser.readline()
+            serial_rcv: bytes = ser.readline()
         return serial_rcv
 
 
