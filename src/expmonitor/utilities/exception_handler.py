@@ -35,7 +35,7 @@ class ExceptionHandler():
 
     @overwrite_log_file.setter
     def overwrite_log_file(self, overwrite_log_file):
-        if type(overwrite_log_file) == bool:
+        if isinstance(overwrite_log_file, bool):
             self._overwrite_log_file = overwrite_log_file
 
     @property
@@ -45,7 +45,7 @@ class ExceptionHandler():
 
     @log_full_tb.setter
     def log_full_tb(self, log_full_tb):
-        if type(log_full_tb) == bool:
+        if isinstance(log_full_tb, bool):
             self._log_full_tb = log_full_tb
 
     @property
@@ -55,7 +55,7 @@ class ExceptionHandler():
 
     @verbose.setter
     def verbose(self, verbose):
-        if type(verbose) == bool:
+        if isinstance(verbose, bool):
             self._verbose = verbose
 
     def create_log_file(self):

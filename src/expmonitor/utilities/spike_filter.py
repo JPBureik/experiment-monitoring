@@ -38,7 +38,7 @@ class SpikeFilter():
 
     @spike_threshold_perc.setter
     def spike_threshold_perc(self, spike_threshold_perc):
-        if type(spike_threshold_perc) in [int, float]:
+        if isinstance(spike_threshold_perc, (int, float)):
             self._spike_threshold_perc = abs(spike_threshold_perc)
             self.enabled = True
         else:
@@ -52,9 +52,9 @@ class SpikeFilter():
 
     @spike_length.setter
     def spike_length(self, spike_length):
-        if type(spike_length) == int and spike_length < 5:
+        if isinstance(spike_length, int) and spike_length < 5:
             self._spike_length = spike_length
-        elif type(spike_length) == int and spike_length > 4:
+        elif isinstance(spike_length, int) and spike_length > 4:
             raise ValueError(""""Large spike lengths can silence legitimate"""
                              + """ alert conditions.\nSpike filter disabled.""")
             self.enabled = False
