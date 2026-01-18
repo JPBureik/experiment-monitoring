@@ -44,6 +44,9 @@ def img_proc(savepath: str) -> float | None:
 
     os.remove(cropped_savepath)
 
+    if im2 is None:
+        return None
+
     # Increase contrast:
     # converting to LAB color space
     lab = cv2.cvtColor(im2, cv2.COLOR_BGR2LAB)
