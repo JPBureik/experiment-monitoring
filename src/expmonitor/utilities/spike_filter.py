@@ -17,13 +17,11 @@ import pandas as pd
 import datetime
 import time
 
-# Local imports
-from expmonitor.utilities.database import Database
-
 
 class SpikeFilter():
 
-    def __init__(self, sensor, spike_threshold_perc, spike_length=1, allow_zeros=True):
+    def __init__(self, sensor, spike_threshold_perc, spike_length=1,
+                 allow_zeros=True):
         self.sensor = sensor  # Object extending the Sensor class
         self.spike_threshold_perc = spike_threshold_perc  # Percentage
         self.spike_length = spike_length  # int
@@ -38,7 +36,7 @@ class SpikeFilter():
 
     @spike_threshold_perc.setter
     def spike_threshold_perc(self, spike_threshold_perc):
-        if type(spike_threshold_perc) in [int, float]:
+        if isinstance(spike_threshold_perc, (int, float)):
             self._spike_threshold_perc = abs(spike_threshold_perc)
             self.enabled = True
         else:
@@ -52,11 +50,12 @@ class SpikeFilter():
 
     @spike_length.setter
     def spike_length(self, spike_length):
-        if type(spike_length) == int and spike_length < 5:
+        if isinstance(spike_length, int) and spike_length < 5:
             self._spike_length = spike_length
-        elif type(spike_length) == int and spike_length > 4:
-            raise ValueError(""""Large spike lengths can silence legitimate"""
-                             + """ alert conditions.\nSpike filter disabled.""")
+        elif isinstance(spike_length, int) and spike_length > 4:
+            raise ValueError(
+                "Large spike lengths can silence legitimate alert conditions."
+                "\nSpike filter disabled.")
             self.enabled = False
 
     @staticmethod
@@ -91,8 +90,10 @@ class SpikeFilter():
         if not self.allow_zeros:
             if self._spike_range['Value'].values[0] == 0:
                 return True
-        if self.percent_change(np.mean(self._spike_range['Value']),
-                               np.mean(baseline['Value'])) >= self.spike_threshold_perc:
+        spike_mean = np.mean(self._spike_range['Value'])
+        baseline_mean = np.mean(baseline['Value'])
+        pct_change = self.percent_change(spike_mean, baseline_mean)
+        if pct_change >= self.spike_threshold_perc:
             return True
         else:
             return False

@@ -35,7 +35,7 @@ class ExceptionHandler():
 
     @overwrite_log_file.setter
     def overwrite_log_file(self, overwrite_log_file):
-        if type(overwrite_log_file) == bool:
+        if isinstance(overwrite_log_file, bool):
             self._overwrite_log_file = overwrite_log_file
 
     @property
@@ -45,7 +45,7 @@ class ExceptionHandler():
 
     @log_full_tb.setter
     def log_full_tb(self, log_full_tb):
-        if type(log_full_tb) == bool:
+        if isinstance(log_full_tb, bool):
             self._log_full_tb = log_full_tb
 
     @property
@@ -55,7 +55,7 @@ class ExceptionHandler():
 
     @verbose.setter
     def verbose(self, verbose):
-        if type(verbose) == bool:
+        if isinstance(verbose, bool):
             self._verbose = verbose
 
     def create_log_file(self):
@@ -63,24 +63,23 @@ class ExceptionHandler():
         if not os.path.isdir(self.log_dir):
             os.mkdir(self.log_dir)
         if self._overwrite_log_file:
-            for f in glob.glob(str(self.log_dir) + '/log_*.txt'): os.remove(f)
-            self.log_file = self.log_dir / ('log_'
-                                    + date.today().strftime('%Y_%m_%d')
-                                    + '.txt')
+            for f in glob.glob(str(self.log_dir) + '/log_*.txt'):
+                os.remove(f)
+            self.log_file = self.log_dir / (
+                'log_' + date.today().strftime('%Y_%m_%d') + '.txt')
         else:
-            self.log_file = self.log_dir / ('log_'
-                                    + datetime.now().strftime(
-                                        '%Y_%m_%d_%H_%M_%S') + '.txt')
+            self.log_file = self.log_dir / (
+                'log_' + datetime.now().strftime('%Y_%m_%d_%H_%M_%S') + '.txt')
         self.log_file.touch()
 
     def log_exception(self, sensor, e):
         """Append exception description to log file."""
-        log_str = "Data acquisition failure for {} at {} due to {}: {}.\n".format(
-                    sensor.descr,
-                    datetime.now().strftime("%d/%m/%Y %H:%M:%S"),
-                    type(e).__name__.strip('<>').split("'")[0],
-                    e.args[0]
-                    )
+        log_str = (
+            "Data acquisition failure for {} at {} due to {}: {}.\n".format(
+                sensor.descr,
+                datetime.now().strftime("%d/%m/%Y %H:%M:%S"),
+                type(e).__name__.strip('<>').split("'")[0],
+                e.args[0]))
         with open(self.log_file, 'a') as logf:
             logf.write(log_str)
             if self._log_full_tb:

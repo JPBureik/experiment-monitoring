@@ -24,11 +24,11 @@ acq_interv = 0
 
 
 # Import all specific sensor classes:
-from expmonitor.classes.phidget_tc import PhidgetTC
-from expmonitor.classes.tpg261 import TPG261
-from expmonitor.classes.tpg300 import TPG300
-from expmonitor.classes.ups.eaton_ups import EatonUPS
-from expmonitor.classes.webcam import Webcam
+from expmonitor.classes.phidget_tc import PhidgetTC  # noqa: E402
+from expmonitor.classes.tpg261 import TPG261  # noqa: E402
+from expmonitor.classes.tpg300 import TPG300  # noqa: E402
+from expmonitor.classes.ups.eaton_ups import EatonUPS  # noqa: E402
+from expmonitor.classes.webcam import Webcam  # noqa: E402
 
 # Setup Phidgets:
 tc1 = PhidgetTC('Source', 4, 0)
@@ -61,7 +61,6 @@ zeeman2_vac = Webcam(
 )
 zeeman2_vac.spike_filter.spike_threshold_perc = 1e3
 zeeman2_vac.spike_filter.allow_zeros = False
-
 
 
 """ ---------- DETAILS ---------- """

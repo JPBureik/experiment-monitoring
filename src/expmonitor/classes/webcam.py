@@ -41,5 +41,5 @@ class Webcam(Sensor):
 # Execution:
 if __name__ == '__main__':
 
-    from expmonitor.config import *
+    from expmonitor.config import *  # noqa: F401, F403
     Webcam.test_execution()

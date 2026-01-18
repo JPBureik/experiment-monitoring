@@ -9,7 +9,7 @@ Implements the Eaton UPS Class for experiment monitoring.
 """
 
 # Standard library imports:
-from easysnmp import Session, snmp_get  # pip3 install easysnmp
+from easysnmp import Session  # pip3 install easysnmp
 
 # Local imports:
 from expmonitor.classes.sensor import Sensor
@@ -23,7 +23,8 @@ class EatonUPS(Sensor):
         self.descr = descr.lower()
         self.unit = None
         self.conversion_fctn = lambda x: x  # No conversion needed
-        super().__init__(self.type, self.descr, self.unit, self.conversion_fctn)
+        super().__init__(
+            self.type, self.descr, self.unit, self.conversion_fctn)
         # EatonUPS-specific setup:
         self.ip = ip
 
@@ -46,7 +47,7 @@ class EatonUPS(Sensor):
         charge_rem = int(self.session.get((
             'UPS-MIB::upsEstimatedChargeRemaining', 0)).value)  # %
         seconds_on_battery = int(self.session.get((
-            'UPS-MIB::upsSecondsOnBattery', 0)).value)  # s            
+            'UPS-MIB::upsSecondsOnBattery', 0)).value)  # s
         p_out = int(self.session.get((
             'UPS-MIB::upsOutputPower', 1)).value)  # W
         p_out_max = int(self.session.get((
@@ -64,8 +65,8 @@ class EatonUPS(Sensor):
         self.connect()
         self.meas_dict = self.rcv_vals()
         for item in self.meas_dict.items():
-            ## SPIKE FILTER
-            ## CHECK SAVE RAW DATA            
+            # TODO: SPIKE FILTER
+            # TODO: CHECK SAVE RAW DATA
             if verbose:
                 print(item)
         self.disconnect()

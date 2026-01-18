@@ -10,14 +10,14 @@ Main executable script for Experiment Monitoring.
 Service script that is run continously by Linux Systemd. Executes the measure
 and to_db methods for all Sensor children defined in config with the frequency
 1/acq_interv.
-By default, the main loop is run continuously. For testing purposes, it can also
-be run a specified amount of times only by passing the corresponding integer as
-argument on the command line, e.g. use "python3 exp_monitor/exec.py 5" to run 5
-executions of the main loop.
-To time the execution of the entire script (however many iterations you specify)
-pass the "t" argument on the command line, e.g.:
+By default, the main loop is run continuously. For testing purposes, it can
+also be run a specified amount of times only by passing the corresponding
+integer as argument on the command line, e.g. use "python3 exp_monitor/exec.py
+5" to run 5 executions of the main loop.
+To time the execution of the entire script (however many iterations you
+specify) pass the "t" argument on the command line, e.g.:
 "python3 exp_monitor/exec.py t 1"
-You can also set the "verbose" argument of config.py manually when executing 
+You can also set the "verbose" argument of config.py manually when executing
 the script from the command line by including the "v" argument, e.g. use
 "python3 exp_monitor/exec.py t v 1" to run 1 execution of the main loop and
 print the exception traceback to stdout along with the execution time.
@@ -28,10 +28,11 @@ import time
 import sys
 
 # Local imports:
-from expmonitor.config import *
+from expmonitor.config import *  # noqa: F401, F403
 from expmonitor.classes.sensor import Sensor
 from expmonitor.utilities.exception_handler import ExceptionHandler
 from expmonitor.utilities.utility import get_subclass_objects
+
 
 def data_acquisition(sensors, exception_handler):
     """Execute measure method for all sensors."""
@@ -47,11 +48,11 @@ def data_acquisition(sensors, exception_handler):
         except Exception as e:
             exception_handler.log_exception(sensor, e)
     # Measurement frequency given by acq_interv:
-    time.sleep(acq_interv)
+    time.sleep(acq_interv)  # noqa: F405
 
 
 def main():
-    """Execute data acquisition cycle continously or a given number of times."""
+    """Execute data acquisition cycle continously or given number of times."""
     # Check for execution time argument on command line:
     if 't' in sys.argv:
         time_exec = True
@@ -61,9 +62,9 @@ def main():
         time_exec = False
     # Set up exception handler:
     exception_handler = ExceptionHandler()
-    exception_handler.overwrite_log_file = overwrite_log_file
-    exception_handler.log_full_tb = log_full_tb
-    exception_handler.verbose = verbose  # Default value from config
+    exception_handler.overwrite_log_file = overwrite_log_file  # noqa: F405
+    exception_handler.log_full_tb = log_full_tb  # noqa: F405
+    exception_handler.verbose = verbose  # noqa: F405
     # Check for verbose argument on command line to override:
     if 'v' in sys.argv:
         exception_handler.verbose = True
@@ -88,5 +89,5 @@ def main():
 
 # Execution:
 if __name__ == '__main__':
-    
+
     main()

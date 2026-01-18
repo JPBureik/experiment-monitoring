@@ -13,8 +13,6 @@ class.
 
 # Standard library imports:
 from abc import ABC, abstractmethod
-from influxdb import InfluxDBClient
-import traceback
 
 # Local imports
 from expmonitor.utilities.database import Database
@@ -50,7 +48,7 @@ class Sensor(ABC):
 
     @num_prec.setter
     def num_prec(self, num_prec):
-        if type(num_prec) == int and num_prec > 0:
+        if isinstance(num_prec, int) and num_prec > 0:
             self._num_prec = num_prec
         else:
             self._num_prec = None
@@ -75,7 +73,7 @@ class Sensor(ABC):
 
     @save_raw.setter
     def save_raw(self, save_raw):
-        if type(save_raw) == bool:
+        if isinstance(save_raw, bool):
             self._save_raw = save_raw
         else:
             self._save_raw = False

@@ -8,15 +8,10 @@ Fixtures for all testing modules.
 @author: jp
 """
 
-# Standard library imports:
 import pytest
-import os
 
-# Local imports
 from expmonitor.classes.phidget_tc import PhidgetTC
-from expmonitor.classes.tpg261 import TPG261
-from expmonitor.classes.tpg300 import TPG300
-from expmonitor.classes.ups.eaton_ups import EatonUPS
+
 
 @pytest.fixture(scope="session")
 def lab_temp_phidget():
