@@ -23,11 +23,12 @@ from expmonitor.utilities.database import Database
 
 class SpikeFilter():
 
-    def __init__(self, sensor, spike_threshold_perc, spike_length=1):
+    def __init__(self, sensor, spike_threshold_perc, spike_length=1, allow_zeros=True):
         self.sensor = sensor  # Object extending the Sensor class
         self.spike_threshold_perc = spike_threshold_perc  # Percentage
         self.spike_length = spike_length  # int
         self.enabled = False  # Enable by setting spike_threshold_perc
+        self.allow_zeros = allow_zeros
 
     @property
     def spike_threshold_perc(self):
@@ -86,6 +87,10 @@ class SpikeFilter():
         df = df.sort_values(by='Timestamp')
         self._spike_range = df.iloc[df.index[1:-1]]
         baseline = df.drop(self._spike_range.index)
+        # Check for zeros:
+        if not self.allow_zeros:
+            if self._spike_range['Value'].values[0] == 0:
+                return True
         if self.percent_change(np.mean(self._spike_range['Value']),
                                np.mean(baseline['Value'])) >= self.spike_threshold_perc:
             return True

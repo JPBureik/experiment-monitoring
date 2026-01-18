@@ -28,6 +28,7 @@ from expmonitor.classes.phidget_tc import PhidgetTC
 from expmonitor.classes.tpg261 import TPG261
 from expmonitor.classes.tpg300 import TPG300
 from expmonitor.classes.ups.eaton_ups import EatonUPS
+from expmonitor.classes.webcam import Webcam
 
 # Setup Phidgets:
 tc1 = PhidgetTC('Source', 4, 0)
@@ -49,6 +50,18 @@ sc_vac.spike_filter.spike_length = 2
 
 # Setup batteries:
 batteries = EatonUPS('Batteries', '10.117.51.129')
+
+# Setup webcam:
+zeeman2_vac = Webcam(
+    descr='zeeman2_vac',
+    sensor_type='Vacuum Gauge',
+    unit='mbar',
+    savepath='/mnt/data/webcam/zeeman2/z2.png',
+    num_prec=12
+)
+zeeman2_vac.spike_filter.spike_threshold_perc = 1e3
+zeeman2_vac.spike_filter.allow_zeros = False
+
 
 
 """ ---------- DETAILS ---------- """

@@ -1,0 +1,45 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Thu Jul 28 15:15:51 2022
+
+@author: jp
+"""
+
+# Standard library imports:
+
+
+# Local imports:
+from expmonitor.classes.sensor import Sensor
+from expmonitor.utilities.img_proc import img_proc
+
+
+class Webcam(Sensor):
+    """Generic sensor class for reading values from displays via webcam OCR."""
+
+    def __init__(self, descr, sensor_type, unit, savepath, num_prec=None):
+        self.type = sensor_type
+        self.descr = descr
+        self.unit = unit
+        self.conversion_fctn = lambda t: t  # No conversion needed
+        super().__init__(
+            self.type, self.descr, self.unit, self.conversion_fctn,
+            num_prec=num_prec
+        )
+        self.savepath = savepath
+
+    def connect(self):
+        pass  # Image is captured externally
+
+    def disconnect(self):
+        pass  # No persistent connection
+
+    def rcv_vals(self):
+        return img_proc(self.savepath)
+
+
+# Execution:
+if __name__ == '__main__':
+
+    from expmonitor.config import *
+    Webcam.test_execution()
