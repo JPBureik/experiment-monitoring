@@ -58,7 +58,7 @@ def img_proc(savepath: str) -> float | None:
     cl = clahe.apply(l_channel)
 
     # merge the CLAHE enhanced L-channel with the a and b channel
-    limg = cv2.merge((cl, a, b))
+    limg = cv2.merge((cl, a, b))  # type: ignore[arg-type]
 
     # Converting image from LAB Color model to BGR color spcae
     enhanced_img = cv2.cvtColor(limg, cv2.COLOR_LAB2BGR)

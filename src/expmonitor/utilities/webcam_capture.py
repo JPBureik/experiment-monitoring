@@ -45,7 +45,7 @@ def setup(savepath: str, remote_path: str) -> tuple[str, Any, SCPClient, str]:
     Returns:
         Tuple of (savepath, cam, scp).
     """
-    cam = cv2.VideoCapture(0)
+    cam = cv2.VideoCapture(0)  # type: ignore[call-arg]
 
     creds = Credentials.get_ssh_credentials()
     ssh = create_ssh_client(
