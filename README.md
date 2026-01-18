@@ -96,6 +96,7 @@ src/expmonitor/
 ├── utilities/        # Shared utilities (spike filter, etc.)
 ├── config.py         # Main configuration
 └── exec.py           # Entry point
+server_setup/         # Deployment scripts and systemd service
 tests/                # Test suite
 docs/                 # Documentation
 ```
