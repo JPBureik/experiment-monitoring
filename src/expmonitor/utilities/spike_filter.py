@@ -11,29 +11,50 @@ Checks the new incoming value versus the last data, determines if there was a
 spike and if so, deletes it.
 """
 
-# Standard library imports
-import numpy as np
-import pandas as pd
+from __future__ import annotations
+
 import datetime
 import time
+from typing import TYPE_CHECKING, Any
+
+import numpy as np
+import pandas as pd
+
+if TYPE_CHECKING:
+    from expmonitor.classes.sensor import Sensor
 
 
 class SpikeFilter:
-    def __init__(self, sensor, spike_threshold_perc, spike_length=1, allow_zeros=True):
-        self.sensor = sensor  # Object extending the Sensor class
-        self.spike_threshold_perc = spike_threshold_perc  # Percentage
-        self.spike_length = spike_length  # int
-        self.enabled = False  # Enable by setting spike_threshold_perc
+    """Filter for detecting and removing spike values from sensor data."""
+
+    sensor: Sensor
+    enabled: bool
+    allow_zeros: bool
+    _spike_threshold_perc: float | None
+    _spike_length: int
+    _spike_range: pd.DataFrame
+
+    def __init__(
+        self,
+        sensor: Sensor,
+        spike_threshold_perc: float | None,
+        spike_length: int = 1,
+        allow_zeros: bool = True,
+    ) -> None:
+        self.sensor = sensor
+        self.spike_threshold_perc = spike_threshold_perc  # type: ignore[assignment]
+        self.spike_length = spike_length  # type: ignore[assignment]
+        self.enabled = False
         self.allow_zeros = allow_zeros
 
     @property
-    def spike_threshold_perc(self):
+    def spike_threshold_perc(self) -> float | None:
         """The percentage value that a data point has to deviate from the
         others by in order to be qualified as a spike."""
         return self._spike_threshold_perc
 
     @spike_threshold_perc.setter
-    def spike_threshold_perc(self, spike_threshold_perc):
+    def spike_threshold_perc(self, spike_threshold_perc: float | None) -> None:
         if isinstance(spike_threshold_perc, (int, float)):
             self._spike_threshold_perc = abs(spike_threshold_perc)
             self.enabled = True
@@ -41,13 +62,13 @@ class SpikeFilter:
             self._spike_threshold_perc = None
 
     @property
-    def spike_length(self):
+    def spike_length(self) -> int:
         """Length of spike. Generally 1 or 2 will suffice. Risk of silencing
         legitimate alert conditions if increased beyond 4."""
         return self._spike_length
 
     @spike_length.setter
-    def spike_length(self, spike_length):
+    def spike_length(self, spike_length: int) -> None:
         if isinstance(spike_length, int) and spike_length < 5:
             self._spike_length = spike_length
         elif isinstance(spike_length, int) and spike_length > 4:
@@ -55,10 +76,9 @@ class SpikeFilter:
                 "Large spike lengths can silence legitimate alert conditions."
                 "\nSpike filter disabled."
             )
-            self.enabled = False
 
     @staticmethod
-    def percent_change(current, previous):
+    def percent_change(current: float, previous: float) -> float:
         """Return change between current and previous in percent."""
         try:
             return (abs(current - previous) / previous) * 100
@@ -66,17 +86,17 @@ class SpikeFilter:
             return float("inf")
 
     @staticmethod
-    def conv_to_u_time(date_time):
+    def conv_to_u_time(date_time: datetime.datetime) -> str:
         """Convert date_time to unix time."""
         date_time = date_time + datetime.timedelta(hours=2)
         u_time = time.mktime(date_time.timetuple())
         u_time_str = str(u_time)[:-2] + 9 * "0"
         return u_time_str
 
-    def was_spike(self):
+    def was_spike(self) -> bool:
         """Check if preceeding values around spike_length in the measurement
         series fullfill spike conditions."""
-        query_result = self.sensor._db.client.query(
+        query_result: Any = self.sensor._db.client.query(
             "SELECT * FROM {} GROUP BY * ORDER BY DESC LIMIT {}".format(
                 self.sensor.descr, self._spike_length + 2
             )
@@ -91,15 +111,14 @@ class SpikeFilter:
         if not self.allow_zeros:
             if self._spike_range["Value"].values[0] == 0:
                 return True
-        spike_mean = np.mean(self._spike_range["Value"])
-        baseline_mean = np.mean(baseline["Value"])
+        spike_mean: float = np.mean(self._spike_range["Value"])
+        baseline_mean: float = np.mean(baseline["Value"])
         pct_change = self.percent_change(spike_mean, baseline_mean)
-        if pct_change >= self.spike_threshold_perc:
-            return True
-        else:
-            return False
+        if self._spike_threshold_perc is not None:
+            return pct_change >= self._spike_threshold_perc
+        return False
 
-    def del_spike(self):
+    def del_spike(self) -> None:
         """Delete datapoints identified as spike from the database."""
         # Create unix timestamps for spike datapoints:
         spike_timestamps = [

@@ -13,15 +13,32 @@ spike factor, display time stamps, unix time stamps and values for found spikes
 and deletes them on request.
 """
 
-# Standard library imports
-import time
+from __future__ import annotations
+
 import datetime
+import time
+from typing import Any
+
 from influxdb import InfluxDBClient
-from tqdm import tqdm  # pip3 install tqdm
+from tqdm import tqdm
 
 
 class DbSpikeFilter:
-    def __init__(self):
+    """Interactive database spike filter for cleaning historical data."""
+
+    database: str
+    client: InfluxDBClient
+    series_list: list[str]
+    selected_series: str
+    spike_factor: float
+    data: dict[str, list[Any]]
+    timestamps: dict[str, list[str]]
+    spike_indices: dict[str, list[int]]
+    spike_timestamps: dict[str, list[str]]
+    spike_utimestamps: dict[str, list[str]]
+    total_spikes: dict[str, int]
+
+    def __init__(self) -> None:
         self.database = "helium2"
         self.client = InfluxDBClient(
             host="localhost", port=8086, database=self.database
@@ -41,13 +58,13 @@ class DbSpikeFilter:
             self.delete_spikes()
 
     @staticmethod
-    def conv_to_u_time(date_time):
+    def conv_to_u_time(date_time: datetime.datetime) -> str:
         date_time = date_time + datetime.timedelta(hours=2)
         u_time = time.mktime(date_time.timetuple())
         u_time_str = str(u_time)[:-2] + 9 * "0"
         return u_time_str
 
-    def set_spike_factor(self):
+    def set_spike_factor(self) -> None:
         spike_factor_in = input(
             "Set spike factor for series {}:\n".format(self.selected_series)
         )
@@ -58,7 +75,7 @@ class DbSpikeFilter:
             print("Try again!")
             self.set_spike_factor()
 
-    def is_spike(self, data_point, previous, following):
+    def is_spike(self, data_point: float, previous: float, following: float) -> bool:
         if (
             data_point > previous * self.spike_factor
             and data_point > following * self.spike_factor
@@ -72,8 +89,8 @@ class DbSpikeFilter:
         else:
             return False
 
-    def display_series(self):
-        series_result = self.client.query("SHOW series").raw
+    def display_series(self) -> None:
+        series_result: Any = self.client.query("SHOW series").raw
         self.series_list = [
             series_result["series"][0]["values"][i][0].split(",")[0]
             for i in range(len(series_result["series"][0]["values"]))
@@ -82,7 +99,7 @@ class DbSpikeFilter:
         for series in self.series_list:
             print("\t", series)
 
-    def select_series(self):
+    def select_series(self) -> None:
         user_input = input("Select series to apply spike filter:\n")
         if user_input in self.series_list:
             self.selected_series = user_input
@@ -90,9 +107,9 @@ class DbSpikeFilter:
             print("Try again!")
             self.select_series()
 
-    def find_spikes(self):
+    def find_spikes(self) -> None:
         # Get data:
-        data_result = self.client.query(
+        data_result: Any = self.client.query(
             'SELECT * FROM "{}"'.format(self.selected_series)
         ).raw
         self.data[self.selected_series] = [
@@ -164,7 +181,7 @@ class DbSpikeFilter:
                         )
                     )
 
-    def delete_spikes(self):
+    def delete_spikes(self) -> None:
         user_delete = input("Delete detected spikes? (y/n)\n")
         if user_delete == "y":
             for spike in self.spike_utimestamps[self.selected_series]:
@@ -177,8 +194,6 @@ class DbSpikeFilter:
         elif user_delete != "y":
             print("No modification made.")
 
-
-""" MAIN """
 
 if __name__ == "__main__":
     db_spike_filter = DbSpikeFilter()

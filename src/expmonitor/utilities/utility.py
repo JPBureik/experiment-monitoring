@@ -10,11 +10,13 @@ General utility module.
 Collection of helper functions that are used in multiple scripts.
 """
 
-# Standard library imports:
+from __future__ import annotations
+
 import inspect
+from typing import Any
 
 
-def get_subclass_objects(BaseClass):
+def get_subclass_objects(BaseClass: type) -> list[Any]:
     """Get all objects that extend BaseClass from global scope of the outermost
     caller frame."""
     # Get current frame:

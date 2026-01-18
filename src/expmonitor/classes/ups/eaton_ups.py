@@ -8,15 +8,23 @@ Created on Tue Aug 31 08:53:25 2021
 Implements the Eaton UPS Class for experiment monitoring.
 """
 
-# Standard library imports:
-from easysnmp import Session  # pip3 install easysnmp
+from __future__ import annotations
 
-# Local imports:
+from typing import Any
+
+from easysnmp import Session  # type: ignore[import-untyped]
+
 from expmonitor.classes.sensor import Sensor
 
 
 class EatonUPS(Sensor):
-    def __init__(self, descr, ip):
+    """Eaton UPS sensor via SNMP protocol."""
+
+    ip: str
+    session: Session
+    meas_dict: dict[str, dict[str, Any]]
+
+    def __init__(self, descr: str, ip: str) -> None:
         # General sensor setup:
         self.type = "Universal Power Supply"
         self.descr = descr.lower()
@@ -26,17 +34,17 @@ class EatonUPS(Sensor):
         # EatonUPS-specific setup:
         self.ip = ip
 
-    def connect(self):
+    def connect(self) -> None:
         # Create SNMP session to be used for all requests:
         self.session = Session(
             hostname=self.ip, security_username="exp_monitor", version=3
         )
 
-    def disconnect(self):
+    def disconnect(self) -> None:
         # Not needed.
         pass
 
-    def rcv_vals(self):
+    def rcv_vals(self) -> dict[str, dict[str, Any]]:
         # Retrieve individual OIDs:
         minutes_rem = int(
             self.session.get(("UPS-MIB::upsEstimatedMinutesRemaining", 0)).value
@@ -59,7 +67,7 @@ class EatonUPS(Sensor):
             "Load": {"value": load, "unit": "%"},
         }
 
-    def measure(self, verbose=False, show_raw=False):
+    def measure(self, verbose: bool = False, show_raw: bool = False) -> None:
         """Operator overloading for Sensor ABC to handle dict as meas obj."""
         self.connect()
         self.meas_dict = self.rcv_vals()
@@ -70,7 +78,7 @@ class EatonUPS(Sensor):
                 print(item)
         self.disconnect()
 
-    def to_db(self):
+    def to_db(self) -> None:
         """Operator overloading for Sensor ABC to handle dict as meas obj."""
         for item in self.meas_dict.items():
             self._db.write(

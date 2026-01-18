@@ -36,7 +36,7 @@ class Database:
     def write(
         self,
         descr: str,
-        unit: str,
+        unit: str | None,
         measurement: Any,
         save_raw: bool = False,
         raw: Any = None,
