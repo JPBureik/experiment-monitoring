@@ -11,6 +11,5 @@ repos:
     hooks:
       - id: mypy
         additional_dependencies: []
-        args: [--ignore-missing-imports]
         pass_filenames: false
-        entry: mypy src
+        entry: mypy src --config-file pyproject.toml

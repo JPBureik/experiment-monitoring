@@ -24,10 +24,21 @@ Config file format (~/.expmonitor/credentials.json):
     }
 """
 
-# Standard library imports:
+from __future__ import annotations
+
 import json
 import os
 from pathlib import Path
+from typing import Any, TypedDict
+
+
+class SSHCredentials(TypedDict):
+    """Type definition for SSH credentials."""
+
+    host: str
+    port: int
+    user: str
+    password: str
 
 
 class CredentialsError(Exception):
@@ -39,52 +50,57 @@ class CredentialsError(Exception):
 class Credentials:
     """Manages secure credential storage and retrieval."""
 
-    CONFIG_DIR = Path.home() / ".expmonitor"
-    CONFIG_FILE = CONFIG_DIR / "credentials.json"
+    CONFIG_DIR: Path = Path.home() / ".expmonitor"
+    CONFIG_FILE: Path = CONFIG_DIR / "credentials.json"
 
     @classmethod
-    def _load_config_file(cls):
+    def _load_config_file(cls) -> dict[str, Any]:
         """Load credentials from JSON config file."""
         if not cls.CONFIG_FILE.exists():
             return {}
         with open(cls.CONFIG_FILE, "r") as f:
-            return json.load(f)
+            result: dict[str, Any] = json.load(f)
+            return result
 
     @classmethod
-    def get_ssh_credentials(cls):
+    def get_ssh_credentials(cls) -> SSHCredentials:
         """
         Get SSH credentials from environment or config file.
 
         Returns:
-            dict: Contains 'host', 'port', 'user', 'password' keys.
+            SSHCredentials: Contains 'host', 'port', 'user', 'password' keys.
 
         Raises:
             CredentialsError: If required credentials are missing.
         """
         # Try environment variables first
-        env_creds = {
-            "host": os.environ.get("EXPMONITOR_SSH_HOST"),
-            "port": os.environ.get("EXPMONITOR_SSH_PORT", "22"),
-            "user": os.environ.get("EXPMONITOR_SSH_USER"),
-            "password": os.environ.get("EXPMONITOR_SSH_PASSWORD"),
-        }
+        env_host = os.environ.get("EXPMONITOR_SSH_HOST")
+        env_port = os.environ.get("EXPMONITOR_SSH_PORT", "22")
+        env_user = os.environ.get("EXPMONITOR_SSH_USER")
+        env_password = os.environ.get("EXPMONITOR_SSH_PASSWORD")
 
-        if all([env_creds["host"], env_creds["user"], env_creds["password"]]):
-            env_creds["port"] = int(env_creds["port"])
-            return env_creds
+        if all([env_host, env_user, env_password]):
+            return SSHCredentials(
+                host=env_host,  # type: ignore[typeddict-item]
+                port=int(env_port),
+                user=env_user,  # type: ignore[typeddict-item]
+                password=env_password,  # type: ignore[typeddict-item]
+            )
 
         # Fall back to config file
         config = cls._load_config_file()
-        ssh_config = config.get("ssh", {})
+        ssh_config: dict[str, Any] = config.get("ssh", {})
 
-        creds = {
-            "host": ssh_config.get("host"),
-            "port": int(ssh_config.get("port", 22)),
-            "user": ssh_config.get("user"),
-            "password": ssh_config.get("password"),
-        }
+        host = ssh_config.get("host")
+        port = int(ssh_config.get("port", 22))
+        user = ssh_config.get("user")
+        password = ssh_config.get("password")
 
-        missing = [k for k in ["host", "user", "password"] if not creds[k]]
+        missing = [
+            k
+            for k, v in [("host", host), ("user", user), ("password", password)]
+            if not v
+        ]
         if missing:
             raise CredentialsError(
                 f"Missing SSH credentials: {', '.join(missing)}. "
@@ -92,10 +108,16 @@ class Credentials:
                 f"{cls.CONFIG_FILE} with the required fields."
             )
 
-        return creds
+        # At this point we know host, user, password are not None
+        return SSHCredentials(
+            host=str(host),
+            port=port,
+            user=str(user),
+            password=str(password),
+        )
 
     @classmethod
-    def create_template_config(cls):
+    def create_template_config(cls) -> None:
         """Create a template config file if none exists."""
         if cls.CONFIG_FILE.exists():
             print(f"Config file already exists: {cls.CONFIG_FILE}")

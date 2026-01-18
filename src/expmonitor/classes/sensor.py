@@ -11,8 +11,11 @@ All interfaces for acquiring data should be subclasses that inherit from this
 class.
 """
 
+from __future__ import annotations
+
 # Standard library imports:
 from abc import ABC, abstractmethod
+from typing import Any, Callable
 
 # Local imports
 from expmonitor.utilities.database import Database
@@ -21,18 +24,24 @@ from expmonitor.utilities.utility import get_subclass_objects
 
 
 class Sensor(ABC):
-    """---------- INIT ----------"""
+    """Abstract base class for all sensor interfaces."""
+
+    type: str
+    descr: str
+    unit: str
+    measurement: Any
+    raw_vals: Any
 
     def __init__(
         self,
-        type,
-        descr,
-        unit,
-        conversion_fctn,
-        num_prec=None,
-        save_raw=False,
-        format_str="f",
-    ):
+        type: str,
+        descr: str,
+        unit: str,
+        conversion_fctn: Callable[[Any], Any],
+        num_prec: int | None = None,
+        save_raw: bool = False,
+        format_str: str = "f",
+    ) -> None:
         self.type = type  # str
         self.descr = descr  # str
         self.unit = unit  # str
@@ -45,66 +54,60 @@ class Sensor(ABC):
         # Database setup:
         self._db = Database()
 
-    """ ---------- PROPERTIES ---------- """
-
     @property
-    def num_prec(self):
-        """Set numerical precision for measurement values.
+    def num_prec(self) -> int | None:
+        """Numerical precision for measurement values.
         For example, num_prec = 12 saves 1.2381e-10 as 1.24e-10."""
         return self._num_prec
 
     @num_prec.setter
-    def num_prec(self, num_prec):
+    def num_prec(self, num_prec: int | None) -> None:
         if isinstance(num_prec, int) and num_prec > 0:
-            self._num_prec = num_prec
+            self._num_prec: int | None = num_prec
         else:
             self._num_prec = None
 
     @property
-    def format_str(self):
-        """Set format in which to save measurement data. Currently all data
-        within one influxDB shard needs to be of the same format."""
+    def format_str(self) -> str:
+        """Format in which to save measurement data."""
         return self._format_str
 
     @format_str.setter
-    def format_str(self, format_str):
-        self._format_dict = {"f": float, "i": round, "s": str}
+    def format_str(self, format_str: str) -> None:
+        self._format_dict: dict[str, Callable[[Any], Any]] = {
+            "f": float,
+            "i": round,
+            "s": str,
+        }
         if format_str in self._format_dict.keys():
             self._format_str = format_str
         else:
             self._format_str = "f"
 
     @property
-    def save_raw(self):
+    def save_raw(self) -> bool:
         return self._save_raw
 
     @save_raw.setter
-    def save_raw(self, save_raw):
-        if isinstance(save_raw, bool):
-            self._save_raw = save_raw
-        else:
-            self._save_raw = False
-
-    """ ---------- ABSTRACT METHODS ---------- """
+    def save_raw(self, save_raw: bool) -> None:
+        self._save_raw = save_raw
 
     @abstractmethod
-    def connect(self):
+    def connect(self) -> None:
         """Open the connection to the sensor."""
         pass
 
     @abstractmethod
-    def disconnect(self):
+    def disconnect(self) -> None:
         """Close the connection to the sensor."""
         pass
 
     @abstractmethod
-    def rcv_vals(self):
+    def rcv_vals(self) -> Any:
         """Receive and return measurement values from sensor."""
-        pass  # return received_vals
+        pass
 
-    """ ---------- PRIVATE METHODS ---------- """
-
-    def _show(self, show_raw=False):
+    def _show(self, show_raw: bool = False) -> None:
         """Print last measurement with description and units."""
         try:
             if show_raw:
@@ -116,30 +119,28 @@ class Sensor(ABC):
         except AttributeError as ae:
             print(self.descr, "_show AttributeError:", ae.args[0])
 
-    def _apply_num_prec(self, value):
+    def _apply_num_prec(self, value: Any) -> Any:
         """Apply numerical precision to value."""
         try:
             return float("{:.{}f}".format(float(value), self._num_prec))
         except (ValueError, TypeError):
             return value
 
-    def _apply_format(self, value):
+    def _apply_format(self, value: Any) -> Any:
         """Apply format to value."""
         try:
             return self._format_dict[self._format_str](value)
         except ValueError:
             return value
 
-    def _convert(self, value):
+    def _convert(self, value: Any) -> Any | None:
         """Perform conversion of received values to proper unit."""
         try:
             return self.conversion_fctn(value)
         except (TypeError, ValueError):
             return None
 
-    """ ---------- PUBLIC METHODS ---------- """
-
-    def measure(self, verbose=False, show_raw=False):
+    def measure(self, verbose: bool = False, show_raw: bool = False) -> None:
         """Execute a measurement."""
         self.connect()
         self.raw_vals = self.rcv_vals()
@@ -151,22 +152,22 @@ class Sensor(ABC):
             self._show(show_raw)
         self.disconnect()
 
-    def to_db(self):
+    def to_db(self) -> None:
         """Write measurement result to database."""
         if self._save_raw:
             self._db.write(
-                self.descr, self.unit, self.measurement, self.save_raw, self.raw
+                self.descr, self.unit, self.measurement, self.save_raw, self.raw_vals
             )
         else:
             self._db.write(self.descr, self.unit, self.measurement)
 
-    def filter_spikes(self):
+    def filter_spikes(self) -> None:
         if self.spike_filter.enabled:
             if self.spike_filter.was_spike():
                 self.spike_filter.del_spike()
 
     @classmethod
-    def test_execution(cls):
+    def test_execution(cls) -> None:
         """Execute measure method for all sensors of this class defined in
         config file and print result to stdout. Has to be preceeded by the
         following import line:
