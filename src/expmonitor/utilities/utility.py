@@ -1,4 +1,3 @@
-
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
@@ -13,6 +12,7 @@ Collection of helper functions that are used in multiple scripts.
 
 # Standard library imports:
 import inspect
+
 
 def get_subclass_objects(BaseClass):
     """Get all objects that extend BaseClass from global scope of the outermost

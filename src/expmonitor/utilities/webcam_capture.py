@@ -73,7 +73,8 @@ if __name__ == '__main__':
     remote_savepath = '/mnt/data/webcam/zeeman2'
 
     try:
-        savepath, cam, scp, remote_path = setup(local_savepath, remote_savepath)
+        savepath, cam, scp, remote_path = setup(
+            local_savepath, remote_savepath)
     except CredentialsError as e:
         print(f"Credentials error: {e}")
         print("\nTo create a template config file, run:")
