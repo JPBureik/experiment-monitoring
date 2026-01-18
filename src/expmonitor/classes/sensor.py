@@ -163,7 +163,7 @@ class Sensor(ABC):
         """Execute measure method for all sensors of this class defined in
         config file and print result to stdout. Has to be preceeded by the
         following import line:
-        'from exp_monitor.config import *'."""
+        'from expmonitor.config import *'."""
         sensor_list = get_subclass_objects(cls)
         for sensor in sensor_list:
             sensor.measure(verbose=True)
