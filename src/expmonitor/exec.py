@@ -54,10 +54,10 @@ def data_acquisition(sensors, exception_handler):
 def main():
     """Execute data acquisition cycle continously or given number of times."""
     # Check for execution time argument on command line:
-    if 't' in sys.argv:
+    if "t" in sys.argv:
         time_exec = True
         start_time = time.time()
-        sys.argv.remove('t')
+        sys.argv.remove("t")
     else:
         time_exec = False
     # Set up exception handler:
@@ -66,9 +66,9 @@ def main():
     exception_handler.log_full_tb = log_full_tb  # noqa: F405
     exception_handler.verbose = verbose  # noqa: F405
     # Check for verbose argument on command line to override:
-    if 'v' in sys.argv:
+    if "v" in sys.argv:
         exception_handler.verbose = True
-        sys.argv.remove('v')
+        sys.argv.remove("v")
     exception_handler.create_log_file()
     # Get all user defined sensor objects:
     sensors = get_subclass_objects(Sensor)
@@ -77,17 +77,15 @@ def main():
         sys.argv.remove(sys.argv[0])
         iterations = int(sys.argv[0])
         for iteration in range(iterations):
-            print('Iteration', iteration + 1, '/', iterations)
+            print("Iteration", iteration + 1, "/", iterations)
             data_acquisition(sensors, exception_handler)
     except (IndexError, ValueError):  # Default: Run continously
         while True:
             data_acquisition(sensors, exception_handler)
     if time_exec:
-        print("--- Execution time: {:.2f} seconds ---".format(
-            time.time() - start_time))
+        print("--- Execution time: {:.2f} seconds ---".format(time.time() - start_time))
 
 
 # Execution:
-if __name__ == '__main__':
-
+if __name__ == "__main__":
     main()

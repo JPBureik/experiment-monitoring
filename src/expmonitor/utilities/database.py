@@ -16,27 +16,24 @@ from influxdb import InfluxDBClient
 from datetime import datetime
 
 
-class Database():
-
+class Database:
     def __init__(self):
         self.port = 8086  # int
         self.name = "helium2"  # str
         self.client = InfluxDBClient(
-                            host='localhost',
-                            port=self.port,
-                            database=self.name
-                            )
+            host="localhost", port=self.port, database=self.name
+        )
 
     def write(self, descr, unit, measurement, save_raw=False, raw=None):
         """Write measurement result to InfluxDB database."""
         json_dict = {}
-        json_dict['measurement'] = descr
-        json_dict['tags'] = {}
-        json_dict['tags']['unit'] = unit
+        json_dict["measurement"] = descr
+        json_dict["tags"] = {}
+        json_dict["tags"]["unit"] = unit
         # Grafana assumes UTC:
-        json_dict['time'] = datetime.utcnow().strftime("%m/%d/%Y %H:%M:%S")
-        json_dict['fields'] = {}
-        json_dict['fields']['value'] = measurement
+        json_dict["time"] = datetime.utcnow().strftime("%m/%d/%Y %H:%M:%S")
+        json_dict["fields"] = {}
+        json_dict["fields"]["value"] = measurement
         if save_raw:
-            json_dict['fields']['raw'] = raw
+            json_dict["fields"]["raw"] = raw
         self.client.write_points([json_dict])

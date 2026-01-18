@@ -32,21 +32,22 @@ from pathlib import Path
 
 class CredentialsError(Exception):
     """Raised when required credentials are missing."""
+
     pass
 
 
 class Credentials:
     """Manages secure credential storage and retrieval."""
 
-    CONFIG_DIR = Path.home() / '.expmonitor'
-    CONFIG_FILE = CONFIG_DIR / 'credentials.json'
+    CONFIG_DIR = Path.home() / ".expmonitor"
+    CONFIG_FILE = CONFIG_DIR / "credentials.json"
 
     @classmethod
     def _load_config_file(cls):
         """Load credentials from JSON config file."""
         if not cls.CONFIG_FILE.exists():
             return {}
-        with open(cls.CONFIG_FILE, 'r') as f:
+        with open(cls.CONFIG_FILE, "r") as f:
             return json.load(f)
 
     @classmethod
@@ -62,28 +63,28 @@ class Credentials:
         """
         # Try environment variables first
         env_creds = {
-            'host': os.environ.get('EXPMONITOR_SSH_HOST'),
-            'port': os.environ.get('EXPMONITOR_SSH_PORT', '22'),
-            'user': os.environ.get('EXPMONITOR_SSH_USER'),
-            'password': os.environ.get('EXPMONITOR_SSH_PASSWORD'),
+            "host": os.environ.get("EXPMONITOR_SSH_HOST"),
+            "port": os.environ.get("EXPMONITOR_SSH_PORT", "22"),
+            "user": os.environ.get("EXPMONITOR_SSH_USER"),
+            "password": os.environ.get("EXPMONITOR_SSH_PASSWORD"),
         }
 
-        if all([env_creds['host'], env_creds['user'], env_creds['password']]):
-            env_creds['port'] = int(env_creds['port'])
+        if all([env_creds["host"], env_creds["user"], env_creds["password"]]):
+            env_creds["port"] = int(env_creds["port"])
             return env_creds
 
         # Fall back to config file
         config = cls._load_config_file()
-        ssh_config = config.get('ssh', {})
+        ssh_config = config.get("ssh", {})
 
         creds = {
-            'host': ssh_config.get('host'),
-            'port': int(ssh_config.get('port', 22)),
-            'user': ssh_config.get('user'),
-            'password': ssh_config.get('password'),
+            "host": ssh_config.get("host"),
+            "port": int(ssh_config.get("port", 22)),
+            "user": ssh_config.get("user"),
+            "password": ssh_config.get("password"),
         }
 
-        missing = [k for k in ['host', 'user', 'password'] if not creds[k]]
+        missing = [k for k in ["host", "user", "password"] if not creds[k]]
         if missing:
             raise CredentialsError(
                 f"Missing SSH credentials: {', '.join(missing)}. "
@@ -107,11 +108,11 @@ class Credentials:
                 "host": "YOUR_HOST_HERE",
                 "port": 22,
                 "user": "YOUR_USER_HERE",
-                "password": "YOUR_PASSWORD_HERE"
+                "password": "YOUR_PASSWORD_HERE",
             }
         }
 
-        with open(cls.CONFIG_FILE, 'w') as f:
+        with open(cls.CONFIG_FILE, "w") as f:
             json.dump(template, f, indent=4)
 
         # Set restrictive permissions (owner read/write only)

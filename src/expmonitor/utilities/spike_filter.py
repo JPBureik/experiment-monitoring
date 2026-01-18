@@ -18,10 +18,8 @@ import datetime
 import time
 
 
-class SpikeFilter():
-
-    def __init__(self, sensor, spike_threshold_perc, spike_length=1,
-                 allow_zeros=True):
+class SpikeFilter:
+    def __init__(self, sensor, spike_threshold_perc, spike_length=1, allow_zeros=True):
         self.sensor = sensor  # Object extending the Sensor class
         self.spike_threshold_perc = spike_threshold_perc  # Percentage
         self.spike_length = spike_length  # int
@@ -31,7 +29,7 @@ class SpikeFilter():
     @property
     def spike_threshold_perc(self):
         """The percentage value that a data point has to deviate from the
-         others by in order to be qualified as a spike."""
+        others by in order to be qualified as a spike."""
         return self._spike_threshold_perc
 
     @spike_threshold_perc.setter
@@ -55,7 +53,8 @@ class SpikeFilter():
         elif isinstance(spike_length, int) and spike_length > 4:
             raise ValueError(
                 "Large spike lengths can silence legitimate alert conditions."
-                "\nSpike filter disabled.")
+                "\nSpike filter disabled."
+            )
             self.enabled = False
 
     @staticmethod
@@ -64,34 +63,36 @@ class SpikeFilter():
         try:
             return (abs(current - previous) / previous) * 100
         except ZeroDivisionError:
-            return float('inf')
+            return float("inf")
 
     @staticmethod
     def conv_to_u_time(date_time):
         """Convert date_time to unix time."""
         date_time = date_time + datetime.timedelta(hours=2)
         u_time = time.mktime(date_time.timetuple())
-        u_time_str = str(u_time)[:-2] + 9 * '0'
+        u_time_str = str(u_time)[:-2] + 9 * "0"
         return u_time_str
 
     def was_spike(self):
         """Check if preceeding values around spike_length in the measurement
         series fullfill spike conditions."""
         query_result = self.sensor._db.client.query(
-            'SELECT * FROM {} GROUP BY * ORDER BY DESC LIMIT {}'.format(
-                self.sensor.descr, self._spike_length + 2)).raw
+            "SELECT * FROM {} GROUP BY * ORDER BY DESC LIMIT {}".format(
+                self.sensor.descr, self._spike_length + 2
+            )
+        ).raw
         df = pd.DataFrame(
-            query_result['series'][0]['values'], columns=['Timestamp', 'Value']
+            query_result["series"][0]["values"], columns=["Timestamp", "Value"]
         )
-        df = df.sort_values(by='Timestamp')
+        df = df.sort_values(by="Timestamp")
         self._spike_range = df.iloc[df.index[1:-1]]
         baseline = df.drop(self._spike_range.index)
         # Check for zeros:
         if not self.allow_zeros:
-            if self._spike_range['Value'].values[0] == 0:
+            if self._spike_range["Value"].values[0] == 0:
                 return True
-        spike_mean = np.mean(self._spike_range['Value'])
-        baseline_mean = np.mean(baseline['Value'])
+        spike_mean = np.mean(self._spike_range["Value"])
+        baseline_mean = np.mean(baseline["Value"])
         pct_change = self.percent_change(spike_mean, baseline_mean)
         if pct_change >= self.spike_threshold_perc:
             return True
@@ -101,14 +102,19 @@ class SpikeFilter():
     def del_spike(self):
         """Delete datapoints identified as spike from the database."""
         # Create unix timestamps for spike datapoints:
-        spike_timestamps = [datetime.datetime.strptime(
-            self._spike_range['Timestamp'].values[i], '%Y-%m-%dT%H:%M:%SZ'
-        ) for i in range(len(self._spike_range.index))]
-        spike_utimestamps = [self.conv_to_u_time(spike_timestamp) for
-                             spike_timestamp in spike_timestamps]
+        spike_timestamps = [
+            datetime.datetime.strptime(
+                self._spike_range["Timestamp"].values[i], "%Y-%m-%dT%H:%M:%SZ"
+            )
+            for i in range(len(self._spike_range.index))
+        ]
+        spike_utimestamps = [
+            self.conv_to_u_time(spike_timestamp) for spike_timestamp in spike_timestamps
+        ]
         # Delete database entries at spike unix timestamps:
         for spike_utime in spike_utimestamps:
             self.sensor._db.client.query(
-                'DELETE FROM "{}" WHERE time = {}'.format(self.sensor.descr,
-                                                          spike_utime)
+                'DELETE FROM "{}" WHERE time = {}'.format(
+                    self.sensor.descr, spike_utime
+                )
             )
