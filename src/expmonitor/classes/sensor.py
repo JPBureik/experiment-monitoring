@@ -13,8 +13,6 @@ class.
 
 # Standard library imports:
 from abc import ABC, abstractmethod
-from influxdb import InfluxDBClient
-import traceback
 
 # Local imports
 from expmonitor.utilities.database import Database

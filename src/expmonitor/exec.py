@@ -28,7 +28,7 @@ import time
 import sys
 
 # Local imports:
-from expmonitor.config import *
+from expmonitor.config import *  # noqa: F401, F403
 from expmonitor.classes.sensor import Sensor
 from expmonitor.utilities.exception_handler import ExceptionHandler
 from expmonitor.utilities.utility import get_subclass_objects

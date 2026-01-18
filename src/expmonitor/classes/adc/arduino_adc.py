@@ -32,7 +32,7 @@ class ArduinoADC():
         self.conversion_fctn = lambda v_int: (v_int / self.buffer_size
                                               * self.volt_limit)
         self.IP = '10.117.53.45'  # Static IP: IOGS network
-        #self.IP = '172.20.217.9' # DHCP: Visitor network - not recommended
+        # self.IP = '172.20.217.9'  # DHCP: Visitor network - not recommended
         self.port = 6574  # Match to server side port
 
     def connect(self):
@@ -52,8 +52,8 @@ class ArduinoADC():
                 int.from_bytes(byte2, 'little')
             # Limit to Arduino voltage range to filter badly converted values:
             v = round(self.conversion_fctn(v_int), self.num_prec)
-            self.analog_signals[channel] = v if 0 <= v <= self.volt_limit\
-                                             else None
+            self.analog_signals[channel] = (
+                v if 0 <= v <= self.volt_limit else None)
         # Buffer time for Arduino:
         time.sleep(0.1)
         return self.analog_signals

@@ -23,7 +23,8 @@ class TPG261(Sensor):
         self.descr = descr.replace(' ', '_').lower() + '_vac'  # Multi-word
         self.unit = 'mbar'
         self.conversion_fctn = lambda p: float(str(p).split(',')[1])
-        super().__init__(self.type, self.descr, self.unit, self.conversion_fctn)
+        super().__init__(
+            self.type, self.descr, self.unit, self.conversion_fctn)
         # TPG261-specific setup:
         self.baudrate = 9600
         self.timeout = 1
@@ -45,9 +46,8 @@ class TPG261(Sensor):
         return serial_rcv
 
 
-
 # Execution:
 if __name__ == '__main__':
 
-    from expmonitor.config import *
+    from expmonitor.config import *  # noqa: F401, F403
     TPG261.test_execution()
