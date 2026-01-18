@@ -63,7 +63,6 @@ zeeman2_vac.spike_filter.spike_threshold_perc = 1e3
 zeeman2_vac.spike_filter.allow_zeros = False
 
 
-
 """ ---------- DETAILS ---------- """
 
 
