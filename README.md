@@ -1,45 +1,102 @@
-![Tests](https://github.com/JPBureik/experiment-monitoring/actions/workflows/tests.yml/badge.svg)
+# Experiment Monitoring
 
-# Experiment Monitoring Software
+[![Tests](https://github.com/JPBureik/experiment-monitoring/actions/workflows/tests.yml/badge.svg)](https://github.com/JPBureik/experiment-monitoring/actions/workflows/tests.yml)
+[![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
-A software package for automated monitoring of lab equipment, including time series visualization and automatic e-mail alerts.
+Automated monitoring of lab equipment with time series visualization and e-mail alerts.
 
 ![Experiment Monitoring](docs/snapshot.png)
 
-## Architecture
+## Features
 
-A central server gathers data from different sources, writes them into a database, hosts a graphic interface for visualization and sends automatic alert e-mails based on user-defined criteria.
+- Centralized data acquisition from multiple sensor types
+- Time series storage in InfluxDB
+- Grafana dashboard for visualization
+- Automatic e-mail alerts based on user-defined thresholds
+- Spike filtering for noisy signals
 
-## Currently supported interfaces
+## Supported Interfaces
 
-  * Serial (e.g. Pfeiffer TPG261)
-  * TCP/IP (e.g. Arduino Due)
-  * Analog [via ADC on Arduino Due] (e.g. Pfeiffer TPG300)
-  * SNMP (e.g. Eaton UPS)
-  * Phidgets (e.g. Thermocouple module)
+| Interface | Example Hardware |
+|-----------|------------------|
+| Serial | Pfeiffer TPG261 |
+| TCP/IP | Arduino Due |
+| Analog (via ADC) | Pfeiffer TPG300 |
+| SNMP | Eaton UPS |
+| Phidgets | Thermocouple module |
+| Webcam OCR | Panel displays |
 
-## Setup
+## Installation
 
-  * Before starting the Experiment Monitoring, you need to set up your server. For hardware requirements & the step-by-step server setup procedure, see `docs/server_setup.md`.
-  * ADC setup: See `src/expmonitor/classes/adc/adc_setup.md`. Only needed if you want to monitor analog signals.
-  * Working with existing interfaces:
-    - `src/expmonitor/config.py` is all you need to modify.
-  * Adding your own interfaces:
-    - Write a subclass that extends the abstract `Sensor` class defined in `src/expmonitor/classes/sensor.py` to drive your sensor/equipment and instantiate it in `src/expmonitor/config.py`.
+```bash
+pip install git+https://github.com/JPBureik/experiment-monitoring.git
+```
 
-## Guide to the repository structure:
+Or for development:
 
-  * `src/expmonitor/calibrations`: Contains calibration data and scripts for all calibrated equipment.
-  * `src/expmonitor/classes`: Contains driver classes for all interfaces. Put your new driver classes in here.
-    * `src/expmonitor/classes/sensor.py`: Abstract base class for individual sensor classes.
-    * `src/expmonitor/classes/adc`: Contains Arduino sketch, its Python Class and its setup guide.
-    * `src/expmonitor/classes/ups`: Implements EatonUPS Class for batteries and their setup guide.
-  * `tests`: Contains tests for the Phidget class.
-  * `src/expmonitor/utilities`: Contains interface-independent classes to be used by all sensors.
-    * `src/expmonitor/utilities/spike_filter.py`: Spike filter for instances of Sensor subclasses. Enable in `src/expmonitor/config.py` by setting `sensor.spike_filter.spike_threshold_perc` for any given sensor.
-  * `src/expmonitor/config.py`: Main configuration file.
-  * `src/expmonitor/exec.py`: Main execution file for Linux service and command line execution. Use it to test single or multiple (e.g. <i>5</i>) iterations of the data acquisition cycle:
-    <pre>
-    python3 /mnt/code/experiment-monitoring/src/expmonitor/exec.py t v <i>5</i>
-    </pre>
-    Note that the argument after the the script filepath sets the number of executions of the loop. The t and v flags enable timing and exception traceback to stdout.
+```bash
+git clone https://github.com/JPBureik/experiment-monitoring.git
+cd experiment-monitoring
+pip install -e ".[testing]"
+```
+
+## Quick Start
+
+1. Set up your server (see `docs/server_setup.md`)
+2. Configure your sensors in `src/expmonitor/config.py`
+3. Run the monitoring loop:
+
+```bash
+python -m expmonitor.exec
+```
+
+Test mode with verbose output (5 iterations):
+
+```bash
+python -m expmonitor.exec t v 5
+```
+
+## Adding New Sensors
+
+Create a subclass of the abstract `Sensor` class:
+
+```python
+from expmonitor.classes.sensor import Sensor
+
+class MySensor(Sensor):
+    def __init__(self, descr, ...):
+        self.type = 'MyType'
+        self.descr = descr
+        # ...
+
+    def measure(self):
+        # Implement measurement logic
+        self.measurement = self.read_value()
+
+    def rcv_vals(self):
+        # Return formatted measurement string
+        return str(self.measurement)
+```
+
+Then instantiate it in `config.py`.
+
+## Repository Structure
+
+```
+src/expmonitor/
+├── classes/          # Sensor driver classes
+│   ├── sensor.py     # Abstract base class
+│   ├── adc/          # Arduino ADC drivers
+│   └── ups/          # UPS monitoring
+├── calibrations/     # Calibration data and scripts
+├── utilities/        # Shared utilities (spike filter, etc.)
+├── config.py         # Main configuration
+└── exec.py           # Entry point
+tests/                # Test suite
+docs/                 # Documentation
+```
+
+## License
+
+GPL-3.0
