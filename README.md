@@ -101,6 +101,10 @@ tests/                # Test suite
 docs/                 # Documentation
 ```
 
+## Note on Coverage
+
+Test coverage is limited because most code paths require physical hardware (sensors, Arduino, Phidgets) or external services (InfluxDB, Grafana). Unit tests cover all pure utility functions that can be tested in isolation.
+
 ## License
 
 GPL-3.0
