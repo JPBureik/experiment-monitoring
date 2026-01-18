@@ -11,7 +11,7 @@ Captures images from a webcam and transfers them to a remote server via SCP.
 """
 
 import cv2
-import paramiko
+import paramiko  # type: ignore[import-untyped]
 from scp import SCPClient
 import os
 import time

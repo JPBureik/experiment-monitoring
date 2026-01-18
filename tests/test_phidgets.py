@@ -8,6 +8,7 @@ Testing module for Phidgets class.
 @author: jp
 """
 
+
 def test_lab_temp_phidget(lab_temp_phidget):
     """Test that Phidget measurement returns correct values."""
     lab_temp_phidget.measure()
