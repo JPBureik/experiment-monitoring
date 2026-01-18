@@ -59,3 +59,8 @@ tests/.ipynb_checkpoints/
 
 # Virtualenv:
 .venv/
+
+# Credentials (never commit secrets):
+credentials.json
+*.credentials
+.env
