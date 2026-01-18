@@ -16,7 +16,7 @@ or feel free to add any new hardware interface you want to connect.
 
 
 # Define interval [s] for data acquisition (+ execution time):
-acq_interv = 0
+acq_interv = 5
 
 
 """ ---------- SENSOR SETUP ---------- """
