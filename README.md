@@ -7,7 +7,7 @@
 [![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
 [![Checked with mypy](https://www.mypy-lang.org/static/mypy_badge.svg)](https://mypy-lang.org/)
 
-Automated monitoring of lab equipment with time series visualization and e-mail alerts.
+Driver-based Python toolkit for 24/7 lab monitoring: multi-sensor acquisition, InfluxDB storage, Grafana dashboards, and automated alerting — deployed continuously for multiple years.
 
 ![Experiment Monitoring](docs/snapshot.png)
 
